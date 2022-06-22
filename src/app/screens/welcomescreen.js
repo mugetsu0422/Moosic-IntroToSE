@@ -7,7 +7,7 @@ const welcome = () => {
     
     <SafeAreaView style={styles.container}>
       
-        <Image style ={styles.logo}  source={require('./assets/sool.jpg')} />
+        <Image style ={styles.logo}  source={require('../../assets/sool.jpg')} />
         <View style ={styles.views1}>
         <Text style = {styles.welcome} >Welcome  </Text>
         <Text style = {styles.script}>Nice place to relax...  </Text>
