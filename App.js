@@ -1,4 +1,4 @@
-import * as React from 'react';
+{/*import * as React from 'react';
 import { Text, View, StyleSheet, Image, } from 'react-native';
 import Constants from 'expo-constants';
 
@@ -15,7 +15,7 @@ export default function App() {
       <View style ={styles.des} />
       <View style={styles.info}>
         <View style={styles.avatar1}>
-          <Image style={styles.avatar} source={require('./assets/Avatar.png')} />
+          <Image style={styles.avatar} source={require('./src/assets/Avatar.png')} />
           <View style = {styles.box1}>
             <Text style = {{marginVertical: 6, fontSize: 20}}> Nickname </Text>
           </View>
@@ -125,3 +125,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+*/}
+
+
+
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import welcomescreen from './src/app/screens/welcomescreen'
+
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="home" component={welcomescreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
