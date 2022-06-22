@@ -1,7 +1,7 @@
 import { StyleSheet,Image, Text ,  View,SafeAreaView, TouchableOpacity } from 'react-native';
 import React from 'react'
 
-const welcome = () => {
+const Welcome = () => {
   
   return (
     
@@ -31,7 +31,7 @@ const welcome = () => {
   );
 }
 
-export default welcome;
+export default Welcome;
 
 const styles = StyleSheet.create({
   container: {
