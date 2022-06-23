@@ -1,9 +1,18 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image, } from 'react-native';
+import { Platform ,Text, View, StyleSheet, Image} from "react-native";
+import { CheckBox } from "react-native-elements";
 import Constants from 'expo-constants';
+
+
+// You can import from local files
+//import AssetExample from './components/AssetExample';
+
+// or any pure javascript modules available in npm
 import { Card } from 'react-native-paper';
 
-export default function Profile() {
+export default function App() {
+  const [male,setMale] = React.useState(false);
+  const [female,setfeMale] = React.useState(false);
   return (
     <View style={styles.container}>
       <View style ={styles.des} />
@@ -14,7 +23,11 @@ export default function Profile() {
             <Text style = {{marginVertical: 6, fontSize: 20}}> Nickname </Text>
           </View>
           <View style={styles.box2}>
-            <Text style = {{marginVertical: 6, fontSize: 20}}> First Name </Text>
+            <Text style = {{marginVertical: 6, fontSize: 20}} 
+            onPress={() => text => console.log(text)}
+              > 
+              First Name </Text>
+            
           </View>
           <View style={styles.box3}>
             <Text style = {{marginVertical: 6, fontSize: 20}}> Last Name </Text>
@@ -25,8 +38,10 @@ export default function Profile() {
           <View style={styles.box4}>
             <Text style = {{marginVertical: 6, fontSize: 20}}> Birthday </Text>
           </View>
-          <View style={styles.box4}>
-            <Text style = {{marginVertical: 6, fontSize: 20}}> Gender </Text>
+          <View style={styles.gender}>
+            <Text style = {{marginVertical: 6, fontSize: 20}}> Gender: </Text>
+            <CheckBox containerStyle={{backgroundColor: '#faedef', borderColor:'#faedef', height:45, width: 90, marginLeft:90, marginTop: -38 }}  title='Male' checked={male} onPress={() => (setMale(!male), setfeMale(false))}/>
+            <CheckBox containerStyle={{backgroundColor: '#faedef', borderColor:'#faedef',height:45, width: 90, marginLeft:200, marginTop: -49 }} title='Female' checked={female} onPress={() => (setfeMale(!female), setMale(false))}/>
           </View>
           <View style={styles.box4}>
             <Text style = {{marginVertical: 6, fontSize: 20}}> Phone number </Text>
@@ -118,4 +133,10 @@ const styles = StyleSheet.create({
     marginVertical: 7,
     fontSize: 20,
   },
+  gender:{
+    marginLeft: 20,
+    marginTop: 10,
+    marginRight: 20,
+  },
+
 });
