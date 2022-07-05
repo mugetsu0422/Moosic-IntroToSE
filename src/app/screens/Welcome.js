@@ -1,7 +1,9 @@
 import { StyleSheet,Image, Text ,  View,SafeAreaView, TouchableOpacity } from 'react-native';
-import React from 'react'
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Welcome = () => {
+const Welcomescreen = ({ navigation }) =>  {
   
   return (
     
@@ -9,33 +11,35 @@ const Welcome = () => {
       
         <Image style ={styles.logo}  source={require('../../assets/sool.jpg')} />
         <View style ={styles.views1}>
-        <Text style = {styles.welcome} >Welcome  </Text>
-        <Text style = {styles.script}>Nice place to relax...  </Text>
+          <Text style = {styles.welcome} >Welcome  </Text>
+          <Text style = {styles.script}>Nice place to relax...  </Text>
         </View>
         <View style ={styles.views2}>
-        <TouchableOpacity  style={styles.button1}
-        onPress={() => { alert('You tapped the button!')}}>
+          <TouchableOpacity  style={styles.button1}
+            onPress={() =>
+              navigation.navigate('SignIn', { name: 'SignIn' })
+            } >
         
-          <Text style = {styles.buttonText1}> LOGIN </Text>  
+            <Text style = {styles.buttonText1}> LOGIN </Text>  
           
-        </TouchableOpacity>
+          </TouchableOpacity>
         
-        <TouchableOpacity
-          style={styles.button2}
-          onPress={() => alert('SIGN IN')}>
-          <Text style={styles.buttonText2}>SIGN IN FOR FREE</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button2}
+              onPress={() => navigation.navigate('SignUp', { name: 'Jane2' })}>
+                <Text style={styles.buttonText2}>SIGN UP FOR FREE</Text>
+          </TouchableOpacity>
         </View>
      </SafeAreaView>
     
   );
 }
 
-export default Welcome;
+export default Welcomescreen;
 
 const styles = StyleSheet.create({
   container: {
-   
+   backgroundColor:'white',
     flex:1,
     
   },
@@ -116,3 +120,4 @@ views1:{
   },
   
 });
+ 
