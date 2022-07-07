@@ -41,8 +41,7 @@ const SignIn = ({navigation}) => {
           <View style={styles.sign}>
           <TouchableOpacity
               style={styles.Signin}
-              onPress={() => //{alert ('sign in')}
-                            navigation.navigate('Favorite')}>
+              onPress={() => {alert ('sign in')}}>
               <Text style={styles.buttonText}>SIGN IN </Text>
           </TouchableOpacity></View>
         </View>

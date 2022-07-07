@@ -1,6 +1,7 @@
 import { StyleSheet,Image, Text ,  View,TouchableOpacity,TextInput,Alert, ImageBackground } from 'react-native';
 import * as React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import FavoriteScreen from './favorite';
 const SignUp = ({ navigation }) => {
   return (
     <KeyboardAwareScrollView
@@ -44,7 +45,9 @@ const SignUp = ({ navigation }) => {
             <View style={styles.sign}>
             <TouchableOpacity
                 style={styles.SignUp}
-                onPress={() => {Alert.alert ('HEHE','account created')}}>
+                onPress={() => //{Alert.alert ('account created')}}
+                navigation.navigate('Favorite', { name: 'Favorite' })
+            }>
                 <Text style={styles.buttonText}>Create An Account </Text>
             </TouchableOpacity></View>
           </View>
