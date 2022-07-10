@@ -1,55 +1,86 @@
-import { StyleSheet,Image, Text ,  View,SafeAreaView, TouchableOpacity,Button, Dimensions } from 'react-native';
-import React from 'react'
-import { TextInput } from 'react-native';
+import { StyleSheet,Image, Text , View, SafeAreaView, TouchableOpacity,Button, Dimensions, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { Component } from 'react'
+import { Formik } from 'formik'
+import axios from 'axios'
+import { NetworkInfo } from "react-native-network-info"
+
+const API_URL = "http://192.168.1.80:8888"
+
 
 const SignIn = ({navigation}) => {
+
+  const login = (formData) => {
+    axios.post(API_URL + '/login', formData)
+      .then(response => {
+        console.log(response.data)
+        alert('Login successfully')
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        alert(error.response.data)
+      })
+  }
+
   return (
     <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
-    <View style={styles.container} >
+    <View style={styles.container}>
       <Image style ={styles.background}  source={require('../../assets/si.png')} />
       <View style = {styles.inputscreen}> 
         <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
         <Image style ={styles.background}  source={require('../../assets/arrrows.jpg')} />
         </TouchableOpacity>
 
-        <View style = {styles.box}>
-          <View style = {styles.input}>
-            <TextInput
-            placeholder="Your Name"
-            
-            placeholderTextColor="gray"
-             style={styles.textinput}
-             autoCapitalize = "none"
+        <Formik initialValues={{username: '', password: ''}} onSubmit={login} >
+          {({handleChange, handleBlur, handleSubmit, values}) => (
+            <View style = {styles.box}>
 
-            />
-            <TextInput
-              placeholder="Your Password"
-              placeholderTextColor="gray"
-              style = {styles.textinput}
+              <View style = {styles.input}>
+                <TextInput
+                id="username"
+                name="username"
+                placeholder="Username"
+                placeholderTextColor="gray"
+                style={styles.textinput}
+                autoCapitalize = "none"
+                onChangeText={handleChange('username')}
+                onBlur={handleBlur('username')}
+                value={values.username}
+                />
+              </View>
 
-            /></View>
-          <View styles= {styles.forgotpassword}>
-            
-            <TouchableOpacity
-            style={styles.reset}
-            onPress={() => navigation.navigate('SignUp')}>
-              <Text style= {styles.forgot} > Forgot your password?</Text>
-              <Text style={styles.reset}> reset password </Text>
-            </TouchableOpacity>
-            </View> 
-          <View style={styles.sign}>
-          <TouchableOpacity
-              style={styles.Signin}
-              onPress={() => {alert ('sign in')}}>
-              <Text style={styles.buttonText}>SIGN IN </Text>
-          </TouchableOpacity></View>
-        </View>
+              <View style = {styles.input}>
+                <TextInput
+                  placeholder="Your Password"
+                  placeholderTextColor="gray"
+                  style = {styles.textinput}
+                  secureTextEntry
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                /></View>
+
+              <TouchableOpacity
+                style={styles.reset}
+                onPress={() => navigation.navigate('SignUp')}>
+                <Text style= {styles.forgot} > Forgot your password?</Text>
+                <Text style={styles.reset}> reset password </Text>
+              </TouchableOpacity>
+
+              <View style={styles.sign}>
+                  <TouchableOpacity
+                  style={styles.Signin}
+                  onPress={handleSubmit} title="Submit">
+                  <Text style={styles.buttonText}>SIGN IN </Text>
+                </TouchableOpacity>
+              </View>
+
+            </View>
+          )}  
+          </Formik>
       </View>
-        
-        
-        
-    </View></KeyboardAwareScrollView>
+    </View>
+    </KeyboardAwareScrollView>
   );
 }
 export default SignIn;
