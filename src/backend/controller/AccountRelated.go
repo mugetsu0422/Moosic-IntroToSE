@@ -24,7 +24,7 @@ func LoginController(c echo.Context) error {
 
 func ForgetPassword(c echo.Context) error {
 	db := db.GetDBInstance()
-	user := &model.User{}
+	user := &models.User{}
 
 	if err := c.Bind(user); err != nil {
 		return err;
