@@ -27,8 +27,8 @@ const SignIn = ({navigation}) => {
     <View style={styles.container}>
       <Image style ={styles.background}  source={require('../../assets/si.png')} />
       <View style = {styles.inputscreen}> 
-        <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
-        <Image style ={styles.background}  source={require('../../assets/arrrows.jpg')} />
+      <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
+        <Icon  name = "arrowleft" size ='50%' color='red' borderRadius={2}  />
         </TouchableOpacity>
 
         <Formik initialValues={{username: '', password: ''}} onSubmit={login} >

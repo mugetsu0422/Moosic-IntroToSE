@@ -1,7 +1,9 @@
 package db
 
-import(
+import (
 	"log"
+
+	models "github.com/tientran505/musicapp/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -19,9 +21,18 @@ func NewDB(params ...string) *gorm.DB {
 		log.Panic(err)
 	}
 
+	DB.Migrator().CurrentDatabase()
+	// DB.Migrator().DropTable(&models.User{})
+	// DB.Migrator().DropTable("users")
+
+	//DB.Migrator().CreateTable(&models.User{})
+
+	user := models.User{Username: "Nguyen Van C"}
+	DB.Create(&user)
+
 	return DB
 }
 
-func GetDBInstance() *gorm.DB{
+func GetDBInstance() *gorm.DB {
 	return DB
 }

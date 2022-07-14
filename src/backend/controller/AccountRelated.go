@@ -19,6 +19,7 @@ func LoginController(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "invalid password")
 	}
 
+
 	return c.JSON(http.StatusOK, user)
 }
 

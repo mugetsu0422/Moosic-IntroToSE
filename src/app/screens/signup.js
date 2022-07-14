@@ -1,22 +1,22 @@
 import { StyleSheet,Image, Text ,  View,TouchableOpacity,TextInput,Alert, ImageBackground } from 'react-native';
 import * as React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import FavoriteScreen from './favorite';
+import Icon from 'react-native-vector-icons/AntDesign';
 const SignUp = ({ navigation }) => {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{flex: 1}}>
       <View style={styles.container} >
           <View style ={styles.background}  >
-            <ImageBackground style ={styles.large}  source={require('../../assets/wel.jpg')} />
+            <ImageBackground style ={styles.large}  source={require('../assets/wel.jpg')} />
             <View style ={styles.logo}>
-                <Image style ={styles.small}  source={require('../../assets/sool.jpg')} />
+                <Image style ={styles.small}  source={require('../assets/sool.jpg')} />
                 <Text style = {styles.wel}> Welcome, Guest!!!</Text>
             </View>
           </View>
         <View style = {styles.inputscreen}> 
           <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
-          <ImageBackground style ={styles.background1}  source={require('../../assets/arrrows.jpg')} />
+            <Icon name = "arrowleft" size ='50%' color='red' borderRadius={2}  />
           </TouchableOpacity>
 
           <View style = {styles.box}>
@@ -45,9 +45,7 @@ const SignUp = ({ navigation }) => {
             <View style={styles.sign}>
             <TouchableOpacity
                 style={styles.SignUp}
-                onPress={() => //{Alert.alert ('account created')}}
-                navigation.navigate('Favorite', { name: 'Favorite' })
-            }>
+                onPress={() => {Alert.alert ('HEHE','account created')}}>
                 <Text style={styles.buttonText}>Create An Account </Text>
             </TouchableOpacity></View>
           </View>
@@ -80,6 +78,7 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 2,
+    justifyContent:"center",
     alignItems:"center",
     alignContent:"center",
 },
@@ -90,38 +89,27 @@ large:{
 },
 logo:{
   width: "100%",
-  marginTop:200,
   position: 'absolute',
   justifyContent:"center",
   alignItems:"center",
   alignContent:"center",
+
 },
 wel:{
   textAlign:"center",
   fontSize:40,
   fontWeight:"bold",
- 
-  
 },
 small:{
   borderRadius:100,
   width: '33%', height: '280%', resizeMode: 'cover',
- 
-
 },
   box:{
     flex: 5,
     paddingHorizontal: 20,
-   
     flexDirection:'column',
-    
     marginBottom: 8,
-    flexDirection:'column',
-   
     paddingBottom: 50,
-
-   
-    
   },
   background1:{
     width: '100%',
@@ -133,7 +121,7 @@ small:{
     backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingVertical:  20,
+    paddingVertical:  4,
     paddingHorizontal: 20,
     borderColor:'black',
     borderWidth: 1,
@@ -163,10 +151,7 @@ small:{
 back:{
   alignContent: 'flex-start',
   resizeMode: 'stretch',
-  width:'10%',
-  height:'3%',
-  
-  
+  width:'100%',
   flex: 0.7,
 },
   input:{

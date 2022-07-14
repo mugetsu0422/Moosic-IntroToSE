@@ -13,11 +13,11 @@ import(
 // }
 
 const (
-	DBUser = ""
-	DBPassword = ""
-	DBName = ""
-	DBHost = ""
-	DBPort = ""
+	DBUser = "root"
+	DBPassword = "8720"
+	DBName = "sys"
+	DBHost = "127.0.0.1"
+	DBPort = "3306"
 	DBType = ""
 )
 
