@@ -14,7 +14,7 @@ import(
 
 const (
 	DBUser = "root"
-	DBPassword = "8720"
+	DBPassword = "123456"
 	DBName = "sys"
 	DBHost = "127.0.0.1"
 	DBPort = "3306"
