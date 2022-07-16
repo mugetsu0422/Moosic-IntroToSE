@@ -8,9 +8,9 @@ const SignUp = ({ navigation }) => {
       contentContainerStyle={{flex: 1}}>
       <View style={styles.container} >
           <View style ={styles.background}  >
-            <ImageBackground style ={styles.large}  source={require('../assets/wel.jpg')} />
+            <ImageBackground style ={styles.large}  source={require('../../assets/wel.jpg')} />
             <View style ={styles.logo}>
-                <Image style ={styles.small}  source={require('../assets/sool.jpg')} />
+                <Image style ={styles.small}  source={require('../../assets/sool.jpg')} />
                 <Text style = {styles.wel}> Welcome, Guest!!!</Text>
             </View>
           </View>

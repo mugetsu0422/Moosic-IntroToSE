@@ -4,40 +4,24 @@ import React,{useState} from "react";
 
 const imageheight = Dimensions.get('window').width/3.5;
 
-const DATA =[
-    {id:1, name:"rock", link:require('../assets/rock.png')},
-    {id:2, name:"electronic", link:require("../assets/electronic.png")},
-    {id:3, name:"pop", link:require("../assets/pop.png")},
-    {id:4, name:"country", link:require("../assets/country.png")},
-    {id:5, name:"funk", link:require("../assets/funk.png")},
-    {id:6, name:"jazz", link:require("../assets/jazz.png")},
-    {id:7, name:"soul", link:require("../assets/soul.png")},
-    {id:8, name:"classical", link:require("../assets/classical.png")},
-    {id:9, name:"chill", link:require("../assets/chill.png")},
-    {id:10, name:"edm", link:require("../assets/edm.png")},
-    {id:11, name:"love", link:require("../assets/love.png")},
-    {id:12, name:"motivation", link:require("../assets/motivation.png")},
-    {id:13, name:"rhymtm", link:require("../assets/rhymtm.png")},
-    {id:14, name:"sad", link:require("../assets/sad.png")}  
-  ];
 
 
 const Favorite = () =>{
     const [dataa, setdataa] = useState([
-    {id:1, name:"rock", link:require('../assets/rock.png')},
-    {id:2, name:"electronic", link:require("../assets/electronic.png")},
-    {id:3, name:"pop", link:require("../assets/pop.png")},
-    {id:4, name:"country", link:require("../assets/country.png")},
-    {id:5, name:"funk", link:require("../assets/funk.png")},
-    {id:6, name:"jazz", link:require("../assets/jazz.png")},
-    {id:7, name:"soul", link:require("../assets/soul.png")},
-    {id:8, name:"classical", link:require("../assets/classical.png")},
-    {id:9, name:"chill", link:require("../assets/chill.png")},
-    {id:10, name:"edm", link:require("../assets/edm.png")},
-    {id:11, name:"love", link:require("../assets/love.png")},
-    {id:12, name:"motivation", link:require("../assets/motivation.png")},
-    {id:13, name:"rhymtm", link:require("../assets/rhymtm.png")},
-    {id:14, name:"sad", link:require("../assets/sad.png")}  ]);
+    {id:1, name:"rock", link:require('../../assets/rock.png')},
+    {id:2, name:"electronic", link:require("../../assets/electronic.png")},
+    {id:3, name:"pop", link:require("../../assets/pop.png")},
+    {id:4, name:"country", link:require("../../assets/country.png")},
+    {id:5, name:"funk", link:require("../../assets/funk.png")},
+    {id:6, name:"jazz", link:require("../../assets/jazz.png")},
+    {id:7, name:"soul", link:require("../../assets/soul.png")},
+    {id:8, name:"classical", link:require("../../assets/classical.png")},
+    {id:9, name:"chill", link:require("../../assets/chill.png")},
+    {id:10, name:"edm", link:require("../../assets/edm.png")},
+    {id:11, name:"love", link:require("../../assets/love.png")},
+    {id:12, name:"motivation", link:require("../../assets/motivation.png")},
+    {id:13, name:"rhymtm", link:require("../../assets/rhymtm.png")},
+    {id:14, name:"sad", link:require("../../assets/sad.png")}  ]);
 
 
     const [count, setcount]= useState(0);
