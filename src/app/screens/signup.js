@@ -2,7 +2,36 @@ import { StyleSheet,Image, Text ,  View,TouchableOpacity,TextInput,Alert, ImageB
 import * as React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/AntDesign';
+import { Formik }  from 'formik'
+import axios from 'axios'
+
+const API_URL = "http://192.168.1.80:8888"
+
 const SignUp = ({ navigation }) => {
+
+  const register = (formData) => {
+    if (!formData.username || !formData.password || !formData.password2) {
+      alert('Please add all fields')
+    }
+
+    else if (formData.password !== formData.password2) {
+      alert('Passwords do not match')
+    }
+
+    else {
+      axios.put(API_URL + '/register', formData)
+      .then(response => {
+        console.log(response.data)
+        alert('Register successfully')
+        navigation.navigate('Favorite', { name: 'Favorite' })
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        alert(error.response.data)
+      })
+    }
+  }
+
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{flex: 1}}>
@@ -14,53 +43,77 @@ const SignUp = ({ navigation }) => {
                 <Text style = {styles.wel}> Welcome, Guest!!!</Text>
             </View>
           </View>
-        <View style = {styles.inputscreen}> 
-          <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
-            <Icon name = "arrowleft" size ='50%' color='red' borderRadius={2}  />
-          </TouchableOpacity>
-
-          <View style = {styles.box}>
-            <View style = {styles.input}>
-              <TextInput
-              placeholder="Username"
-              
-              placeholderTextColor="gray"
-              style={styles.textinput}
-              autoCapitalize = "none"
-
-              />
-              <TextInput
-                placeholder="Password"
-                placeholderTextColor="gray"
-                style = {styles.textinput}
-
-              />
-              <TextInput
-                placeholder="Confirm Password"
-                placeholderTextColor="gray"
-                style = {styles.textinput}
-
-              />
+          
+        <Formik initialValues={{username: '', password: '', password2: ''}} onSubmit={register} >
+          {({handleChange, handleBlur, handleSubmit, values}) => (
+            <View style = {styles.inputscreen}> 
+            <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
+              <Icon name = "arrowleft" size ='50%' color='red' borderRadius={2}  />
+            </TouchableOpacity>
             
-            <View style={styles.sign}>
-            <TouchableOpacity
-                style={styles.SignUp}
-                onPress={() => {Alert.alert ('HEHE','account created')}}>
-                <Text style={styles.buttonText}>Create An Account </Text>
-            </TouchableOpacity></View>
-          </View>
-          <View styles= {styles.signin}>
+
+            <View style = {styles.box}>
+              <View style = {styles.input}>
+                <TextInput
+                  id="username"
+                  name="username"
+                  placeholder="Username"
+                  placeholderTextColor="gray"
+                  style={styles.textinput}
+                  autoCapitalize = "none"
+                  onChangeText={handleChange('username')}
+                  onBlur={handleBlur('username')}
+                  value={values.username}
+                />
+
+                <TextInput
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  placeholderTextColor="gray"
+                  style={styles.textinput}
+                  autoCapitalize = "none"
+                  secureTextEntry
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+
+                />
+                <TextInput
+                  id="password2"
+                  name="password2"
+                  placeholder="Confirm Password"
+                  placeholderTextColor="gray"
+                  style={styles.textinput}
+                  autoCapitalize = "none"
+                  secureTextEntry
+                  onChangeText={handleChange('password2')}
+                  onBlur={handleBlur('password2')}
+                  value={values.password2}
+
+                />
+              
+              <View style={styles.sign}>
               <TouchableOpacity
-              style={styles.click}
-              onPress={() => navigation.navigate("SignIn")}>
-                <Text style= {styles.forgot} > Already has an account?</Text>
-                <Text style={styles.click}> Sign In </Text>
-              </TouchableOpacity>
-            </View> 
-          </View >
+                  style={styles.SignUp}
+                  onPress={handleSubmit} title="Submit">
+                  <Text style={styles.buttonText}>Create An Account </Text>
+              </TouchableOpacity></View>
+            </View>
+            <View styles= {styles.signin}>
+                <TouchableOpacity
+                style={styles.click}
+                onPress={() => navigation.navigate("SignIn")}>
+                  <Text style= {styles.forgot} > Already has an account?</Text>
+                  <Text style={styles.click}> Sign In </Text>
+                </TouchableOpacity>
+              </View> 
+            </View >
+            
+            </View>
+          )}
           
-        </View>
-          
+        </Formik>  
           
           
       </View>

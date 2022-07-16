@@ -19,6 +19,6 @@ func main() {
 
 	e.POST("/login", controllers.LoginController)
 	e.POST("/like", controllers.LikeSong)
-	e.POST("/register", controllers.RegisterController)
+	e.PUT("/register", controllers.RegisterController)
 	e.Logger.Fatal(e.Start(":8888"))
 }

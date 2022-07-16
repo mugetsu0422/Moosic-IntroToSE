@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/tientran505/musicapp/db"
 	"golang.org/x/crypto/bcrypt"
