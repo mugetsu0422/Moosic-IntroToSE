@@ -1,10 +1,12 @@
 package mysqlgorm
 
-import(
+import (
 	"fmt"
 	"log"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 var dbGORM *gorm.DB
@@ -29,7 +31,11 @@ func NewDB(params ...string) *gorm.DB {
 	conString := GetMySQLConnectionString()
 	log.Print(conString)
 
-	dbGORM, err = gorm.Open(mysql.Open(conString), &gorm.Config{})
+	dbGORM, err = gorm.Open(mysql.Open(conString), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+	})
 
 	if err != nil {
 		log.Panic(err)

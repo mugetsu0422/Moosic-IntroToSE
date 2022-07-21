@@ -1,12 +1,15 @@
 package main
 
 import (
-    "github.com/labstack/echo/v4"
-    "github.com/labstack/echo/v4/middleware"
-    "music-app-backend/constant"
-    "music-app-backend/entity/response"
-    "net/http"
-    "regexp"
+	"music-app-backend/constant"
+	"music-app-backend/controller"
+	mysqlgorm "music-app-backend/database/mysqlGORM"
+	"music-app-backend/entity/response"
+	"net/http"
+	"regexp"
+
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func SubdomainCORS(next echo.HandlerFunc) echo.HandlerFunc {
@@ -38,8 +41,9 @@ func handleOptions(context echo.Context) error {
 
 func main() {
     constant.Init()
-    
     e := echo.New()
+    // Connect to mysql using gorm
+    mysqlgorm.NewDB()
 
     // Middleware
     e.Use(middleware.Logger())
@@ -50,6 +54,12 @@ func main() {
     e.IPExtractor = echo.ExtractIPDirect()
 
     e.OPTIONS("*", handleOptions)
+
+    // Controllers
+    e.GET("/user/forgetpassword", controller.ForgetPassword)
+    e.GET("/song", controller.GetSong)
+    e.POST("/song/like", controller.LikeSong)
+	e.DELETE("/song/like", controller.DislikeSong)
 
     // Start server
     e.Logger.Fatal(e.Start(":" + constant.ServerPort))
