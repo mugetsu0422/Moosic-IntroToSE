@@ -4,10 +4,11 @@ import (
 	mysqlgorm "music-app-backend/database/mysqlGORM"
 	"music-app-backend/model"
 	"net/http"
+
 	"github.com/labstack/echo/v4"
 )
 
-// Like Song API 
+// Like Song API
 // Method: POST and DELETE
 // Path: /song/like
 // Content-Type: JSON
@@ -49,22 +50,28 @@ func DislikeSong(c echo.Context) error {
 
 // Get Song info API
 // Method: GET
-// Path: /song
-// Content-Type: JSON
-// Form:
-// {
-//      "song_id": "song_id"
-// }
+// Path: /search/:type?q=	type là song hoặc artist
 func GetSong(c echo.Context) error {
 	db := mysqlgorm.GetDBInstance()
-	song := &model.Song{}
+	songs := []model.Song{}
 
-	if err := c.Bind(song); err != nil {
-		return err;
+	_type := c.Param("type")
+	query := c.QueryParam("q")
+	query = "%" + query + "%"
+	
+	if _type == "song" {
+		result := db.Where("title like ?", query).Find(&songs);
+		if result.Error != nil {
+			return c.JSON(http.StatusInternalServerError, "Song not found");
+		}
+	} else if _type == "artist" {
+		result := db.Where("performer like ?", query).Find(&songs);
+		if result.Error != nil {
+			return c.JSON(http.StatusInternalServerError, "Song not found");
+		}
+	} else {
+		return c.JSON(http.StatusNotFound, "Invalid path")
 	}
-	result := db.Take(&song);
-	if result.Error != nil {
-		return c.JSON(http.StatusInternalServerError, "Song not found");
-	}
-	return c.JSON(http.StatusOK, song) 
+
+	return c.JSON(http.StatusOK, songs) 
 }

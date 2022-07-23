@@ -57,7 +57,7 @@ func main() {
 
     // Controllers
     e.GET("/user/forgetpassword", controller.ForgetPassword)
-    e.GET("/song", controller.GetSong)
+    e.GET("/search/:type", controller.GetSong)
     e.POST("/song/like", controller.LikeSong)
 	e.DELETE("/song/like", controller.DislikeSong)
 
