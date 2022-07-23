@@ -1,4 +1,4 @@
-import { StyleSheet,Image, Text ,  View,SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet,Image, Text ,  View,SafeAreaView, TouchableOpacity, StatusBar } from 'react-native';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,7 +7,7 @@ const Welcomescreen = ({ navigation }) =>  {
   
   return (
     
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.AndroidSafeArea}>
       
         <Image style ={styles.logo}  source={require('../../assets/sool.jpg')} />
         <View style ={styles.views1}>
@@ -38,11 +38,11 @@ const Welcomescreen = ({ navigation }) =>  {
 export default Welcomescreen;
 
 const styles = StyleSheet.create({
-  container: {
-   backgroundColor:'white',
-    flex:1,
-    
-  },
+  AndroidSafeArea: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: 'white',
+},
   logo: {
     top:20,
     width:'100%',

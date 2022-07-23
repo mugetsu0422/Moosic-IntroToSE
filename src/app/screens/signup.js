@@ -1,4 +1,4 @@
-import { StyleSheet,Image, Text ,  View,TouchableOpacity,TextInput,Alert, ImageBackground } from 'react-native';
+import { StyleSheet,Image, Text ,  View,TouchableOpacity,TextInput,Alert, ImageBackground, StatusBar, Platform } from 'react-native';
 import * as React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -35,7 +35,7 @@ const SignUp = ({ navigation }) => {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{flex: 1}}>
-      <View style={styles.container} >
+      <View style={styles.AndroidSafeArea} >
           <View style ={styles.background}  >
             <ImageBackground style ={styles.large}  source={require('../../assets/wel.jpg')} />
             <View style ={styles.logo}>
@@ -129,6 +129,11 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor:'white'
   },
+  AndroidSafeArea: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: 'white',
+  },
   background: {
     flex: 2,
     justifyContent:"center",
@@ -162,7 +167,6 @@ small:{
     paddingHorizontal: 20,
     flexDirection:'column',
     marginBottom: 8,
-    paddingBottom: 50,
   },
   background1:{
     width: '100%',
@@ -204,8 +208,8 @@ small:{
 back:{
   alignContent: 'flex-start',
   resizeMode: 'stretch',
-  width:'100%',
-  flex: 0.7,
+  width:'15%',
+  flex: 1,
 },
   input:{
     flex:4,

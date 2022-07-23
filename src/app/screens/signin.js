@@ -1,4 +1,4 @@
-import { StyleSheet,Image, Text , View, SafeAreaView, TouchableOpacity,Button, Dimensions, TextInput } from 'react-native';
+import { StyleSheet,Image, Text , View, SafeAreaView, TouchableOpacity,Button, Dimensions, TextInput, StatusBar } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import React, { Component } from 'react'
 import { Formik } from 'formik'
@@ -24,7 +24,7 @@ const SignIn = ({navigation}) => {
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
-    <View style={styles.container}>
+    <View style={styles.AndroidSafeArea}>
       <Image style ={styles.background}  source={require('../../assets/si.png')} />
       <View style = {styles.inputscreen}> 
       <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
@@ -87,11 +87,11 @@ export default SignIn;
 
 
 const styles = StyleSheet.create({
-  container: {
-    
-    flex:1,
-    backgroundColor:'black'
-  },
+  AndroidSafeArea: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: 'white',
+},
   background: {
     width: '100%',
     resizeMode:'stretch',
@@ -106,11 +106,6 @@ const styles = StyleSheet.create({
     marginTop: -20,
     marginBottom: 8,
     flexDirection:'column',
-   
-    paddingBottom: 50,
-
-   
-    
   },
   inputscreen:{
     flex: 2,
@@ -159,13 +154,14 @@ textinput2:{
   textAlign:'center',
 },
   back:{
-    marginVertical:10,
     marginHorizontal: 10,
     alignContent: 'flex-start',
     resizeMode: 'repeat',
-    width:'10%',
+    width:'15%',
     height:'5%',
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input:{
     flex:4,
@@ -173,7 +169,9 @@ textinput2:{
   reset:{
     color: 'red',
     flexDirection:"row",
-    justifyContent:"center"
+    justifyContent:"center",
+    marginBottom: 10,
+    fontSize: 15,
   },
   forgotpassword:{
     color:'white',
@@ -183,6 +181,7 @@ textinput2:{
   },
   forgot:{
     color: 'black',
+    fontSize: 15,
   },
   Signin:{
 

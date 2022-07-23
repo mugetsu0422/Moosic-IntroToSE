@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 import { AntDesign } from '@expo/vector-icons';
 import { Formik } from 'formik'
@@ -8,20 +8,29 @@ import axios from 'axios'
 const API_URL = "http://192.168.100.9:4000/search/artist?q=andiez"
 
 export default function ForgotPassword({navigation}) {
-  const GetPassword = (formData) => {
-    axios.get(API_URL, formData)
+  const GetPassword = async(formData) => {
+    const {data} = await axios.get(API_URL, formData)
       .then(response => {
         console.log(response.data)
         alert('Login successfully')
       })
       .catch(error => {
         console.log(error)
-        alert(error.response.data)
+        console.error(error.request?._response);
       })
+
+    // const res = await fetch("http://localhost:4000/search/artist?q=andiez", {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // });
+    // const json = await res.json()
+    // console.log(json)
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.AndroidSafeArea}>
       <View style={styles.des}>
         <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
           <AntDesign name = "arrowleft" size={50} color='white' borderRadius={2}  />
@@ -70,25 +79,22 @@ export default function ForgotPassword({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  AndroidSafeArea: {
     flex: 1,
-    justifyContent: 'center',
-  },
+    paddingTop: StatusBar.currentHeight,
+},
   back:{
-    marginVertical:10,
     marginHorizontal: 10,
     alignContent: 'flex-start',
     resizeMode: 'repeat',
-    width:'10%',
-    height:'5%',
     flex: 1,
-    paddingTop: 25,
+    width: '15%',
+    justifyContent: 'center',
   },
   txt: {
     fontSize: 30,
     color: 'red',
     paddingVertical: 50,
-    paddingHorizontal: 42,
     alignSelf: 'center',
   },
   des: {
@@ -112,6 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     weight: 200,
     height: 44,
+    justifyContent: 'center',
   },
   textinput:{
     textAlign:'center',
@@ -126,10 +133,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
   },
   getbackText: {
-    marginVertical: 9, 
     fontSize: 20, 
     color: 'white', 
-    marginHorizontal: 63, 
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 });
