@@ -7,16 +7,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// Forget Password API
+// Forgot Password API
 // Method: GET
-// Path: /user/forgetpassword
+// Path: /user/forgotpassword
 // Content-Type: JSON
 // Form:
 // {
 //      "username": "username",
 //      "email": "email"
 // }
-func ForgetPassword(c echo.Context) error {
+func ForgotPassword(c echo.Context) error {
 	db := mysqlgorm.GetDBInstance()
 	user := &model.User{}
 

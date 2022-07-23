@@ -56,7 +56,7 @@ func main() {
     e.OPTIONS("*", handleOptions)
 
     // Controllers
-    e.GET("/user/forgetpassword", controller.ForgetPassword)
+    e.GET("/user/forgotpassword", controller.ForgotPassword)
     e.GET("/search/:type", controller.GetSong)
     e.POST("/song/like", controller.LikeSong)
 	e.DELETE("/song/like", controller.DislikeSong)
