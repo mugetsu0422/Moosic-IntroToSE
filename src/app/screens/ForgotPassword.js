@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TextInput } from 'react-native';
 import Constants from 'expo-constants';
 
 export default function ForgotPassword() {
@@ -10,12 +10,15 @@ export default function ForgotPassword() {
       </View>
       <View style ={styles.info}>
         <Text style = {styles.txt}>Get your password back </Text>
+
         <View style ={styles.box}>
-          <Text style = {{marginVertical: 6, fontSize: 20, marginHorizontal: 10}}>Userename </Text>
+          <TextInput style = {{marginVertical: 6, fontSize: 20, marginHorizontal: 10}} placeholder="Username"/>
         </View>
+
         <View style ={styles.box}>
-          <Text style = {{marginVertical: 6, fontSize: 20, marginHorizontal: 10}}>Email </Text>
+          <TextInput style = {{marginVertical: 6, fontSize: 20, marginHorizontal: 10}} placeholder="email"/>
         </View>
+
         <View style ={styles.button}>
           <Text style = {{marginVertical: 9, fontSize: 20, color: 'white', marginHorizontal: 63}}>Done </Text>
         </View>
