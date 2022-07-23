@@ -35,13 +35,11 @@ const styles = StyleSheet.create({
     flex: 1,
     color: 'black',
     fontSize: 18,
-    fontFamily : 'san francisco pro text',
     marginHorizontal: 20,
     marginVertical: 25,
   },
   txt: {
       fontSize: 30,
-      fontFamily: 'verdana',
       color: '#de4552',
       paddingVertical: 50,
       paddingHorizontal: 42,

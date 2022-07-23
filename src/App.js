@@ -2,9 +2,11 @@ import Welcomescreen from './app/screens/Welcome'
 import SignIn from './app/screens/signin';
 import SignUp from './app/screens/signup';
 import FavoriteScreen from './app/screens/favorite';
+import ForgotPassword from './app/screens/ForgotPassword';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, {useState} from 'react';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,7 @@ function App() {
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="SignUp" component={SignUp}/>
         <Stack.Screen name="Favorite" component={FavoriteScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

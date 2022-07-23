@@ -48,7 +48,7 @@ const SignUp = ({ navigation }) => {
           {({handleChange, handleBlur, handleSubmit, values}) => (
             <View style = {styles.inputscreen}> 
             <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
-              <Icon name = "arrowleft" size ='50%' color='red' borderRadius={2}  />
+              <Icon name = "arrowleft" size={50} color='red' borderRadius={2}  />
             </TouchableOpacity>
             
 

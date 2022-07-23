@@ -28,7 +28,7 @@ const SignIn = ({navigation}) => {
       <Image style ={styles.background}  source={require('../../assets/si.png')} />
       <View style = {styles.inputscreen}> 
       <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
-        <Icon  name = "arrowleft" size ='50%' color='red' borderRadius={2}  />
+        <Icon  name = "arrowleft" size={50} color='red' borderRadius={2}  />
         </TouchableOpacity>
 
         <Formik initialValues={{username: '', password: ''}} onSubmit={login} >
@@ -62,7 +62,7 @@ const SignIn = ({navigation}) => {
 
               <TouchableOpacity
                 style={styles.reset}
-                onPress={() => navigation.navigate('SignUp')}>
+                onPress={() => navigation.navigate('ForgotPassword')}>
                 <Text style= {styles.forgot} > Forgot your password?</Text>
                 <Text style={styles.reset}> reset password </Text>
               </TouchableOpacity>
