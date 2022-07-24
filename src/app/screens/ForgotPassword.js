@@ -4,29 +4,43 @@ import Constants from 'expo-constants';
 import { AntDesign } from '@expo/vector-icons';
 import { Formik } from 'formik'
 import axios from 'axios'
-
-const API_URL = "http://192.168.100.9:4000/search/artist?q=andiez"
+import { API_URL, PATH } from '../constants/constants';
 
 export default function ForgotPassword({navigation}) {
   const GetPassword = async(formData) => {
-    const {data} = await axios.get(API_URL, formData)
-      .then(response => {
-        console.log(response.data)
-        alert('Login successfully')
-      })
-      .catch(error => {
-        console.log(error)
-        console.error(error.request?._response);
-      })
+    const {username, email} = formData
+    const fullURL = `${API_URL}${PATH.FORGOT_PASSWORD}u=${username}&e=${email}`
+    axios.get(fullURL)
+    .then(response => {
+      console.log(response.data)
+      alert('Login successfully')
+    })
+    .catch(error => {
+      console.log(error.response.data)
+      alert(error.response.data)
+    })
 
-    // const res = await fetch("http://localhost:4000/search/artist?q=andiez", {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // });
-    // const json = await res.json()
-    // console.log(json)
+  //   var data = JSON.stringify({
+  //     "username": "admin",
+  //     "email": "admin@gmail.com",
+  //   });
+    
+  //   var config = {
+  //     method: 'get',
+  //     url: API_URL + PATH.FORGOT_PASSWORD,
+  //     headers: { 
+  //       'Content-Type': 'application/json'
+  //     },
+  //     data : data
+  //   };
+    
+  //   axios(config)
+  //   .then(function (response) {
+  //     console.log(JSON.stringify(response.data));
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
   }
 
   return (

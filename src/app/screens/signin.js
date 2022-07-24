@@ -51,7 +51,7 @@ const SignIn = ({navigation}) => {
 
               <View style = {styles.input}>
                 <TextInput
-                  placeholder="Your Password"
+                  placeholder="Password"
                   placeholderTextColor="gray"
                   style = {styles.textinput}
                   secureTextEntry
@@ -64,7 +64,7 @@ const SignIn = ({navigation}) => {
                 style={styles.reset}
                 onPress={() => navigation.navigate('ForgotPassword')}>
                 <Text style= {styles.forgot} > Forgot your password?</Text>
-                <Text style={styles.reset}> reset password </Text>
+                <Text style={styles.reset}> Get your password back </Text>
               </TouchableOpacity>
 
               <View style={styles.sign}>
@@ -154,7 +154,6 @@ textinput2:{
   textAlign:'center',
 },
   back:{
-    marginHorizontal: 10,
     alignContent: 'flex-start',
     resizeMode: 'repeat',
     width:'15%',
