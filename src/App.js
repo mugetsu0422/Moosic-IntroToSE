@@ -1,6 +1,7 @@
 import Welcomescreen from './app/screens/Welcome'
 import SignIn from './app/screens/signin';
 import SignUp from './app/screens/signup';
+import Setting from './app/screens/setting';
 import FavoriteScreen from './app/screens/favorite';
 import ForgotPassword from './app/screens/ForgotPassword';
 import { NavigationContainer } from '@react-navigation/native';
@@ -42,6 +43,7 @@ function App() {
         <Stack.Screen name="SignUp" component={SignUp}/>
         <Stack.Screen name="Favorite" component={FavoriteScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
+        <Stack.Screen name="Setting" component={Setting}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
