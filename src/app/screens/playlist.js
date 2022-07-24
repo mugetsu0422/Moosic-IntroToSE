@@ -86,9 +86,9 @@ const Playlist = ({ navigation }) =>  {
     <View style = {styles.container}>
         <ImageBackground style = {styles.header} source = {require ('../../assets/blackblur.jpg')}>
           <View style = {styles.plinfo}>
-              <Image
+          <Image
               style = {styles.imagesetting}
-              source = {require(imagelink)} />
+              source = {require('../../assets/chill.png')} />
               <View style= {styles.info}>
                 <Text style= {styles.plname}> Playlist's name</Text>
                 <View style ={{flexDirection: 'row',justifyContent:'space-between'}}>
