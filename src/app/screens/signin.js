@@ -5,13 +5,13 @@ import { Formik } from 'formik'
 import axios from 'axios'
 import { NetworkInfo } from "react-native-network-info"
 import Icon from 'react-native-vector-icons/AntDesign';
-const API_URL = "http://192.168.1.80:8888"
+const API_URL = "http://192.168.1.80:4000"
 
 
 const SignIn = ({navigation}) => {
 
   const login = (formData) => {
-    axios.post(API_URL + '/login', formData)
+    axios.post(API_URL + '/user/login', formData)
       .then(response => {
         console.log(response.data)
         alert('Login successfully')

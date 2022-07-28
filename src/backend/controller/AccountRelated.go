@@ -76,7 +76,10 @@ func RegisterController(c echo.Context) error {
 	new_user := &models.User{
 		Username: user.Username,
 		Password: hashPassword,
+		User_role: "user",
 	}
+
+	log.Printf(new_user)
 
 	db.Create(&new_user)
 	return c.JSON(http.StatusOK, new_user)

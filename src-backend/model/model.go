@@ -2,13 +2,13 @@ package model
 
 type User struct {
 	User_id      string `json:"user_id" gorm:"primaryKey"`
-	Username     string `json:"username"`
+	Username     string `json:"username" xml:"username" form:"username" query:"username"`
 	Email        string `json:"email"`
 	User_role	 string `json:"user_role"`
 	Birthday     string `json:"birthday"`
 	Gender       int    `json:"gender"`
 	Phone_number string `json:"phone_number"`
-	Password	 string `json:"password"`
+	Password	 string `json:"password" xml:"password" form:"password" query:"password,omitempty"`
 }
 
 type Song struct {

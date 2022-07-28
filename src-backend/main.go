@@ -60,6 +60,8 @@ func main() {
     e.GET("/search/:type", controller.GetSong)
     e.POST("/song/like", controller.LikeSong)
 	e.DELETE("/song/like", controller.DislikeSong)
+    e.PUT("/user/register", controller.Register)
+    e.POST("/user/login", controller.Login)
 
     // Start server
     e.Logger.Fatal(e.Start(":" + constant.ServerPort))
