@@ -25,7 +25,7 @@ const HomeDisplay = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.top}>
         <Image 
-          source={require('./assets/screen1.jpg')}
+          source={require('../../assets/screen1.jpg')}
           style={styles.background}
         />
       </View>
@@ -33,11 +33,11 @@ const HomeDisplay = ({navigation}) => {
       <View style={styles.body}> 
         <ScrollView>
         <View>
-          <Image style={styles.tropy} source={require('./assets/Tropy.png')} />
+          <Image style={styles.tropy} source={require('../../assets/trophy.png')} />
           <Text style={styles.recommend}> Recommend play list </Text>
 
           <TouchableOpacity onPress={() => navigation.navigate('Playlist')}>
-            <Image style={styles.playlist} source={require('./assets/PL1.png')} />
+            <Image style={styles.playlist} source={require('../../assets/PL1.png')} />
             <View style={styles.name} > 
               <Text style={styles.PLname} > Fall out boy </Text>
             </View>
@@ -45,21 +45,21 @@ const HomeDisplay = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('Playlist')}>
-            <Image style={styles.playlist} source={require('./assets/PL2.png')} />
+            <Image style={styles.playlist} source={require('../../assets/PL2.png')} />
             <View style={styles.name} > 
               <Text style={styles.PLname} > Sơn Tùng</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('Playlist')}>
-            <Image style={styles.playlist} source={require('./assets/PL3.png')} />
+            <Image style={styles.playlist} source={require('../../assets/PL3.png')} />
             <View style={styles.name} > 
               <Text style={styles.PLname1} > MAROON </Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('Playlist')}>
-            <Image style={styles.playlist} source={require('./assets/PL4.png')} />
+            <Image style={styles.playlist} source={require('../../assets/PL4.png')} />
             <View style={styles.name} > 
               <Text style={styles.PLname} >ALAN WALKER</Text>
             </View>

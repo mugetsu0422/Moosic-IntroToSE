@@ -5,10 +5,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import Profile from './profile';
-import Home from './home';
-import Playlist from './playlist'
-import Setting from './setting'
+import Profile from '../screens/Profile';
+import Home from '../screens/Home';
+import Playlist from '../screens/playlist'
+import Setting from '../screens/setting'
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -83,7 +83,7 @@ function MyTabs() {
   );
 }
 
-export default function APP() {
+export default function HomeNavigator() {
   return (
     <View style={styles.container}>   
       <NavigationContainer>

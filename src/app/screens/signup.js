@@ -4,8 +4,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Formik }  from 'formik'
 import axios from 'axios'
+import { API_URL, PATH } from '../constants/constants';
 
-const API_URL = "http://192.168.1.80:4000"
+// const API_URL = "http://192.168.1.80:4000"
 
 const SignUp = ({ navigation }) => {
 
@@ -19,7 +20,7 @@ const SignUp = ({ navigation }) => {
     }
 
     else {
-      axios.put(API_URL + '/user/register', formData)
+      axios.put(API_URL + PATH.REGISTER, formData)
       .then(response => {
         console.log(response.data)
         alert('Register successfully')

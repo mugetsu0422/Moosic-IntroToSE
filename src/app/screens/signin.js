@@ -3,15 +3,15 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import React, { Component } from 'react'
 import { Formik } from 'formik'
 import axios from 'axios'
-import { NetworkInfo } from "react-native-network-info"
 import Icon from 'react-native-vector-icons/AntDesign';
-const API_URL = "http://192.168.1.80:4000"
+import { API_URL, PATH } from '../constants/constants';
+// const API_URL = "http://192.168.1.80:4000"
 
 
 const SignIn = ({navigation}) => {
 
   const login = (formData) => {
-    axios.post(API_URL + '/user/login', formData)
+    axios.post(API_URL + PATH.LOGIN, formData)
       .then(response => {
         console.log(response.data)
         alert('Login successfully')

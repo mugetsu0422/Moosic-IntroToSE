@@ -10,7 +10,8 @@ import {
   ScrollView,
   SafeAreaView
 } from 'react-native';
-import { CheckBox } from 'react-native-elements';
+// import { CheckBox } from 'react-native-elements';
+import Checkbox from 'expo-checkbox';
 
 const Profile = () =>  {
   const [male, setMale] = React.useState(false);
@@ -24,7 +25,7 @@ const Profile = () =>  {
           <View style={styles.avatar1}>
             <Image
               style={styles.avatar}
-              source={require('./assets/avatar.jpg')}
+              source={require('../../assets/avatar.jpg')}
             />
 
             <View >
@@ -53,7 +54,7 @@ const Profile = () =>  {
 
             <View style={styles.gender}>
               <Text style={{ marginVertical: 6, fontSize: 20 }}> Gender: </Text>
-              <CheckBox
+              <Checkbox
                 containerStyle={{
                   backgroundColor: '#faedef',
                   borderColor: '#faedef',
@@ -66,7 +67,7 @@ const Profile = () =>  {
                 checked={male}
                 onPress={() => (setMale(!male), setfeMale(false))}
               />
-              <CheckBox
+              <Checkbox
                 containerStyle={{
                   backgroundColor: '#faedef',
                   borderColor: '#faedef',
