@@ -86,12 +86,9 @@ function MyTabs() {
 export default function HomeNavigator() {
   return (
     <View style={styles.container}>   
-      <NavigationContainer>
         <MyTabs />
         <Stack.Screen name='Playlist' component={Playlist}/>
-        <Stack.Screen name='Home' component={Home}/>
         <Stack.Screen name='Setting' component={Setting}/>
-      </NavigationContainer>
     </View>
   );
 }

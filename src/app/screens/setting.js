@@ -52,7 +52,7 @@ const Setting = ({navigation}) =>{
               <View style ={{flexDirection:'row',padding:10, paddingHorizontal: 10,justifyContent:'space-between', borderBottomWidth:1, borderBottomColor:'grey'}}>
                     <Icon name = {item.icon} size = {30} >
                     <Text style ={{fontSize:20}}>   {item.name}</Text></Icon>
-                    <Icon style = {{ }} name ="chevron-forward" size = '30' />
+                    <Icon style = {{ }} name ="chevron-forward" size = {30} />
               </View>
           
           
@@ -74,7 +74,7 @@ const Setting = ({navigation}) =>{
             <View style ={{flexDirection:'row',padding:10, paddingHorizontal: 10,justifyContent:'space-between', borderBottomWidth:1, borderBottomColor:'grey'}}>
                   <Icon name = {item.icon} size = {30} >
                   <Text style ={{fontSize:20}}>   {item.name}</Text></Icon>
-                  <Icon style = {{ }} name ="chevron-forward" size = '30' />
+                  <Icon style = {{ }} name ="chevron-forward" size = {30} />
             </View>
         
         

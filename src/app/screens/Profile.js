@@ -8,7 +8,8 @@ import {
   TextInput,
   Alert, 
   ScrollView,
-  SafeAreaView
+  SafeAreaView,
+  StatusBar
 } from 'react-native';
 // import { CheckBox } from 'react-native-elements';
 import Checkbox from 'expo-checkbox';
@@ -18,7 +19,7 @@ const Profile = () =>  {
   const [female, setfeMale] = React.useState(false);
   return (
     
-    < SafeAreaView style={styles.container}>
+    < View style={styles.AndroidSafeArea}>
       <View style={styles.des} />
       < ScrollView>
         <View style={styles.info}>
@@ -27,11 +28,12 @@ const Profile = () =>  {
               style={styles.avatar}
               source={require('../../assets/avatar.jpg')}
             />
+          </View>
 
             <View >
               <TextInput
                 style={styles.box}
-                placeholder="First Name"
+                placeholder="Name"
                 placeholderTextColor="gray"
               />
             </View>
@@ -54,20 +56,20 @@ const Profile = () =>  {
 
             <View style={styles.gender}>
               <Text style={{ marginVertical: 6, fontSize: 20 }}> Gender: </Text>
-              <Checkbox
-                containerStyle={{
-                  backgroundColor: '#faedef',
-                  borderColor: '#faedef',
-                  height: 45,
-                  width: 90,
-                  marginLeft: 90,
-                  marginTop: -38,
-                }}
-                title="Male"
-                checked={male}
-                onPress={() => (setMale(!male), setfeMale(false))}
-              />
-              <Checkbox
+                <View style={styles.section}>
+                  <Checkbox style={styles.checkbox} 
+                    value={male} 
+                    onValueChange={() => (setMale(!male), setfeMale(false))} />
+                  <Text style={{fontSize: 20}}>Male</Text>
+                </View>
+
+                <View style={styles.section}>
+                  <Checkbox style={styles.checkbox} 
+                    value={female} 
+                    onValueChange={() => (setfeMale(!female), setMale(false))} />
+                  <Text style={{fontSize: 20}}>Female</Text>
+                </View>
+              {/* <Checkbox
                 containerStyle={{
                   backgroundColor: '#faedef',
                   borderColor: '#faedef',
@@ -76,10 +78,11 @@ const Profile = () =>  {
                   marginLeft: 200,
                   marginTop: -49,
                 }}
-                title="Female"
-                checked={female}
+                // title="Female"
+                // checked={female}
+                value={female}
                 onPress={() => (setfeMale(!female), setMale(false))}
-              />
+              /> */}
             </View>
 
             <View>
@@ -90,31 +93,29 @@ const Profile = () =>  {
                 />
             </View>
 
-            <View style={styles.button}>
-              <View style={styles.button1}>
-                <Text style={styles.textBut}   onPress={() => Alert.alert("Successful", "You have successfully changed profile")} > Change profile </Text>
-                
+            <View style={styles.button1}>
+              <Text style={styles.textBut}   
+                onPress={() => Alert.alert("Successful", "You have successfully changed profile")} > 
+                Change profile
+              </Text>
+            </View>
 
-              </View>
-            </View> 
-
-          </View>
+          
         </View>
       </ScrollView>
       <View style={styles.des} />
-    </SafeAreaView>
+    </View>
     
   );
 }
 export default Profile
 
 const styles = StyleSheet.create({
-  container: {
+  AndroidSafeArea: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: '#faedef',
   },
-
   des: {
     flex: 1.1,
     backgroundColor: '#de4552',
@@ -126,14 +127,15 @@ const styles = StyleSheet.create({
   avatar1: {
     flex: 1,
     marginTop: 10,
+    justifyContent:'center'
   },
   avatar: {
     height: 120,
     width: 120,
     borderRadius: 90,
-    marginLeft: '35%',
     borderColor: 'gray',
     borderWidth: 0.3,
+    alignSelf: 'center'
   },
 
   box: {
@@ -156,6 +158,8 @@ const styles = StyleSheet.create({
     height: 40,
     width: 180,
     borderRadius: 10,
+    marginTop: 20,
+    alignSelf: 'center',
   },
   textBut: {
     color: 'white',
@@ -168,5 +172,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 20,
     marginBottom: -10,
+    flexDirection: 'row',
+  },
+  section: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    margin: 8,
   },
 });

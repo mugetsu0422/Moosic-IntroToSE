@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     marginLeft: 80,
   },
   recommend:{
-    fontFamily: 'Helvetica',
     fontSize: 18,
     marginTop: -60,
     marginLeft: 130,
@@ -115,12 +114,10 @@ const styles = StyleSheet.create({
     marginLeft: 200,
   },
   PLname:{
-    fontFamily: 'Pacifico',
     fontSize: 18,
     color: 'white'
   },
   PLname1:{
-    fontFamily: 'Pacifico',
     fontSize: 18,
     color: 'black'
   },

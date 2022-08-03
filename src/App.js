@@ -45,7 +45,7 @@ function App() {
         <Stack.Screen name="Favorite" component={FavoriteScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
         <Stack.Screen name="Setting" component={Setting}/>
-        <Stack.Screen name="Home" component={HomeNavigator}/>
+        <Stack.Screen name="HomeNavigator" component={HomeNavigator}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -15,6 +15,7 @@ const SignIn = ({navigation}) => {
       .then(response => {
         console.log(response.data)
         alert('Login successfully')
+        navigation.navigate('HomeNavigator')
       })
       .catch(error => {
         console.log(error.response.data)
