@@ -8,7 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import HomeNavigator from './app/navigation/HomeNavigator';
-
+import Playlist from './app/screens/playlist';
+import Search from './app/screens/search';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,7 +38,7 @@ function App() {
       headerShown: false,
       background: 'transparent',
   }}
-      initialRouteName = "Welcome"
+      initialRouteName = "Search"
   >
         <Stack.Screen name="Welcome" component={Welcomescreen} />
         <Stack.Screen name="SignIn" component={SignIn} />
@@ -46,6 +47,8 @@ function App() {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword}/>
         <Stack.Screen name="Setting" component={Setting}/>
         <Stack.Screen name="HomeNavigator" component={HomeNavigator}/>
+        <Stack.Screen name="Playlist" component={Playlist}/>
+        <Stack.Screen name="Search" component={Search}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
