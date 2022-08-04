@@ -11,6 +11,7 @@ import HomeNavigator from './app/navigation/HomeNavigator';
 import Playlist from './app/screens/playlist';
 import Search from './app/screens/search';
 import MySong from './app/screens/mysong';
+import Music from './app/screens/MusicScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,7 +40,7 @@ function App() {
       headerShown: false,
       background: 'transparent',
   }}
-      initialRouteName = "MySong"
+      initialRouteName = "Search"
   >
         <Stack.Screen name="Welcome" component={Welcomescreen} />
         <Stack.Screen name="SignIn" component={SignIn} />
@@ -51,6 +52,7 @@ function App() {
         <Stack.Screen name="Playlist" component={Playlist}/>
         <Stack.Screen name="Search" component={Search}/>
         <Stack.Screen name="MySong" component={MySong}/>
+        <Stack.Screen name="Music" component={Music}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

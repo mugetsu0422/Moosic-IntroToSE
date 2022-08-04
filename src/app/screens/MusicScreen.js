@@ -1,9 +1,13 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function Music() {
+const widthScreen = Dimensions.get('window').width;
+const heightScreen = Dimensions.get('window').height;
+
+export default function Music({navigation, route}) {
+  const {songInfo} = route.params
 
   const [play, setPlay] = React.useState('play')
   const [shuffle, setShuffle] = React.useState('random')
@@ -13,12 +17,15 @@ export default function Music() {
     <View style={styles.container}>
       <ImageBackground style={styles.background} source={require('../../assets/background.jpg')} resizeMode="cover">
         <View style={styles.des1}>
-          <MaterialIcons name="arrow-back" size={50} color="white" />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back" size={50} color="white" />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.musicInf}>
-          <Image style={styles.musicImg} source={require('../../assets/music.jpg')}/>
-          <Text style={styles.nameSong} > Name song - name artist </Text>
+          <Image style={styles.musicImg} source={require('../../assets/song.png')}/>
+          <Text style={styles.nameSong}> {songInfo.title} </Text>
+          <Text style={styles.artist}> {songInfo.performer} </Text>
         </View>
           
         <View style={styles.buttons}>
@@ -80,11 +87,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   musicImg:{
-    width: 200,
-    height: 200,
+    width: widthScreen * 0.6,
+    height: heightScreen * 0.3,
+    borderRadius: 10,
     opacity: 0.8,
   },
   nameSong:{
+    color: 'white',
+    fontSize: 25,
+    paddingTop: 10,
+  },
+  artist:{
     color: 'white',
     fontSize: 20,
     paddingTop: 10,

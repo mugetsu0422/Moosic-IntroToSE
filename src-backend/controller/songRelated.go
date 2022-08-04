@@ -50,7 +50,7 @@ func DislikeSong(c echo.Context) error {
 
 // Get Song info API
 // Method: GET
-// Path: /search/:type?q=	type là song hoặc artist
+// Path: /search/:type?q=	type là song hoặc artist hoặc
 func GetSong(c echo.Context) error {
 	db := mysqlgorm.GetDBInstance()
 	songs := []model.Song{}
@@ -74,4 +74,32 @@ func GetSong(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, songs) 
+}
+
+// Get Playlist content API
+// Method: GET
+// Path: /playlist/:id
+func GetPlaylist(c echo.Context) error {
+	db := mysqlgorm.GetDBInstance();
+	playlist_content := []model.Playlist_content{};
+	songs := []model.Song{};
+
+	playlist_id := c.Param("id");
+
+	if result := db.Where("playlist_id = ?", playlist_id).Find(&playlist_content);
+	result.Error != nil {
+		return result.Error;
+	}
+
+	var song_id []string
+	for i := 0; i < len(playlist_content); i++ {
+		song_id = append(song_id, playlist_content[i].Song_id)
+	} 
+
+	if result := db.Where(song_id).Find(&songs);
+	result.Error != nil {
+		return result.Error;
+	}
+
+	return c.JSON(http.StatusOK, songs);
 }

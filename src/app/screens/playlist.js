@@ -6,6 +6,8 @@ import Icon3 from 'react-native-vector-icons/Feather';
 import Icon4 from 'react-native-vector-icons/Entypo';
 import Icon5 from 'react-native-vector-icons/FontAwesome';
 import { BottomPopup } from './pop'
+import { API_URL, PATH } from '../constants/constants';
+import axios from 'axios'
 
 
 const imageheight = Dimensions.get('window').width*0.35;
@@ -38,18 +40,41 @@ const popupSong = [
   {id: 8,icon:'close', name: 'ban'},
   {id: 9,icon:'md-share-social-outline', name: 'share'},
 ]
+
+const getPlaylistContent = async(playlist_id) => {
+  const fullURL = API_URL + PATH.PLAYLIST_CONTENT + playlist_id
+  try {
+    const {data:response} = await axios.get(fullURL) //use data destructuring to get data from the promise object
+    return response
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
 const Playlist = ({ navigation }) =>  {
+  const content = getPlaylistContent(1)
+  console.log(content)
   const [data, setdata] = useState([
-    {id: 1,image: require('../../assets/chill.png'), name:"song's name", artist : "artist's name", view : " K views", selected: false },
-    {id: 2, image: require('../../assets/love.png'),name:"song's name", artist : "artist's name", view : " K views",selected: false },
-    {id: 3,image: require('../../assets/motivation.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 4,image: require('../../assets/soul.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 5, image: require('../../assets/rhymtm.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 6,image: require('../../assets/pop.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 7,image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 8, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 9, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 10, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false }
+    // {id: 1,image: require('../../assets/chill.png'), name:"song's name", artist : "artist's name", view : " K views", selected: false },
+    // {id: 2, image: require('../../assets/love.png'),name:"song's name", artist : "artist's name", view : " K views",selected: false },
+    // {id: 3,image: require('../../assets/motivation.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 4,image: require('../../assets/soul.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 5, image: require('../../assets/rhymtm.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 6,image: require('../../assets/pop.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 7,image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 8, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 9, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 10, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false }
+    {
+      "id": "1",
+      "uploaded_by": "1",
+      "artist": "Rick Astley",
+      "name": "Never Gonna Give You Up",
+      "play_count": 0,
+      "liked_count": 0,
+      "status": "APPROVED"
+    }
   ])
 
 

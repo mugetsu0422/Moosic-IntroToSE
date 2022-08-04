@@ -6,4 +6,6 @@ export const PATH = {
     LIKE_SONG: "/song/like",
     SEARCH_BY_SONG: "/search/song?q=",
     SEARCH_BY_ARTIST: "/search/artist?q=",
+    SEARCH_BY_PLAYLIST: "/search/playlist?q=",
+    PLAYLIST_CONTENT: "/playlist/",
 }
