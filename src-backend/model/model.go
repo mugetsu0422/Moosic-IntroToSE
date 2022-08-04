@@ -8,7 +8,7 @@ type User struct {
 	Birthday     string `json:"birthday"`
 	Gender       int    `json:"gender"`
 	Phone_number string `json:"phone_number"`
-	Password	 string `json:"password" xml:"password" form:"password" query:"password,omitempty"`
+	//Password	 string `json:"password" xml:"password" form:"password" query:"password,omitempty"`
 }
 
 type Song struct {

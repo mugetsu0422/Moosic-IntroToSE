@@ -31,18 +31,20 @@ func ForgotPassword(c echo.Context) error {
 // Method: POST
 // Path: /user/register
 func Register(c echo.Context) error {
-	user := new(model.User)
+	newUser := &struct {
+		Username string `json:"username" xml:"username" form:"username" query:"username"`
+		Password string `json:"password" xml:"password" form:"password" query:"password,omitempty"`
+	} {}
+
 	db := mysqlgorm.GetDBInstance()
 
-	if err := c.Bind(user); err != nil {
+	if err := c.Bind(newUser); err != nil {
 		return err
 	}
 
-	log.Print(user)
-
-
-	if user.Username == "" || user.Password == "" {
-		return c.JSON(http.StatusInternalServerError, "Please add all fields")
+	log.Print(c)
+	user := &model.User{
+		Username: newUser.Username,
 	}
 
 	// check if user exists
@@ -52,17 +54,24 @@ func Register(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "User already exists")
 	}
 
-	hashPassword, _ := HashPassword(user.Password)
+	hashPassword, _ := HashPassword(newUser.Password)
 
 	new_user := &model.User{
 		User_id: user.Username,
 		Username: user.Username,
-		Password: hashPassword,
 		User_role: "user",
 		Birthday: "0/0/0",
 	}
 	
+	user_password := &model.Password_salt{
+		User_id: user.Username,
+		Salt: hashPassword,
+	}
+
+	
 	db.Create(&new_user)
+	db.Create(&user_password)
+
 	//db.Select("Username", "Password", )
 	return c.JSON(http.StatusOK, new_user)
 }
@@ -81,22 +90,37 @@ func CheckPasswordHash(password, hash string) bool {
 // Method: POST
 // Path: /user/login
 func Login(c echo.Context) error {
-	user := new(model.User)
+	newUser := &struct {
+		Username string `json:"username" xml:"username" form:"username" query:"username"`
+		Password string `json:"password" xml:"password" form:"password" query:"password,omitempty"`
+	} {}
+
 	db := mysqlgorm.GetDBInstance()
 
-	if err := c.Bind(user); err != nil {
+	if err := c.Bind(newUser); err != nil {
 		return err
 	}
 
-	var existedUser model.User
+	validatedUser := &model.User{ 
+		Username: newUser.Username,
+	} 
 
-	record := db.Where("username = ?", user.Username).First(&existedUser)
+	record := db.Where("username = ?", newUser.Username).First(&validatedUser)
 	
 	if (record.RowsAffected) == 1 {
-		if (CheckPasswordHash(user.Password, existedUser.Password)) {
-			return c.JSON(http.StatusOK, "Login successfully")
-		}	
+		userId := validatedUser.User_id 
+		validatedSaltPassword := model.Password_salt{
+			User_id: validatedUser.User_id,
+		}
+
+		record := db.Where("user_id = ?", userId).First(&validatedSaltPassword)
+
+		if (record.RowsAffected) == 1 {
+			if (CheckPasswordHash(newUser.Password, validatedSaltPassword.Salt)) {
+				return c.JSON(http.StatusOK, "Login successfully")
+			}	
+		}
 	}
 	
-	return c.JSON(http.StatusInternalServerError, "invalid username/password")
+	return c.JSON(http.StatusInternalServerError, "Invalid username/password")
 }
