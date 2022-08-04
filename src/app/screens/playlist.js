@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   star:{
     //borderWidth:1,
     flexDirection:'row',
-    justifyContent:'plex-start',
+    justifyContent:'flex-start',
     alignItems:'center',
   },
   play:{
