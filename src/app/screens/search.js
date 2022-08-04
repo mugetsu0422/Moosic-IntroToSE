@@ -43,21 +43,33 @@ const playlist = [
       {id: 4,image: require('../../assets/account.png'),  name:"artist's name" },
       {id: 5, image: require('../../assets/account.png'), name:"artist's name" }]
 
-let popupRef1 = React.createRef()
+
+const Search = () =>{
+  const [choice,setChoice] = useState("");
+  let popupRef1 = React.createRef()
   const onShowPopup1 = () => {
     popupRef1.show()
 }
 const onClosePopup1 = () => {
   popupRef1.close()
 }
+const receiveOption = ()=>{
+      return popupRef1.sendOption()
+}
+settingChoice = (option) =>{
+    setChoice(option)
+    console.log(option)
 
-const Search = () =>{
-  
+}
+
   return (
       <View style = {styles.container}>
         <View style={styles.header}>
+         
           <View style = {{flexDirection:'row', height:'35%', width:'100%', justifyContent:'space-around'}}>
-          <TouchableOpacity style = {{justifyContent:'flex-start'}} onPress ={ () => navigation.goBack()}>
+          <TouchableOpacity style = {{justifyContent:'flex-start'}} onPress ={ ()=>{
+
+          }}>
                 <Icon  name = "left" size ={25} color='black' borderRadius={2}  />
             </TouchableOpacity>
 
@@ -67,16 +79,19 @@ const Search = () =>{
               style = {styles.searchbar}
               
             />
-            <TouchableOpacity style = {{justifyContent:'flex-start'}} onPress ={ onShowPopup1}>
+            <TouchableOpacity style = {{justifyContent:'flex-start'}} onPress ={ onShowPopup1 }>
                 <Icon  name = "filter" size ={25} color='black' borderRadius={2}  />
                 <BottomPopup 
-          title =""
-          author= ""
+                    title =""
+                    author= ""
+                    ref={(target) => popupRef1 = target}
+                    onTouchOutside = {onClosePopup1}
+                    data = {popupList}
+                    settingChoice = {settingChoice}
           
-          ref={(target) => popupRef1 = target}
-          onTouchOutside = {onClosePopup1}
-          data = {popupList}
+        
         />
+
             </TouchableOpacity>
 
             </View>
