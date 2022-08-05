@@ -7,7 +7,7 @@ import (
 	"music-app-backend/entity/response"
 	"net/http"
 	"regexp"
-
+    "music-app-backend/mdw"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -55,13 +55,18 @@ func main() {
 
     e.OPTIONS("*", handleOptions)
 
+    // auth
+    //isLogged := middleware.JWT([]byte("mysecretkey"))
+
     // Controllers
     e.GET("/user/forgotpassword", controller.ForgotPassword)
     e.GET("/search/:type", controller.GetSong)
     e.POST("/song/like", controller.LikeSong)
 	e.DELETE("/song/like", controller.DislikeSong)
+
+    // User
     e.PUT("/user/register", controller.Register)
-    e.POST("/user/login", controller.Login)
+    e.POST("/user/login", controller.Login, middleware.BasicAuth(mdw.BasicAuth))
     e.GET("/playlist/:id", controller.GetPlaylist)
 
     // Start server

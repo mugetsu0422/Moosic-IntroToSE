@@ -4,7 +4,6 @@ import (
 	mysqlgorm "music-app-backend/database/mysqlGORM"
 	"music-app-backend/model"
 	"net/http"
-
 	"github.com/labstack/echo/v4"
 )
 

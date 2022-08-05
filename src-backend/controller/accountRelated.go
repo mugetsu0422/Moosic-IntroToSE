@@ -6,7 +6,10 @@ import (
 	"net/http"
 	"log"
 	"golang.org/x/crypto/bcrypt"
+	"music-app-backend/entity/response"
+	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
+	"time"
 )
 
 // Forgot Password API
@@ -90,37 +93,59 @@ func CheckPasswordHash(password, hash string) bool {
 // Method: POST
 // Path: /user/login
 func Login(c echo.Context) error {
-	newUser := &struct {
-		Username string `json:"username" xml:"username" form:"username" query:"username"`
-		Password string `json:"password" xml:"password" form:"password" query:"password,omitempty"`
-	} {}
+	userId := c.Get("user_id").(string)
+	
+	token := jwt.New(jwt.SigningMethodHS256)
 
-	db := mysqlgorm.GetDBInstance()
+	claims := token.Claims.(jwt.MapClaims)
+	claims["username"] = userId
+	claims["exp"] = time.Now().Add(5 * time.Hour).Unix()
 
-	if err := c.Bind(newUser); err != nil {
+	log.Printf("\nExpired time: %v\n", claims["exp"])
+
+	// Generate encoded token and send it as response.
+	t, err := token.SignedString([]byte("secret"))
+	if err != nil {
 		return err
 	}
-
-	validatedUser := &model.User{ 
-		Username: newUser.Username,
-	} 
-
-	record := db.Where("username = ?", newUser.Username).First(&validatedUser)
 	
-	if (record.RowsAffected) == 1 {
-		userId := validatedUser.User_id 
-		validatedSaltPassword := model.Password_salt{
-			User_id: validatedUser.User_id,
-		}
+	return c.JSON(http.StatusOK, &response.JSONResponse{
+		Success: true,
+		Data: t,
+		Messages: "Success",
+	})
 
-		record := db.Where("user_id = ?", userId).First(&validatedSaltPassword)
 
-		if (record.RowsAffected) == 1 {
-			if (CheckPasswordHash(newUser.Password, validatedSaltPassword.Salt)) {
-				return c.JSON(http.StatusOK, "Login successfully")
-			}	
-		}
-	}
+
+	// ----
+	// db := mysqlgorm.GetDBInstance()
+
+	// if err := c.Bind(newUser); err != nil {
+	// 	return err
+	// }
+
+	// validatedUser := &model.User{ 
+	// 	Username: newUser.Username,
+	// } 
+
+	// record := db.Where("username = ?", newUser.Username).First(&validatedUser)
 	
-	return c.JSON(http.StatusInternalServerError, "Invalid username/password")
+	// if (record.RowsAffected) == 1 {
+	// 	userId := validatedUser.User_id 
+	// 	validatedSaltPassword := model.Password_salt{
+	// 		User_id: validatedUser.User_id,
+	// 	}
+
+	// 	record := db.Where("user_id = ?", userId).First(&validatedSaltPassword)
+
+	// 	if (record.RowsAffected) == 1 {
+			
+
+	// 		if (CheckPasswordHash(newUser.Password, validatedSaltPassword.Salt)) {
+	// 			return c.JSON(http.StatusOK, "Login successfully")
+	// 		}	
+	// 	}
+	// }
+	
+	// return c.JSON(http.StatusInternalServerError, "Invalid username/password")
 }
