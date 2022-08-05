@@ -6,9 +6,12 @@ import{
   Image,
   TouchableOpacity,
   Dimensions,
-  FlatList
+  FlatList,
+  Modal,
+  Pressable,
+  TextInput
 } from 'react-native'
-
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const widthScreen =Dimensions.get('window').width;
 const heightScreen =Dimensions.get('window').height;
@@ -30,11 +33,16 @@ const song = [
  ]
 
 const playlist = [
-    {id: 1,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
+    {id: 1,image: require('../../assets/add.png'), name:"Add" },
     {id: 2, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
     {id: 3,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
     {id: 4,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
     {id: 5,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 6,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
+    {id: 7, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
+    {id: 8,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 9,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 10,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
    ]
 
     const artist = [
@@ -62,7 +70,9 @@ const MySong = () =>{
     setStatus(status)
     console.log(status)
   }
+  const [modalVisible, setModalVisible] = useState(false);
   return (
+    
       <View style = {styles.container}>
         <View style={styles.header}>
         <View style= {styles.listartist}>
@@ -71,6 +81,7 @@ const MySong = () =>{
                 style= {styles.fl}
                 data={artist}
                horizontal
+               keyExtractor={(item, index) => item.key}
                 renderItem= {({item, index})=>(
                     <TouchableOpacity
                         style={styles.artist}  >
@@ -87,7 +98,7 @@ const MySong = () =>{
                     </TouchableOpacity>
                 )
                 }
-                keyExtractor={(item, index) => index}
+                
                 
                 
               />
@@ -95,64 +106,7 @@ const MySong = () =>{
             </View>
         </View>
         <View style ={styles.footer}>
-          {/*
-            <View style= {styles.listplaylist}>
-              <Text style ={{ fontSize:15, color:'grey',paddingVertical:15,}}> TOP PLAYLIST RESULT</Text>
-              
-            <FlatList
-                style= {styles.fl}
-                data={playlist}
-               horizontal
-                renderItem= {({item, index})=>(
-                    <TouchableOpacity
-                        style={styles.playlist}  >
-                        <Image style={styles.imageformat} 
-                         source={item.image}/>
-                        <View >
-                         <Text style ={{fontSize:15, color:'black'}}>{item.name}</Text>
-                         <View style ={{flexDirection:'row',paddingRight:'5%'}}>
-                          <Text style ={{fontSize:13, color:'grey'}}>{item.artist}</Text>
-                          <Text style ={{fontSize:13, color:'grey'}}> {item.view}</Text>
-                        </View>
-                         
-                         </View>
-                        
-                    </TouchableOpacity>
-                )
-                }
-                keyExtractor={(item, index) => 'key'+index}
-                
-                
-              />
-              
-            </View>
-            <View style= {styles.song}>
-            <FlatList
-                
-                data={song}
-                renderItem= {({item, index})=>(
-                    <TouchableOpacity
-                        style={styles.songinf1}  >
-                        <Image style={styles.imageformat} 
-                         source={item.image}/>
-                        <View style={styles.songinf} >
-                         <Text style ={{fontSize:15, color:'black'}}>{item.name}</Text>
-                         <View style ={{flexDirection:'row',paddingRight:'5%'}}>
-                          <Text style ={{fontSize:13, color:'grey'}}>{item.artist}</Text>
-                          <Text style ={{fontSize:13, color:'grey'}}> {item.view}</Text>
-                        </View>
-                         
-                         </View>
-                        
-                    </TouchableOpacity>
-                )
-                }
-                keyExtractor={(item, index) => 'key'+index}
-                
-                
-              />
-              
-            </View> */}
+        
             <View style={styles.listTab}>
               {
                 listTab.map(e =>(
@@ -166,11 +120,15 @@ const MySong = () =>{
               }</View>
               {status =='Playlist'? 
               <View style= {styles.listplaylist}>
-            <FlatList
+                <FlatList
                 style= {{width:widthScreen, padding:20}}
                 data={playlist}
-               
+                _keyExtractor = {(item, index) => item.item.key}
                 renderItem= {({item, index})=>(
+                  <View>
+                  {item.name != 'Add'?
+                <View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
+                width:widthScreen*0.9}}>
                   <TouchableOpacity
                       style={styles.songinf1} >
                       <Image style={styles.imageformat} 
@@ -181,13 +139,78 @@ const MySong = () =>{
                         <Text style ={{fontSize:13, color:'grey'}}>{item.artist}</Text>
                         <Text style ={{fontSize:13, color:'grey'}}> {item.view}</Text>
                       </View>
-                       
                        </View>
-                      
                   </TouchableOpacity>
+                  <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}>
+                      <Icon  name = "remove-circle-outline" size ={40} color='black' borderRadius={2}  />
+                    </TouchableOpacity>
+                </View>:<View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
+                width:widthScreen*0.9}}>
+                 
+                      <Modal
+                      animationType="slide"
+                      transparent={true}
+                      visible={modalVisible}
+                      onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                    <View style={styles.centeredView}>
+        
+          <View style={styles.modalView}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose,{alignSelf:'flex-start'}]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Icon name = "close"/>
+              </TouchableOpacity>
+              <Text style={styles.modalText}>Your playlist name!</Text>
+                <TextInput
+                placeholder="Your Name"
+                
+                placeholderTextColor="gray"
+                style={styles.textinput}
+                autoCapitalize = "none"
+
+                />
+              <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {setModalVisible(!modalVisible)
+                    alert ('create playlist complete')}
+                  }
+                >
+                <Text> Create Playlist </Text>
+              </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <TouchableOpacity
+                      style={styles.songinf1}
+                      onPress={() => setModalVisible(true)} >
+                      <Image style={[styles.imageformat]} 
+                       source={item.image}/>
+                      <View style={styles.songinf} >
+                       <Text style ={{fontSize:15, color:'black'}}>{item.name}</Text>
+                       <View style ={{flexDirection:'row',paddingRight:'5%'}}>
+                        <Text style ={{fontSize:13, color:'grey'}}>{item.artist}</Text>
+                        <Text style ={{fontSize:13, color:'grey'}}> {item.view}</Text>
+                      </View>
+                       </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}
+                    onPress={() => setModalVisible(true)}
+                  >
+                      <Icon  name = "add-circle-outline" size ={40} color='black' borderRadius={2}  />
+                      </TouchableOpacity>
+                </View>
+                
+                }</View>
+              
+                
               )
               }
-              keyExtractor={(item, index) => 'k'+index}
+              
               
               />
             </View> : status =='Song' ?  <View style= {{width:widthScreen, padding:20}}>
@@ -195,7 +218,8 @@ const MySong = () =>{
             <FlatList
                 
                 data={song}
-                renderItem= {({item, index})=>(
+              
+                renderItem = {({item, index})=>(
                     <TouchableOpacity
                         style={styles.songinf1} >
                         <Image style={styles.imageformat} 
@@ -212,7 +236,7 @@ const MySong = () =>{
                     </TouchableOpacity>
                 )
                 }
-                keyExtractor={(item, index) => 'keyy'+index}
+                
                 
                 
               />
@@ -222,6 +246,7 @@ const MySong = () =>{
               <FlatList
                   
                   data={recently}
+                  keyExtractor ={(item, index) => `${item.key}${index}`}
                   renderItem= {({item, index})=>(
                       <TouchableOpacity
                           style={styles.songinf1} >
@@ -239,7 +264,7 @@ const MySong = () =>{
                       </TouchableOpacity>
                   )
                   }
-                  keyExtractor={(item, index) => 'keyyy'+index}
+                  
                   
                   
                 />
@@ -258,7 +283,7 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   header:{
-    height:heightScreen*0.35,
+    height:heightScreen*0.25,
     width:'100%',
     backgroundColor:"#c94444",
     justifyContent:'flex-end',
@@ -308,7 +333,7 @@ imageformat1:{
   height:heightScreen*0.1,
   resizeMode:'contain',
   borderRadius:80,
-  borderWidth:12,
+  //borderWidth:12,
 },
 song:{
   height:heightScreen*0.6,
@@ -320,7 +345,7 @@ artist:{
 songinf1:{
   flexDirection:'row',
   padding:5,
-  width:widthScreen,
+  width:widthScreen*0.7,
 },
 songinf:{
   justifyContent:'center',
@@ -346,5 +371,39 @@ TabButtonActive:{
   borderBottomColor:'white',
   borderBottomWidth:4,
 },
-
+centeredView: {
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  //position:'absolute',
+},
+modalView: {
+  margin: 20,
+  backgroundColor: "white",
+  borderRadius: 20,
+  padding: 35,
+  alignItems: "center",
+  width:'50%',
+},
+button: {
+  borderRadius: 20,
+  padding: 10,
+  elevation: 20,
+},
+buttonOpen: {
+  backgroundColor: "#F194FF",
+},
+buttonClose: {
+  backgroundColor: "#f27e7e",
+  //alignSelf:'flex-start',
+},
+textStyle: {
+  color: "white",
+  fontWeight: "bold",
+  textAlign: "center"
+},
+modalText: {
+  marginBottom: 15,
+  textAlign: "center"
+},
 })

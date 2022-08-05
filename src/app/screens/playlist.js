@@ -1,6 +1,15 @@
-import { StyleSheet,Image, Text ,  View,SafeAreaView,Dimensions,FlatList, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet,
+  Image, 
+  Text, 
+  View, 
+  Dimensions,
+  FlatList,
+  TouchableOpacity, 
+  ImageBackground,
+  StatusBar } from 'react-native';
 import React,{useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon1 from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon3 from 'react-native-vector-icons/Feather';
 import Icon4 from 'react-native-vector-icons/Entypo';
@@ -41,43 +50,9 @@ const popupSong = [
   {id: 9,icon:'md-share-social-outline', name: 'share'},
 ]
 
-const getPlaylistContent = async(playlist_id) => {
-  const fullURL = API_URL + PATH.PLAYLIST_CONTENT + playlist_id
-  try {
-    const {data:response} = await axios.get(fullURL) //use data destructuring to get data from the promise object
-    return response
-  }
-  catch (error) {
-    console.log(error);
-  }
-}
-
-const Playlist = ({ navigation }) =>  {
-  const content = getPlaylistContent(1)
-  console.log(content)
-  const [data, setdata] = useState([
-    // {id: 1,image: require('../../assets/chill.png'), name:"song's name", artist : "artist's name", view : " K views", selected: false },
-    // {id: 2, image: require('../../assets/love.png'),name:"song's name", artist : "artist's name", view : " K views",selected: false },
-    // {id: 3,image: require('../../assets/motivation.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 4,image: require('../../assets/soul.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 5, image: require('../../assets/rhymtm.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 6,image: require('../../assets/pop.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 7,image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 8, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 9, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 10, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false }
-    {
-      "id": "1",
-      "uploaded_by": "1",
-      "artist": "Rick Astley",
-      "name": "Never Gonna Give You Up",
-      "play_count": 0,
-      "liked_count": 0,
-      "status": "APPROVED"
-    }
-  ])
-
-
+const Playlist = ({ navigation, route }) =>  {
+  const {content} = route.params;
+  const [data, setdata] = useState(content)
   const [playlistlove,setplaylist] = useState(false);
   onValueChange = (item, index) => {
     const newData = data.map( preItem =>{
@@ -110,10 +85,14 @@ const Playlist = ({ navigation }) =>  {
   return (
     <View style = {styles.container}>
         <ImageBackground style = {styles.header} source = {require ('../../assets/blackblur.jpg')}>
+          <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
+            <Icon1  name = "arrowleft" size ={55} color='white' borderRadius={2}  />
+          </TouchableOpacity>
           <View style = {styles.plinfo}>
-          <Image
+
+          {/* <Image
               style = {styles.imagesetting}
-              source = {require('../../assets/chill.png')} />
+              source = {require('../../assets/chill.png')} /> */}
               <View style= {styles.info}>
                 <Text style= {styles.plname}> Playlist's name</Text>
                 <View style ={{flexDirection: 'row',justifyContent:'space-between'}}>
@@ -128,8 +107,8 @@ const Playlist = ({ navigation }) =>  {
             onPress ={()=>{
 
             }}>
-              <Icon name = "account-circle" size = {50} color = "white" />
-              <Text style ={{color:'white',fontSize: 22}}> Artist's name </Text>
+              {/* <Icon name = "account-circle" size = {50} color = "white" />
+              <Text style ={{color:'white',fontSize: 22}}> Artist's name </Text> */}
           </TouchableOpacity>
           <View style ={styles.star}>
             <TouchableOpacity 
@@ -167,38 +146,38 @@ const Playlist = ({ navigation }) =>  {
           renderItem ={({item, index}) =>(
             <TouchableOpacity
               style={styles.songs}
-                onPress={()=>{ alert("play song "+ item.id) } }>
-                <Image style={styles.songimage} 
-                         source={item.image}/>
+              onPress={() => navigation.navigate("Music", {songInfo: item})}>
+              <Image style={styles.songimage} 
+                         source={require('../../assets/song.png')}/>
                          <View style={styles.songinf} >
-                         <Text style ={{fontSize:20, color:'black'}}>{item.name}</Text>
+                         <Text style ={{fontSize:20, color:'black'}}>{item.title}</Text>
                          <View style ={{flexDirection:'row',paddingRight:'5%'}}>
-                          <Text style ={{fontSize:13, color:'grey'}}>{item.artist}</Text>
-                          <Text style ={{fontSize:13, color:'grey'}}> {item.view}</Text>
+                          <Text style ={{fontSize:13, color:'grey'}}>{item.performer}</Text>
+                          {/* <Text style ={{fontSize:13, color:'grey'}}> {item.play_count}</Text> */}
                         </View>
                          <View>
                          </View>
                          </View>
                   <View style ={styles.star}>
-            <TouchableOpacity 
-            onPress={() =>{onValueChange(item,index)}}>
-              {item.selected ? <Icon5 name = "star"  size = {40} color = "red" /> : <Icon5 name = "star-o"  size = {40} color= "red" />}</TouchableOpacity>
-              <TouchableOpacity 
-               onPress={ onShowPopup2}>
-                <BottomPopup 
-              title = {item.name}
-              author= {item.artist}
-          
-              ref={(target) => popupRef2 = target}
-              onTouchOutside = {onClosePopup2}
-              data = {popupSong}
-        />
-              <Icon3 name = "more-horizontal" size = {40} color = "red" />
-              
+                <TouchableOpacity
+                onPress={() =>{onValueChange(item,index)}}>
+                {item.selected ? <Icon5 name = "star"  size = {40} color = "red" /> : <Icon5 name = "star-o"  size = {40} color= "red" />}</TouchableOpacity>
+                <TouchableOpacity 
+                onPress={ onShowPopup2}>
+                  <BottomPopup 
+                    title = {item.title}
+                    author= {item.performer}
+                  
+                    ref={(target) => popupRef2 = target}
+                    onTouchOutside = {onClosePopup2}
+                    data = {popupSong}
+                />
+                <Icon3 name = "more-horizontal" size = {40} color = "red" />
+                
               </TouchableOpacity>
-          </View>    
-          </TouchableOpacity>)}
-          keyExtractor={item => item.id} >
+            </View>    
+            </TouchableOpacity>)}
+          keyExtractor={item => item.song_id} >
         </FlatList>
       </View>
       <BottomPopup 
@@ -222,10 +201,11 @@ export default Playlist;
 
 const styles = StyleSheet.create({
   container: {
-   backgroundColor:'white',
+    backgroundColor:'white',
     flex:1,
     justifyContent:'center',
     alignItems:'center',
+    paddingTop: StatusBar.currentHeight,
     //backgroundColor:'red',
     ////borderWidth:1,
   },
@@ -329,6 +309,11 @@ const styles = StyleSheet.create({
   imageformat:{
     borderWidth:1,
     borderColor:'red'
-}
+  },
+  back: {
+    alignSelf:"flex-start",
+    paddingBottom: 20,
+    // backgroundColor:'blue',
+  }
 });
  

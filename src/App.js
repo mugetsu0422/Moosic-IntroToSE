@@ -40,7 +40,8 @@ function App() {
       headerShown: false,
       background: 'transparent',
   }}
-      initialRouteName = "Welcome"
+      initialRouteName = "MySong"
+
   >
         <Stack.Screen name="Welcome" component={Welcomescreen} />
         <Stack.Screen name="SignIn" component={SignIn} />

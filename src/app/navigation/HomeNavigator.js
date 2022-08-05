@@ -9,6 +9,8 @@ import Profile from '../screens/Profile';
 import Home from '../screens/Home';
 import Playlist from '../screens/playlist'
 import Setting from '../screens/setting'
+import Music from '../screens/MusicScreen';
+import Search from '../screens/search';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -47,7 +49,7 @@ function MyTabs() {
       <Tab.Screen
         name="Search"
         headerMode="none"
-        component={Home}
+        component={Search}
         options={{
           headerShown: false,
           tabBarLabel: '',
@@ -87,8 +89,6 @@ export default function HomeNavigator() {
   return (
     <View style={styles.container}>   
         <MyTabs />
-        <Stack.Screen name='Playlist' component={Playlist}/>
-        <Stack.Screen name='Setting' component={Setting}/>
     </View>
   );
 }

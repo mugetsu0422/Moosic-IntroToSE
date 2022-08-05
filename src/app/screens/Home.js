@@ -5,6 +5,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Playlist from './playlist'
+import { API_URL, PATH } from '../constants/constants';
+import axios from 'axios'
+import Music from './MusicScreen';
 const Stack = createNativeStackNavigator();
 
 
@@ -14,6 +17,7 @@ export default function Home() {
             <Stack.Navigator >
               <Stack.Screen name='Home' component={HomeDisplay} options={{headerShown: false,}}/>
               <Stack.Screen name='Playlist' component={Playlist} options={{headerShown: false,}}/>
+              <Stack.Screen name="Music" component={Music} options={{headerShown: false,}}/>
             </Stack.Navigator>
   </NavigationContainer>
   );
@@ -21,6 +25,17 @@ export default function Home() {
 
 
 const HomeDisplay = ({navigation}) => {
+  const getPlaylistContent = async(playlist_id) => {
+    const fullURL = API_URL + PATH.PLAYLIST_CONTENT + playlist_id
+    try {
+      const {data:response} = await axios.get(fullURL) //use data destructuring to get data from the promise object
+      return response
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -36,7 +51,13 @@ const HomeDisplay = ({navigation}) => {
           <Image style={styles.tropy} source={require('../../assets/trophy.png')} />
           <Text style={styles.recommend}> Recommend play list </Text>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Playlist')}>
+          <TouchableOpacity onPress={() => {
+            getPlaylistContent(1).then(content => {
+              navigation.navigate('Playlist', {content: content})}).catch(err =>{
+                console.log(err)
+              }); 
+            
+            ;}}>
             <Image style={styles.playlist} source={require('../../assets/PL1.png')} />
             <View style={styles.name} > 
               <Text style={styles.PLname} > Fall out boy </Text>
