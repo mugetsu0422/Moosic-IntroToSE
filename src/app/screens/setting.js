@@ -32,9 +32,9 @@ const Setting = ({navigation}) =>{
     <>
       <View style = {styles.container}>
         <View style = {styles.header}>
-            <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
+            {/* <TouchableOpacity style = {styles.back} onPress ={ () => navigation.goBack()}>
                 <Icon1  name = "arrowleft" size ={55} color='black' borderRadius={2}  />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <Text style= {styles.headerTitle}> Setting </Text>
         </View>
         <View style = {styles.footer}>
@@ -48,6 +48,7 @@ const Setting = ({navigation}) =>{
               renderItem= {({item, index})=>(
                     <TouchableOpacity
                     style={styles.selected}
+                    onPress={() => item.name === 'Account' ? navigation.navigate('Profile') : null}
                     >
               <View style ={{flexDirection:'row',padding:10, paddingHorizontal: 10,justifyContent:'space-between', borderBottomWidth:1, borderBottomColor:'grey'}}>
                     <Icon name = {item.icon} size = {30} >

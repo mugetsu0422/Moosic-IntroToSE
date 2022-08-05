@@ -9,18 +9,25 @@ import {
   Alert, 
   ScrollView,
   SafeAreaView,
-  StatusBar
+  StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 // import { CheckBox } from 'react-native-elements';
 import Checkbox from 'expo-checkbox';
+import Icon1 from 'react-native-vector-icons/AntDesign';
 
-const Profile = () =>  {
+const Profile = ({navigation}) =>  {
   const [male, setMale] = React.useState(false);
   const [female, setfeMale] = React.useState(false);
   return (
     
     < View style={styles.AndroidSafeArea}>
-      <View style={styles.des} />
+      <View style={styles.des}>
+        <TouchableOpacity style = {{marginTop: 30,}} onPress ={ () => navigation.goBack()}>
+          <Icon1  name = "arrowleft" size ={55} color='black' borderRadius={2}  />
+        </TouchableOpacity>
+      </View>
+
       < ScrollView>
         <View style={styles.info}>
           <View style={styles.avatar1}>
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
   },
   des: {
     flex: 1.1,
-    backgroundColor: '#de4552',
+    backgroundColor: '#cf4848',
   },
   info: {
     flex: 8,
@@ -154,7 +161,7 @@ const styles = StyleSheet.create({
     marginVertical: 40,
   },
   button1: {
-    backgroundColor: '#de4552',
+    backgroundColor: '#cf4848',
     height: 40,
     width: 180,
     borderRadius: 10,
@@ -162,7 +169,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textBut: {
-    color: 'white',
+    color: 'black',
     marginHorizontal: 22.5,
     marginVertical: 7,
     fontSize: 20,

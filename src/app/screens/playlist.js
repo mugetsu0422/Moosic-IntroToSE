@@ -7,7 +7,7 @@ import { StyleSheet,
   TouchableOpacity, 
   ImageBackground,
   StatusBar } from 'react-native';
-import React,{useState} from 'react';
+import React,{useContext, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/AntDesign';
@@ -17,6 +17,7 @@ import Icon5 from 'react-native-vector-icons/FontAwesome';
 import { BottomPopup } from './pop'
 import { API_URL, PATH } from '../constants/constants';
 import axios from 'axios'
+import { AudioContext } from '../context/AudioProvider';
 
 
 const imageheight = Dimensions.get('window').width*0.35;
@@ -51,6 +52,8 @@ const popupSong = [
 ]
 
 const Playlist = ({ navigation, route }) =>  {
+  const audioContext = useContext(AudioContext)
+
   const {content} = route.params;
   const [data, setdata] = useState(content)
   const [playlistlove,setplaylist] = useState(false);
@@ -146,7 +149,9 @@ const Playlist = ({ navigation, route }) =>  {
           renderItem ={({item, index}) =>(
             <TouchableOpacity
               style={styles.songs}
-              onPress={() => navigation.navigate("Music", {songInfo: item})}>
+              onPress={() => {
+                audioContext.handleAudioPress(item)
+                navigation.navigate("Music", {songInfo: item})}}>
               <Image style={styles.songimage} 
                          source={require('../../assets/song.png')}/>
                          <View style={styles.songinf} >

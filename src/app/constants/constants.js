@@ -1,4 +1,4 @@
-export const API_URL = "http://192.168.1.80:4000"
+export const API_URL = "http://192.168.100.9:4000"
 export const PATH = {
     LOGIN: '/user/login',
     REGISTER: '/user/register',
@@ -9,3 +9,4 @@ export const PATH = {
     SEARCH_BY_PLAYLIST: "/search/playlist?q=",
     PLAYLIST_CONTENT: "/playlist/",
 }
+export const SONG_URI = 'https://storage.googleapis.com/moosic-intro2se/'

@@ -8,10 +8,13 @@ import Playlist from './playlist'
 import { API_URL, PATH } from '../constants/constants';
 import axios from 'axios'
 import Music from './MusicScreen';
+import Profile from './Profile';
+import { AudioContext } from '../context/AudioProvider';
 const Stack = createNativeStackNavigator();
 
 
 export default function Home() {
+
   return(
   <NavigationContainer independent={true}>
             <Stack.Navigator >
@@ -25,6 +28,8 @@ export default function Home() {
 
 
 const HomeDisplay = ({navigation}) => {
+  const audioContext = React.useContext(AudioContext)
+
   const getPlaylistContent = async(playlist_id) => {
     const fullURL = API_URL + PATH.PLAYLIST_CONTENT + playlist_id
     try {
@@ -53,6 +58,7 @@ const HomeDisplay = ({navigation}) => {
 
           <TouchableOpacity onPress={() => {
             getPlaylistContent(1).then(content => {
+              audioContext.updateState(audioContext, {playlistContent: content})
               navigation.navigate('Playlist', {content: content})}).catch(err =>{
                 console.log(err)
               }); 

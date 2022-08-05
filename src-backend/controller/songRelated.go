@@ -59,12 +59,12 @@ func GetSong(c echo.Context) error {
 	query = "%" + query + "%"
 	
 	if _type == "song" {
-		result := db.Where("title like ?", query).Find(&songs);
+		result := db.Where("title like ?", query).Limit(10).Find(&songs);
 		if result.Error != nil {
 			return c.JSON(http.StatusInternalServerError, "Song not found");
 		}
 	} else if _type == "artist" {
-		result := db.Where("performer like ?", query).Find(&songs);
+		result := db.Where("performer like ?", query).Limit(10).Find(&songs);
 		if result.Error != nil {
 			return c.JSON(http.StatusInternalServerError, "Song not found");
 		}
@@ -95,7 +95,7 @@ func GetPlaylist(c echo.Context) error {
 		song_id = append(song_id, playlist_content[i].Song_id)
 	} 
 
-	if result := db.Where(song_id).Find(&songs);
+	if result := db.Where(song_id).Order("title asc").Find(&songs);
 	result.Error != nil {
 		return result.Error;
 	}

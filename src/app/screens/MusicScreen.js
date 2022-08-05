@@ -2,16 +2,14 @@ import * as React from 'react';
 import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimensions } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { AudioContext } from '../context/AudioProvider';
 
 const widthScreen = Dimensions.get('window').width;
 const heightScreen = Dimensions.get('window').height;
 
 export default function Music({navigation, route}) {
+  const audioContext = React.useContext(AudioContext)
   const {songInfo} = route.params
-
-  const [play, setPlay] = React.useState('play')
-  const [shuffle, setShuffle] = React.useState('random')
-  const [repeat, setRepeat] = React.useState('none')
 
   return (
     <View style={styles.container}>
@@ -29,27 +27,32 @@ export default function Music({navigation, route}) {
         </View>
           
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => setShuffle(shuffle === 'random' ? 'alphabetical' : 'random')}>
-            {Shuffle.type[shuffle]}
+          <TouchableOpacity onPress={() => audioContext.updateState(audioContext, 
+            {shuffle: audioContext.shuffle === 'random' ? 'alphabetical' : 'random'})}>
+            {Shuffle.type[audioContext.shuffle]}
           </TouchableOpacity>
 
          <TouchableOpacity onPress={() => null}>
             <Ionicons name="play-skip-back-sharp" size={50} color="white" />
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={() => setPlay(play === 'play' ? 'pause' : 'play')}>
-            {PlayPause.type[play]}
+          <TouchableOpacity onPress={() => {
+            audioContext.updateState(audioContext,
+              {play: audioContext.play === 'play' ? 'pause' : 'play'})
+            audioContext.handleAudioPress(songInfo)}}>
+            {PlayPause.type[audioContext.play]}
           </TouchableOpacity>
           
           <TouchableOpacity onPress={() => null}>
             <Ionicons name="play-skip-forward-sharp" size={50} color="white" />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setRepeat(
-              repeat === 'none' ? 'playlist' 
-              : repeat === 'playlist' ? 'song' 
-              : 'none')}>
-            {Repeat.type[repeat]}
+          <TouchableOpacity onPress={() => audioContext.updateState(audioContext,
+              {repeat: 
+              audioContext.repeat === 'none' ? 'playlist' 
+              : audioContext.repeat === 'playlist' ? 'song' 
+              : 'none'})}>
+            {Repeat.type[audioContext.repeat]}
           </TouchableOpacity>
           
         </View>

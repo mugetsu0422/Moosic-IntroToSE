@@ -11,6 +11,7 @@ import Playlist from '../screens/playlist'
 import Setting from '../screens/setting'
 import Music from '../screens/MusicScreen';
 import Search from '../screens/search';
+import MySong from '../screens/mysong';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,7 +24,7 @@ function MyTabs() {
       screenOptions={{
         tabBarActiveTintColor: '#e91e63',
       }}>
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -33,7 +34,7 @@ function MyTabs() {
             <AntDesign name="user" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
      
       <Tab.Screen
         name="Home"
@@ -59,8 +60,8 @@ function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="User Playlist"
-        component={Home}
+        name="MySong"
+        component={MySong}
         options={{
           headerShown: false,
           tabBarLabel: '',
