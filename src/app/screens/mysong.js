@@ -7,7 +7,9 @@ import{
   TouchableOpacity,
   Dimensions,
   FlatList,
-  
+  Modal,
+  Pressable,
+  TextInput
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -123,8 +125,10 @@ const MySong = () =>{
                 data={playlist}
                 _keyExtractor = {(item, index) => item.item.key}
                 renderItem= {({item, index})=>(
+                  <View>
+                  {item.name != 'Add'?
                 <View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
-                  width:widthScreen*0.9}}>
+                width:widthScreen*0.9}}>
                   <TouchableOpacity
                       style={styles.songinf1} >
                       <Image style={styles.imageformat} 
@@ -137,15 +141,73 @@ const MySong = () =>{
                       </View>
                        </View>
                   </TouchableOpacity>
+                  <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}>
+                      <Icon  name = "remove-circle-outline" size ={40} color='black' borderRadius={2}  />
+                    </TouchableOpacity>
+                </View>:<View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
+                width:widthScreen*0.9}}>
                  
-                    {item.name != 'Add'? 
-                    <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}>
-                      <Icon  name = "remove-circle-outline" size ={40} color='black' borderRadius={2}  /></TouchableOpacity>
-                      :
-                      <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}>
-                      <Icon  name = "add-circle-outline" size ={40} color='black' borderRadius={2}  /></TouchableOpacity>
-                }
-                  </View>
+                      <Modal
+                      animationType="slide"
+                      transparent={true}
+                      visible={modalVisible}
+                      onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                    <View style={styles.centeredView}>
+        
+          <View style={styles.modalView}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose,{alignSelf:'flex-start'}]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Icon name = "close"/>
+              </TouchableOpacity>
+              <Text style={styles.modalText}>Your playlist name!</Text>
+                <TextInput
+                placeholder="Your Name"
+                
+                placeholderTextColor="gray"
+                style={styles.textinput}
+                autoCapitalize = "none"
+
+                />
+              <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {setModalVisible(!modalVisible)
+                    alert ('create playlist complete')}
+                  }
+                >
+                <Text> Create Playlist </Text>
+              </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <TouchableOpacity
+                      style={styles.songinf1}
+                      onPress={() => setModalVisible(true)} >
+                      <Image style={[styles.imageformat]} 
+                       source={item.image}/>
+                      <View style={styles.songinf} >
+                       <Text style ={{fontSize:15, color:'black'}}>{item.name}</Text>
+                       <View style ={{flexDirection:'row',paddingRight:'5%'}}>
+                        <Text style ={{fontSize:13, color:'grey'}}>{item.artist}</Text>
+                        <Text style ={{fontSize:13, color:'grey'}}> {item.view}</Text>
+                      </View>
+                       </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}
+                    onPress={() => setModalVisible(true)}
+                  >
+                      <Icon  name = "add-circle-outline" size ={40} color='black' borderRadius={2}  />
+                      </TouchableOpacity>
+                </View>
+                
+                }</View>
+              
+                
               )
               }
               
@@ -271,7 +333,7 @@ imageformat1:{
   height:heightScreen*0.1,
   resizeMode:'contain',
   borderRadius:80,
-  borderWidth:12,
+  //borderWidth:12,
 },
 song:{
   height:heightScreen*0.6,
@@ -309,5 +371,39 @@ TabButtonActive:{
   borderBottomColor:'white',
   borderBottomWidth:4,
 },
-
+centeredView: {
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  //position:'absolute',
+},
+modalView: {
+  margin: 20,
+  backgroundColor: "white",
+  borderRadius: 20,
+  padding: 35,
+  alignItems: "center",
+  width:'50%',
+},
+button: {
+  borderRadius: 20,
+  padding: 10,
+  elevation: 20,
+},
+buttonOpen: {
+  backgroundColor: "#F194FF",
+},
+buttonClose: {
+  backgroundColor: "#f27e7e",
+  //alignSelf:'flex-start',
+},
+textStyle: {
+  color: "white",
+  fontWeight: "bold",
+  textAlign: "center"
+},
+modalText: {
+  marginBottom: 15,
+  textAlign: "center"
+},
 })
