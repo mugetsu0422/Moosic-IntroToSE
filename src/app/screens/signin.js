@@ -6,20 +6,28 @@ import axios from 'axios'
 import Icon from 'react-native-vector-icons/AntDesign';
 import { API_URL, PATH } from '../constants/constants';
 // const API_URL = "http://192.168.1.80:4000"
-
+import {encode as btoa} from 'base-64'
 
 const SignIn = ({navigation}) => {
-
   const login = (formData) => {
-    axios.post(API_URL + PATH.LOGIN, formData)
+    var basicAuth = 'Basic ' + btoa(formData.username + ':' + formData.password)
+
+    axios.post(API_URL + PATH.LOGIN, {}, {
+      headers: {'Authorization': basicAuth}
+    }
+    )
       .then(response => {
         console.log(response.data)
         alert('Login successfully')
         navigation.navigate('HomeNavigator')
       })
       .catch(error => {
-        console.log(error.response.data)
-        alert(error.response.data)
+        var errorMsg = error.response.status
+        console.log(errorMsg)
+
+        if (errorMsg == '401') {
+          alert("Invalid username/password")
+        }
       })
   }
 

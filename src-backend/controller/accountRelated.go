@@ -98,7 +98,7 @@ func Login(c echo.Context) error {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["username"] = userId
+	claims["user_id"] = userId
 	claims["exp"] = time.Now().Add(5 * time.Hour).Unix()
 
 	log.Printf("\nExpired time: %v\n", claims["exp"])
@@ -108,44 +108,10 @@ func Login(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return c.JSON(http.StatusOK, &response.JSONResponse{
 		Success: true,
 		Data: t,
 		Messages: "Success",
 	})
-
-
-
-	// ----
-	// db := mysqlgorm.GetDBInstance()
-
-	// if err := c.Bind(newUser); err != nil {
-	// 	return err
-	// }
-
-	// validatedUser := &model.User{ 
-	// 	Username: newUser.Username,
-	// } 
-
-	// record := db.Where("username = ?", newUser.Username).First(&validatedUser)
-	
-	// if (record.RowsAffected) == 1 {
-	// 	userId := validatedUser.User_id 
-	// 	validatedSaltPassword := model.Password_salt{
-	// 		User_id: validatedUser.User_id,
-	// 	}
-
-	// 	record := db.Where("user_id = ?", userId).First(&validatedSaltPassword)
-
-	// 	if (record.RowsAffected) == 1 {
-			
-
-	// 		if (CheckPasswordHash(newUser.Password, validatedSaltPassword.Salt)) {
-	// 			return c.JSON(http.StatusOK, "Login successfully")
-	// 		}	
-	// 	}
-	// }
-	
-	// return c.JSON(http.StatusInternalServerError, "Invalid username/password")
 }

@@ -40,7 +40,7 @@ function App() {
       headerShown: false,
       background: 'transparent',
   }}
-      initialRouteName = "Search"
+      initialRouteName = "Welcome"
   >
         <Stack.Screen name="Welcome" component={Welcomescreen} />
         <Stack.Screen name="SignIn" component={SignIn} />
