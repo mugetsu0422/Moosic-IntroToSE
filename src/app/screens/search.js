@@ -82,7 +82,6 @@ const Search = ({navigation}) =>{
 
     try {
       const {data:response} = await axios.get(fullURL) 
-      // console.log(response.data)
       song = [...response]
       setSearchData(song)
     }
@@ -208,7 +207,7 @@ const Search = ({navigation}) =>{
                     </TouchableOpacity>
                 )
                 }
-                keyExtractor={(item, index) => 'key'+index}
+                keyExtractor={item => item.song_id}
                 extraData={searchData}
               />
               
