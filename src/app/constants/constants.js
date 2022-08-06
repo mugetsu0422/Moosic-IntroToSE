@@ -8,5 +8,6 @@ export const PATH = {
     SEARCH_BY_ARTIST: "/search/artist?q=",
     SEARCH_BY_PLAYLIST: "/search/playlist?q=",
     PLAYLIST_CONTENT: "/playlist/",
+    CREATE_PLAYLIST: "/playlists" 
 }
 export const SONG_URI = 'https://storage.googleapis.com/moosic-intro2se/'

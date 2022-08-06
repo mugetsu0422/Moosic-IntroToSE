@@ -14,6 +14,8 @@ import{
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios'
+import { API_URL, PATH } from '../constants/constants';
 
 const widthScreen =Dimensions.get('window').width;
 const heightScreen =Dimensions.get('window').height;
@@ -70,7 +72,7 @@ const MySong = () =>{
   let i = playlist.length + 1
   const [status,setStatus] = useState('Playlist')
   const [playlistName, setPlaylistName] = useState('') 
-  const [uid, setUid] = useState('')
+
   const [playlistIndex, setPlaylistIndex] = useState(i)
   const setStatusFilter = status =>{
     setStatus(status)
@@ -78,6 +80,7 @@ const MySong = () =>{
   }
 
   const createPlaylist = async() => {
+    console.log(playlistName)
     if (playlistName.length == 0) {
       Alert.alert('Please write the playlist name')
     }
@@ -86,11 +89,21 @@ const MySong = () =>{
         AsyncStorage.getItem('uid')
           .then(value => {
             if (value != null) {
+
+              console.log(playlistName)
+              axios.post(API_URL + `/user/${value}` + PATH.CREATE_PLAYLIST, {title: playlistName})
+                .then(response => {
+                  console.log(response.data)
+                })
+                .catch(error => {
+                  console.log(error)
+                })
               playlist.push(
                 {id: playlistIndex, image: require('../../assets/playlist.png'),name:playlistName, artist : "", view : "",selected: false },
               )
               setPlaylistIndex(playlistIndex + 1)
               Alert.alert('Successful create playlist')
+              setModalVisible(!modalVisible)
             }
           })
       } catch (error) {
@@ -205,7 +218,6 @@ const MySong = () =>{
                 />
               <TouchableOpacity
                   style={[styles.button, styles.buttonClose]}
-                  
                   onPress={createPlaylist}
                 >
                 <Text> Create Playlist </Text>
