@@ -41,7 +41,7 @@ function AppNavigator() {
       headerShown: false,
       background: 'transparent',
   }}
-      initialRouteName = "HomeNavigator"
+      initialRouteName = "Welcome"
 
   >
         <Stack.Screen name="Welcome" component={Welcomescreen} />

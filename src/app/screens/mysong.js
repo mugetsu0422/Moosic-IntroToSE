@@ -9,9 +9,11 @@ import{
   FlatList,
   Modal,
   Pressable,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const widthScreen =Dimensions.get('window').width;
 const heightScreen =Dimensions.get('window').height;
@@ -34,15 +36,15 @@ const song = [
 
 const playlist = [
     {id: 1,image: require('../../assets/add.png'), name:"Add" },
-    {id: 2, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
-    {id: 3,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 4,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 5,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 6,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
-    {id: 7, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
-    {id: 8,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 9,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 10,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 2, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
+    // {id: 3,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 4,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 5,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 6,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
+    // {id: 7, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
+    // {id: 8,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 9,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    // {id: 10,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
    ]
 
     const artist = [
@@ -65,11 +67,39 @@ const listTab = [
 ]
 
 const MySong = () =>{
+  let i = playlist.length + 1
   const [status,setStatus] = useState('Playlist')
+  const [playlistName, setPlaylistName] = useState('') 
+  const [uid, setUid] = useState('')
+  const [playlistIndex, setPlaylistIndex] = useState(i)
   const setStatusFilter = status =>{
     setStatus(status)
     console.log(status)
   }
+
+  const createPlaylist = async() => {
+    if (playlistName.length == 0) {
+      Alert.alert('Please write the playlist name')
+    }
+    else {
+      try {
+        AsyncStorage.getItem('uid')
+          .then(value => {
+            if (value != null) {
+              playlist.push(
+                {id: playlistIndex, image: require('../../assets/playlist.png'),name:playlistName, artist : "", view : "",selected: false },
+              )
+              setPlaylistIndex(playlistIndex + 1)
+              Alert.alert('Successful create playlist')
+            }
+          })
+      } catch (error) {
+        console.log(error)
+      }
+      
+    }
+  }
+
   const [modalVisible, setModalVisible] = useState(false);
   return (
     
@@ -168,17 +198,15 @@ const MySong = () =>{
               <Text style={styles.modalText}>Your playlist name!</Text>
                 <TextInput
                 placeholder="Your Name"
-                
+                onChangeText={(value) => setPlaylistName(value)}
                 placeholderTextColor="gray"
                 style={styles.textinput}
                 autoCapitalize = "none"
-
                 />
               <TouchableOpacity
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => {setModalVisible(!modalVisible)
-                    alert ('create playlist complete')}
-                  }
+                  
+                  onPress={createPlaylist}
                 >
                 <Text> Create Playlist </Text>
               </TouchableOpacity>
@@ -239,7 +267,7 @@ const MySong = () =>{
                 
                 
                 
-              />
+            />
               
             </View>: <View style= {{width:widthScreen, padding:20}}>
               

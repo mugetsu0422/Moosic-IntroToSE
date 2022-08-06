@@ -20,7 +20,7 @@ const SignUp = ({ navigation }) => {
     }
 
     else {
-      axios.put(API_URL + PATH.REGISTER, formData)
+      axios.post(API_URL + PATH.REGISTER, formData)
       .then(response => {
         console.log(response.data)
         alert('Register successfully')

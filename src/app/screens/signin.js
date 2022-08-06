@@ -5,21 +5,28 @@ import { Formik } from 'formik'
 import axios from 'axios'
 import Icon from 'react-native-vector-icons/AntDesign';
 import { API_URL, PATH } from '../constants/constants';
-// const API_URL = "http://192.168.1.80:4000"
 import {encode as btoa} from 'base-64'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = ({navigation}) => {
-  const login = (formData) => {
+  const login = async (formData) => {
     var basicAuth = 'Basic ' + btoa(formData.username + ':' + formData.password)
 
-    axios.post(API_URL + PATH.LOGIN, {}, {
+    await axios.post(API_URL + PATH.LOGIN, {}, {
       headers: {'Authorization': basicAuth}
     }
     )
       .then(response => {
-        console.log(response.data)
-        alert('Login successfully')
-        navigation.navigate('HomeNavigator')
+        data = response.data
+        console.log(data.data)
+        try {
+          AsyncStorage.clear()
+          AsyncStorage.setItem('uid' ,data.data._uid)
+          alert('Login successfully')
+          navigation.navigate('HomeNavigator')
+        } catch (error) {
+          console.log(error)
+        }
       })
       .catch(error => {
         var errorMsg = error.response.status

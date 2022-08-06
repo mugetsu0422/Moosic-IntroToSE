@@ -1,18 +1,34 @@
 import axios from 'axios'
-
-const API_URL = 'localhost:8888/api/'
+import {encode as btoa} from 'base-64'
+import { API_URL, PATH } from '../constants/constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // login user
-const login = async (userData) => {
-    const response = await axios.POST(API_URL + 'login', userData)
+const login = async (formData) => {
+    var basicAuth = 'Basic ' + btoa(formData.username + ':' + formData.password)
 
-    if (response && response.data) {
-        AsyncStorage.setItem('login', JSON.stringify(response.data))
-        console.log(response.data)
+    axios.post(API_URL + PATH.LOGIN, {}, {
+      headers: {'Authorization': basicAuth}
     }
+    )
+      .then(response => {
+        data = response.data
+        console.log(data.data)
 
-    return response.data
-}
+        await AsyncStorage.setItem('user', data.data)
+
+        alert('Login successfully')
+        navigation.navigate('HomeNavigator')
+      })
+      .catch(error => {
+        var errorMsg = error.response.status
+        console.log(errorMsg)
+
+        if (errorMsg == '401') {
+          alert("Invalid username/password")
+        }
+      })
+  }
 
 const authService = {
     login,
