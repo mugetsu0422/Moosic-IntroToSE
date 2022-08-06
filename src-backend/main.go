@@ -65,10 +65,12 @@ func main() {
 	e.DELETE("/song/like", controller.DislikeSong)
 
     // User
-    e.PUT("/user/register", controller.Register)
+    e.POST("/user/register", controller.Register)
     e.POST("/user/login", controller.Login, middleware.BasicAuth(mdw.BasicAuth))
     e.GET("/playlist/:id", controller.GetPlaylist)
 
+    // Playlist
+    e.POST("/user/:uid/playlists", controller.CreatePlaylist)
     // Start server
     e.Logger.Fatal(e.Start(":" + constant.ServerPort))
 }

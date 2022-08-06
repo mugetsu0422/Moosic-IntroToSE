@@ -5,6 +5,9 @@ import (
 	"music-app-backend/model"
 	"net/http"
 	"github.com/labstack/echo/v4"
+	"log"
+	"strconv"
+	"time"
 )
 
 // Like Song API
@@ -73,6 +76,39 @@ func GetSong(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, songs) 
+}
+
+// Create Playlist API
+// Method: PUT
+// Path: /:id/playlist
+func CreatePlaylist(c echo.Context) error {
+	user_id := c.Param("uid")
+
+	newPlaylist := &struct {
+		Title string `json:"title" xml:"title" form:"title" query:"title"`
+	} {}
+
+	log.Printf("%s", user_id)
+
+	if err := c.Bind(newPlaylist); err != nil {
+		return err
+	}
+
+	db := mysqlgorm.GetDBInstance()
+	var count int64
+	db.Model(&model.Playlist{}).Group("playlist_id").Count(&count)
+
+	count += 1
+
+	p := &model.Playlist{
+		Playlist_id: strconv.FormatInt(count, 10),
+		Created_by: user_id,
+		Title: newPlaylist.Title,
+		Created_date: time.Now().Format("2006-01-02"),
+	}
+
+	db.Exec("INSERT INTO `playlist` (`playlist_id`, `created_by`, `title`, `created_date`) VALUES(?, ?, ?, ?)", p.Playlist_id, p.Created_by, p.Title, p.Created_date)
+	return c.JSON(http.StatusOK, p) 
 }
 
 // Get Playlist content API

@@ -56,7 +56,7 @@ CREATE TABLE `playlist` (
   `title` text DEFAULT NULL,
   `thumbnail` text DEFAULT NULL,
   `published_date` bigint(20) DEFAULT NULL,
-  `created_date` bigint(20) DEFAULT NULL
+  `created_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

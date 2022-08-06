@@ -5,12 +5,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"music-app-backend/model"
 	"music-app-backend/controller"
-	"log"
 )
 
 func BasicAuth(username string, password string, c echo.Context) (bool, error) {
-	log.Printf("\nhasdasdasd\n")
-
 	db := mysqlgorm.GetDBInstance()
 
 	var validatedUser model.User
@@ -27,7 +24,7 @@ func BasicAuth(username string, password string, c echo.Context) (bool, error) {
 		if (record.RowsAffected) == 1 {
 			if (controller.CheckPasswordHash(password, validatedSaltPassword.Salt)) {
 				c.Set("user_id", userId)
-
+				c.Set("username", username)
 				return true, nil
 			}
 		}

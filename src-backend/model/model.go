@@ -8,7 +8,6 @@ type User struct {
 	Birthday     string `json:"birthday"`
 	Gender       int    `json:"gender"`
 	Phone_number string `json:"phone_number"`
-	//Password	 string `json:"password" xml:"password" form:"password" query:"password,omitempty"`
 }
 
 type Song struct {
@@ -45,8 +44,8 @@ type Playlist struct {
 	Type string `json:"type"`
 	Title string `json:"title"`
 	Thumbnail string `json:"thumbnail"`
-	Published_date int64 `json:"published_date"`
-	Created_date int64 `json:"created_date"`
+	Published_date string `json:"published_date"`
+	Created_date string `json:"created_date"`
 }
 
 type Password_salt struct {

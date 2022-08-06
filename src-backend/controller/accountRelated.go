@@ -5,8 +5,10 @@ import (
 	"music-app-backend/model"
 	"net/http"
 	"log"
+	//"encoding/json"
 	"golang.org/x/crypto/bcrypt"
 	"music-app-backend/entity/response"
+	"github.com/lithammer/shortuuid"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"time"
@@ -60,14 +62,14 @@ func Register(c echo.Context) error {
 	hashPassword, _ := HashPassword(newUser.Password)
 
 	new_user := &model.User{
-		User_id: user.Username,
+		User_id: generateUID(),
 		Username: user.Username,
 		User_role: "user",
 		Birthday: "0/0/0",
 	}
 	
 	user_password := &model.Password_salt{
-		User_id: user.Username,
+		User_id: new_user.User_id,
 		Salt: hashPassword,
 	}
 
@@ -89,29 +91,65 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-// Forgot Password API
+// Login API
 // Method: POST
 // Path: /user/login
 func Login(c echo.Context) error {
 	userId := c.Get("user_id").(string)
-	
-	token := jwt.New(jwt.SigningMethodHS256)
+	username := c.Get("username").(string)
 
-	claims := token.Claims.(jwt.MapClaims)
-	claims["user_id"] = userId
-	claims["exp"] = time.Now().Add(5 * time.Hour).Unix()
+	t, err := generateToken(userId)
 
-	log.Printf("\nExpired time: %v\n", claims["exp"])
-
-	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte("secret"))
 	if err != nil {
 		return err
 	}
 
+	res := map[string]interface{} {
+		"_uid": userId,
+		"_username": username,
+		"token": t,
+	}
+
 	return c.JSON(http.StatusOK, &response.JSONResponse{
 		Success: true,
-		Data: t,
+		Data: res,
 		Messages: "Success",
 	})
+}
+
+func generateUID() string {
+	db := mysqlgorm.GetDBInstance()
+
+	var valid_uid string
+	for true {
+		u_id := shortuuid.New()
+
+		user := &model.User{
+			User_id: u_id,
+		}
+	
+		// check if user exists
+		record := db.Where("user_id = ?", user.User_id).Take(&user)
+
+		if record.RowsAffected == 0 {
+			valid_uid = u_id
+			break
+		}
+	}
+
+	return valid_uid[:8]
+}
+
+func generateToken(u_id string) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["user_id"] = u_id
+	claims["exp"] = time.Now().Add(5 * time.Hour).Unix()
+
+	tokenString, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
 }
