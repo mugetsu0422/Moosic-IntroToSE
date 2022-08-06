@@ -111,6 +111,24 @@ func CreatePlaylist(c echo.Context) error {
 	return c.JSON(http.StatusOK, p) 
 }
 
+// Get User's Playlists API
+// Method: GET
+// Path: /user/:id/playlists
+func GetUserPlaylist(c echo.Context) error {
+	db := mysqlgorm.GetDBInstance()
+	uid := c.Param("uid")
+
+	playlist := []model.Playlist{}
+	
+	record := db.Where("created_by = ?", uid).Find(&playlist)
+	
+	if record.RowsAffected == 0 {
+		return c.JSON(http.StatusInternalServerError, "Empty playlist")
+	}
+
+	return c.JSON(http.StatusOK, playlist)  
+}
+
 // Get Playlist content API
 // Method: GET
 // Path: /playlist/:id
