@@ -37,24 +37,16 @@ const song = [
  ]
 
 const playlist = [
-    {id: 1,image: require('../../assets/add.png'), name:"Add" },
-    // {id: 2, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
-    // {id: 3,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 4,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 5,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 6,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
-    // {id: 7, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
-    // {id: 8,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 9,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    // {id: 10,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-   ]
+    {image: require('../../assets/add.png'), name:"Add" }
+]
 
-    const artist = [
-      {id: 1,image: require('../../assets/account.png'), name:"artist's name", },
-      {id: 2, image: require('../../assets/account.png'),name:"artist's name" },
-      {id: 3,image: require('../../assets/account.png'),  name:"artist's name" },
-      {id: 4,image: require('../../assets/account.png'),  name:"artist's name" },
-      {id: 5, image: require('../../assets/account.png'), name:"artist's name" }]
+const artist = [
+  {id: 1,image: require('../../assets/account.png'), name:"artist's name", },
+  {id: 2, image: require('../../assets/account.png'),name:"artist's name" },
+  {id: 3,image: require('../../assets/account.png'),  name:"artist's name" },
+  {id: 4,image: require('../../assets/account.png'),  name:"artist's name" },
+  {id: 5, image: require('../../assets/account.png'), name:"artist's name" }
+]
 
 const listTab = [
 {
@@ -68,12 +60,38 @@ const listTab = [
 },
 ]
 
+const init = async() => {
+  try {
+    AsyncStorage.getItem('uid')
+    .then(value => {
+      if (value != null) {
+        axios.get(API_URL + `/user/${value}` + PATH.CREATE_PLAYLIST)
+          .then(response => {
+            let body = response.data
+            console.log(response.data)
+            for (let i = 0; i < body.length; i++) {
+              playlist.push({image: require('../../assets/playlist.png'),
+                            name: body[i].title, 
+                            selected: false 
+                          })
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    })
+  }
+  catch(error) {
+    console.log(error)
+  }
+}
+
+init()
 const MySong = () =>{
-  let i = playlist.length + 1
   const [status,setStatus] = useState('Playlist')
   const [playlistName, setPlaylistName] = useState('') 
 
-  const [playlistIndex, setPlaylistIndex] = useState(i)
   const setStatusFilter = status =>{
     setStatus(status)
     console.log(status)
@@ -89,20 +107,19 @@ const MySong = () =>{
         AsyncStorage.getItem('uid')
           .then(value => {
             if (value != null) {
-
               console.log(playlistName)
               axios.post(API_URL + `/user/${value}` + PATH.CREATE_PLAYLIST, {title: playlistName})
                 .then(response => {
                   console.log(response.data)
+                  playlist.push({image: require('../../assets/playlist.png'),
+                            name: response.data.title, 
+                            selected: false 
+                          })
+                  Alert.alert('Successful create playlist')
                 })
                 .catch(error => {
                   console.log(error)
                 })
-              playlist.push(
-                {id: playlistIndex, image: require('../../assets/playlist.png'),name:playlistName, artist : "", view : "",selected: false },
-              )
-              setPlaylistIndex(playlistIndex + 1)
-              Alert.alert('Successful create playlist')
               setModalVisible(!modalVisible)
             }
           })
@@ -140,10 +157,7 @@ const MySong = () =>{
                         
                     </TouchableOpacity>
                 )
-                }
-                
-                
-                
+                } 
               />
               
             </View>
@@ -168,7 +182,7 @@ const MySong = () =>{
                 data={playlist}
                 _keyExtractor = {(item, index) => item.item.key}
                 renderItem= {({item, index})=>(
-                  <View>
+                  <View> 
                   {item.name != 'Add'?
                 <View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
                 width:widthScreen*0.9}}>
