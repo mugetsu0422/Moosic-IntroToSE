@@ -79,7 +79,7 @@ func GetSong(c echo.Context) error {
 }
 
 // Create Playlist API
-// Method: PUT
+// Method: POST
 // Path: /:id/playlist
 func CreatePlaylist(c echo.Context) error {
 	user_id := c.Param("uid")
@@ -95,16 +95,12 @@ func CreatePlaylist(c echo.Context) error {
 	}
 
 	db := mysqlgorm.GetDBInstance()
-	var count int64
-	db.Model(&model.Playlist{}).Group("playlist_id").Count(&count)
-
-	count += 1
 
 	p := &model.Playlist{
-		Playlist_id: strconv.FormatInt(count, 10),
+		Playlist_id: generatePID(),
 		Created_by: user_id,
 		Title: newPlaylist.Title,
-		Created_date: time.Now().Format("2006-01-02"),
+		Created_date: time.Now().Format("2006-01-02 15:04:05"),
 	}
 
 	db.Exec("INSERT INTO `playlist` (`playlist_id`, `created_by`, `title`, `created_date`) VALUES(?, ?, ?, ?)", p.Playlist_id, p.Created_by, p.Title, p.Created_date)
@@ -120,13 +116,28 @@ func GetUserPlaylist(c echo.Context) error {
 
 	playlist := []model.Playlist{}
 	
-	record := db.Where("created_by = ?", uid).Find(&playlist)
+	record := db.Where("created_by = ?", uid).Order("created_date").Find(&playlist)
 	
 	if record.RowsAffected == 0 {
 		return c.JSON(http.StatusInternalServerError, "Empty playlist")
 	}
 
 	return c.JSON(http.StatusOK, playlist)  
+}
+
+// Remove playlist API
+// Method: DELETE
+// path: /playlist/:pid
+func RemovePlaylist(c echo.Context) error {
+	db := mysqlgorm.GetDBInstance()
+	pid := c.Param("pid")
+
+	record := db.Delete(&model.Playlist{}, "playlist_id = ?", pid)
+	if record.Error != nil {
+		return record.Error 
+	}
+
+	return c.JSON(http.StatusOK, "Playlist deleted")  
 }
 
 // Get Playlist content API
@@ -155,4 +166,26 @@ func GetPlaylist(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, songs);
+}
+
+
+func generatePID() string {
+	db := mysqlgorm.GetDBInstance()
+	
+	var i int64 = 2
+
+	for true {
+		p := &model.Playlist{}
+	
+		// check if user exists
+		record := db.Where("playlist_id = ?", i).Take(&p)
+
+		if record.RowsAffected == 0 {
+			break
+		}
+
+		i += 1
+	}
+
+	return strconv.FormatInt(i, 10)
 }
