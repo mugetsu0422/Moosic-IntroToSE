@@ -71,6 +71,7 @@ const init = async() => {
             console.log(response.data)
             for (let i = 0; i < body.length; i++) {
               playlist.push({image: require('../../assets/playlist.png'),
+                            id: body[i].playlist_id,
                             name: body[i].title, 
                             selected: false 
                           })
@@ -91,13 +92,14 @@ init()
 const MySong = () =>{
   const [status,setStatus] = useState('Playlist')
   const [playlistName, setPlaylistName] = useState('') 
+  const [playlistData, setplaylistData] = useState(playlist)
 
   const setStatusFilter = status =>{
     setStatus(status)
     console.log(status)
   }
 
-  const createPlaylist = async() => {
+  const createPlaylist = () => {
     console.log(playlistName)
     if (playlistName.length == 0) {
       Alert.alert('Please write the playlist name')
@@ -108,26 +110,46 @@ const MySong = () =>{
           .then(value => {
             if (value != null) {
               console.log(playlistName)
+              console.log('Loading....')
               axios.post(API_URL + `/user/${value}` + PATH.CREATE_PLAYLIST, {title: playlistName})
                 .then(response => {
+                  let newPlaylist = [{image: require('../../assets/playlist.png'),
+                                    id: response.data.playlist_id,
+                                    name: response.data.title, 
+                                    selected: false 
+                                  }]
+
+                  newPlaylist = playlistData.concat(newPlaylist)
+
+                  setplaylistData(newPlaylist)
                   console.log(response.data)
-                  playlist.push({image: require('../../assets/playlist.png'),
-                            name: response.data.title, 
-                            selected: false 
-                          })
-                  Alert.alert('Successful create playlist')
+                  Alert.alert("New playlist created")
                 })
                 .catch(error => {
                   console.log(error)
                 })
               setModalVisible(!modalVisible)
-            }
+           }
           })
       } catch (error) {
         console.log(error)
       }
-      
     }
+  }
+
+  const removePlaylist = (id) => {
+    axios.delete(API_URL + `/playlists/${id}`)
+      .then(response => {
+        let new_playlist = playlistData.filter(function(item) {
+          return item.id !== id
+        })
+        Alert.alert(response.data)
+        setplaylistData(new_playlist)
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -179,8 +201,8 @@ const MySong = () =>{
               <View style= {styles.listplaylist}>
                 <FlatList
                 style= {{width:widthScreen, padding:20}}
-                data={playlist}
-                _keyExtractor = {(item, index) => item.item.key}
+                data={playlistData}
+                keyExtractor = {item => item.id}
                 renderItem= {({item, index})=>(
                   <View> 
                   {item.name != 'Add'?
@@ -198,8 +220,9 @@ const MySong = () =>{
                       </View>
                        </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}>
+                  <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}  onPress={() => {removePlaylist(item.id)}}>
                       <Icon  name = "remove-circle-outline" size ={40} color='black' borderRadius={2}  />
+                     
                     </TouchableOpacity>
                 </View>:<View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
                 width:widthScreen*0.9}}>
