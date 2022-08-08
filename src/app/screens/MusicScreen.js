@@ -43,7 +43,7 @@ export default function Music({navigation, route}) {
             {PlayPause.type[audioContext.play]}
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={() => null}>
+          <TouchableOpacity onPress={() => audioContext.forwardButton()}>
             <Ionicons name="play-skip-forward-sharp" size={50} color="white" />
           </TouchableOpacity>
 

@@ -27,7 +27,6 @@ export class AudioProvider extends Component {
     }
 
     handleAudioPress = async(audio) => {
-        console.log(this.state.playlistContent[0])
         const { song, songStatus, currentSong, updateState,  } = this.state
         // playing audio for the first time
         if(songStatus === null) {
@@ -92,6 +91,23 @@ export class AudioProvider extends Component {
         }
     }
 
+    forwardButton = async() => {
+        const { song, songStatus, currentSong, updateState, playlistContent } = this.state
+        try {
+            await song.stopAsync()
+            await song.unloadAsync()
+
+            const idx = playlistContent.findIndex(song => song.song_id === currentSong.song_id)
+            console.log(idx)
+            if (this.shuffle === 'random') {
+                const newIdx = idx + 1 > this.playlistContent.length ? 0 : idx + 1
+                console.log('New idx', newIdx)
+            }
+        } catch (error) {
+            console.log('error when forward song', error.message)
+        }
+    }
+
     render() {
         const {
             playlistContent, 
@@ -121,6 +137,7 @@ export class AudioProvider extends Component {
                 repeat,
                 updateState: this.updateState,
                 handleAudioPress: this.handleAudioPress,
+                forwardButton: this.forwardButton,
             }}>
                 {this.props.children}
             </AudioContext.Provider>
