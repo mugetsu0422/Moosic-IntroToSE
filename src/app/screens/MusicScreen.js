@@ -63,11 +63,7 @@ export default function Music({navigation, route}) {
             <Ionicons name="play-skip-forward-sharp" size={50} color="white" />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => audioContext.updateState(audioContext,
-              {repeat: 
-              audioContext.repeat === 'none' ? 'playlist' 
-              : audioContext.repeat === 'playlist' ? 'song' 
-              : 'none'})}>
+          <TouchableOpacity onPress={() => audioContext.repeatButton()}>
             {Repeat.type[audioContext.repeat]}
           </TouchableOpacity>
           

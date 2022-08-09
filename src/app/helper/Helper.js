@@ -19,7 +19,7 @@ export const shuffleArray = (array) => {
   }
 }
 
-// Tạo mảng chứa index của playlistContent được shuffle nhưng vị trí idx được giữ nguyên
+// Tạo mảng chứa index của playlistContent được shuffle nhưng vị trí idx được đưa lên đầu
 export const createRandArr = (arrLen, idx) => {
   var randArr = [...Array(arrLen).keys()]
   shuffleArray(randArr)
@@ -29,9 +29,9 @@ export const createRandArr = (arrLen, idx) => {
   // [randArr[0], randArr[idx]] = [randArr[idx], randArr[0]]
 
   // Swap
-  var temp = randArr[0]
-  randArr[0] = randArr[idx]
-  randArr[idx] = temp
+  // var temp = randArr[0]
+  // randArr[0] = randArr[idx]
+  // randArr[idx] = temp
 
   // console.log(randArr)
   return randArr

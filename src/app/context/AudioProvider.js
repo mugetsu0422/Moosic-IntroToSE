@@ -29,7 +29,7 @@ export class AudioProvider extends Component {
     }
 
     onPlaybackStatusUpdate = async(playbackStatus) => {
-        const { currentSongIndex, playlistContent } = this.state
+        const { currentSongIndex, playlistContent, shuffle, repeat } = this.state
         if(playbackStatus.isLoaded && playbackStatus.isPlaying) {
             this.updateState(this.context, {
                 playbackPosition: playbackStatus.positionMillis,
@@ -38,11 +38,14 @@ export class AudioProvider extends Component {
         }
 
         if(playbackStatus.didJustFinish) {
-            if (currentSongIndex != playlistContent.length - 1)
-            {
-                this.forwardButton()
+            if (repeat != 'song') {
+                if (repeat != 'playlist') {
+                    if (currentSongIndex != playlistContent.length - 1)
+                    {
+                        this.forwardButton()
+                    }
+                }
             }
-            
         }
     }
 
@@ -61,6 +64,7 @@ export class AudioProvider extends Component {
                     songStatus: status, 
                     currentSong: audio,
                     currentSongIndex: idx,
+                    play: 'pause',
                 })
                 return song.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
             } catch (error) {
@@ -83,6 +87,7 @@ export class AudioProvider extends Component {
                     songStatus: status, 
                     currentSong: audio,
                     currentSongIndex: idx,
+                    play: 'pause',
                 })
                 return song.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
             } catch (error) {
@@ -103,21 +108,49 @@ export class AudioProvider extends Component {
         }
         // Alphabetical
         else {
-            // Create array of index for random shuffle
-            // var randArrTemp = [...Array(playlistContent.length).keys()]
-            // helper.shuffleArray(randArrTemp)
-            // randArrTemp.unshift(idx)
-            // randArrTemp = [... new Set(randArrTemp)]
-
             const randArrTemp = helper.createRandArr(playlistContent.length, idx)
-            console.log(randArrTemp)
-            console.log(idx)
+            // console.log(randArrTemp)
+            // console.log(idx)
 
             updateState(this.state, {
                 randArr: randArrTemp,
-                currentSongIndex: 0,
                 shuffle: 'random',
+                currentSongIndex: 0,
             })
+        }
+    }
+
+    repeatButton = async() => {
+        const { repeat, updateState, song } = this.state
+        // switch to playlist
+        if (repeat === 'none') {
+            updateState(this.state, {
+                repeat: 'playlist',
+            })
+        }
+        // switch to song
+        else if (repeat === 'playlist') {
+            try {
+                const status = await song.setStatusAsync({isLooping: true})
+                updateState(this.state, {
+                    repeat: 'song',
+                    songStatus: status,
+                })
+            } catch (error) {
+                console.log('error repeat button', error.message)
+            }
+        }
+        // switch to none
+        else {
+            try {
+                const status = await song.setStatusAsync({isLooping: false})
+                updateState(this.state, {
+                    repeat: 'none',
+                    songStatus: status,
+                })
+            } catch (error) {
+                console.log('error repeat button', error.message)
+            }
         }
     }
 
@@ -213,19 +246,16 @@ export class AudioProvider extends Component {
     }
 
     forwardButton = async() => {
-        const { song, songStatus, currentSong, updateState, playlistContent, shuffle, randArr } = this.state
+        const { song, currentSong, updateState, playlistContent, shuffle, randArr, currentSongIndex } = this.state
 
-        console.log(shuffle)
-        const idx = playlistContent.findIndex(song => song.song_id === currentSong.song_id)
-        var newIdx = null
-        if (shuffle === 'alphabetical') {
-            newIdx = idx + 1 >= playlistContent.length ? 0 : idx + 1
+        // index in playlistContent
+        var realIdx = currentSongIndex + 1 >= playlistContent.length ? 0 : currentSongIndex + 1
+        var virtIdx = realIdx
+        if (shuffle === 'random') {
+            virtIdx = randArr[realIdx]
         }
-        // random
-        else {
-            newIdx = randArr[idx + 1 >= randArr.length ? 0 : idx + 1]
-        }
-        console.log(newIdx)
+        // console.log('realIdx', realIdx)
+        // console.log('virtIdx', virtIdx)
 
         try {
             // unload current song
@@ -234,13 +264,13 @@ export class AudioProvider extends Component {
 
             // load next song
             const status = await song.loadAsync({
-                uri: SONG_URI + playlistContent[newIdx].song_id}, 
+                uri: SONG_URI + playlistContent[virtIdx].song_id}, 
                 {shouldPlay: true})
             updateState(this.state, {
                 song: song, 
                 songStatus: status, 
-                currentSong: playlistContent[newIdx],
-                currentSongIndex: newIdx,
+                currentSong: playlistContent[virtIdx],
+                currentSongIndex: realIdx,
                 play: 'pause',
             })
             return song.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
@@ -250,19 +280,16 @@ export class AudioProvider extends Component {
     }
 
     backwardButton = async() => {
-        const { song, songStatus, currentSong, updateState, playlistContent, shuffle, randArr } = this.state
+        const { song, currentSong, updateState, playlistContent, shuffle, randArr, currentSongIndex } = this.state
 
-        console.log(shuffle)
-        const idx = playlistContent.findIndex(song => song.song_id === currentSong.song_id)
-        var newIdx = null
-        if (shuffle === 'alphabetical') {
-            newIdx = idx - 1 < 0 ? playlistContent.length - 1 : idx - 1
+        // index in playlistContent
+        var realIdx = currentSongIndex - 1 < 0 ? playlistContent.length - 1 : currentSongIndex - 1
+        var virtIdx = realIdx
+        if (shuffle === 'random') {
+            virtIdx = randArr[realIdx]
         }
-        // random
-        else {
-            newIdx = randArr[idx -1 < 0 ? randArr.length - 1 : idx - 1]
-        }
-        console.log(newIdx)
+        console.log('realIdx', realIdx)
+        console.log('virtIdx', virtIdx)
 
         try {
             // unload current song
@@ -271,13 +298,13 @@ export class AudioProvider extends Component {
 
             // load next song
             const status = await song.loadAsync({
-                uri: SONG_URI + playlistContent[newIdx].song_id}, 
+                uri: SONG_URI + playlistContent[virtIdx].song_id}, 
                 {shouldPlay: true})
             updateState(this.state, {
                 song: song, 
                 songStatus: status, 
-                currentSong: playlistContent[newIdx],
-                currentSongIndex: newIdx,
+                currentSong: playlistContent[virtIdx],
+                currentSongIndex: realIdx,
                 play: 'pause',
             })
             return song.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
@@ -316,8 +343,8 @@ export class AudioProvider extends Component {
                 updateState: this.updateState,
                 playNewSong: this.playNewSong,
                 shuffleButton: this.shuffleButton,
+                repeatButton: this.repeatButton,
                 playpauseButton: this.playpauseButton,
-                handleAudioPress: this.handleAudioPress,
                 forwardButton: this.forwardButton,
                 backwardButton: this.backwardButton,
             }}>
