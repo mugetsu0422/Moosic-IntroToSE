@@ -150,7 +150,7 @@ const Playlist = ({ navigation, route }) =>  {
             <TouchableOpacity
               style={styles.songs}
               onPress={() => {
-                audioContext.handleAudioPress(item)
+                audioContext.playNewSong(item)
                 navigation.navigate("Music", {songInfo: item})}}>
               <Image style={styles.songimage} 
                          source={require('../../assets/song.png')}/>

@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Dimen
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { AudioContext } from '../context/AudioProvider';
+import Slider from '@react-native-community/slider';
 
 const widthScreen = Dimensions.get('window').width;
 const heightScreen = Dimensions.get('window').height;
@@ -11,9 +12,17 @@ export default function Music({navigation, route}) {
   const audioContext = React.useContext(AudioContext)
   const {songInfo} = route.params
 
+  const calculateSeekBar =() => {
+    if(audioContext.playbackPosition !== null && audioContext.playbackDuration !== null) {
+      return audioContext.playbackPosition / audioContext.playbackDuration
+    }
+    return 0
+  }
+
   return (
     <View style={styles.container}>
-      <ImageBackground style={styles.background} source={require('../../assets/background.jpg')} resizeMode="cover">
+      <ImageBackground style={styles.background} source={require('../../assets/musicBackground.jpg')} 
+        resizeMode="cover">
         <View style={styles.des1}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <MaterialIcons name="arrow-back" size={50} color="white" />
@@ -22,24 +31,31 @@ export default function Music({navigation, route}) {
 
         <View style={styles.musicInf}>
           <Image style={styles.musicImg} source={require('../../assets/song.png')}/>
-          <Text style={styles.nameSong}> {songInfo.title} </Text>
-          <Text style={styles.artist}> {songInfo.performer} </Text>
+          <Text style={styles.nameSong}> {audioContext.currentSong.title} </Text>
+          <Text style={styles.artist}> {audioContext.currentSong.performer} </Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={0}
+            maximumValue={1}
+            value={calculateSeekBar()}
+            minimumTrackTintColor="red"
+            maximumTrackTintColor="white"
+          />
         </View>
           
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => audioContext.updateState(audioContext, 
-            {shuffle: audioContext.shuffle === 'random' ? 'alphabetical' : 'random'})}>
+          <TouchableOpacity onPress={() => audioContext.shuffleButton()}>
             {Shuffle.type[audioContext.shuffle]}
           </TouchableOpacity>
 
-         <TouchableOpacity onPress={() => null}>
+         <TouchableOpacity onPress={() => audioContext.backwardButton()}>
             <Ionicons name="play-skip-back-sharp" size={50} color="white" />
           </TouchableOpacity>
           
           <TouchableOpacity onPress={() => {
             audioContext.updateState(audioContext,
               {play: audioContext.play === 'play' ? 'pause' : 'play'})
-            audioContext.handleAudioPress(songInfo)}}>
+            audioContext.playpauseButton()}}>
             {PlayPause.type[audioContext.play]}
           </TouchableOpacity>
           
@@ -81,7 +97,7 @@ const styles = StyleSheet.create({
   background:{
     flex: 1,
     justifyContent: "center",
-    opacity: 0.95,
+    opacity: 0.9,
   },
   musicInf:
   {
@@ -93,7 +109,6 @@ const styles = StyleSheet.create({
     width: widthScreen * 0.6,
     height: heightScreen * 0.3,
     borderRadius: 10,
-    opacity: 0.8,
   },
   nameSong:{
     color: 'white',
@@ -104,6 +119,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     paddingTop: 10,
+  },
+  slider:{
+    width: widthScreen - 50, 
+    height: 50,
   },
 });
 
@@ -116,8 +135,8 @@ const PlayPause = {
 
 const Shuffle = {
   type: {
-    'random': <MaterialIcons name="shuffle" size={50} color="white"/>,
-    'alphabetical': <MaterialIcons name="shuffle" size={50} color="red"/>,
+    'alphabetical': <MaterialIcons name="shuffle" size={50} color="white"/>,
+    'random': <MaterialIcons name="shuffle" size={50} color="red"/>,
   }
 }
 
