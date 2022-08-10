@@ -20,40 +20,32 @@ import { API_URL, PATH } from '../constants/constants';
 const widthScreen =Dimensions.get('window').width;
 const heightScreen =Dimensions.get('window').height;
 const song = [
-  {id: 1,image: require('../../assets/song.png'), name:"song's name", artist : "artist's name", view : " K views", selected: false },
-  {id: 2, image: require('../../assets/song.png'),name:"song's name", artist : "artist's name", view : " K views",selected: false },
-  {id: 3,image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 4,image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 5, image: require('../../assets/song.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 6,image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+  {id: 's1',image: require('../../assets/song.png'), name:"song's name", artist : "artist's name", view : " K views", selected: false },
+  {id: 's2', image: require('../../assets/song.png'),name:"song's name", artist : "artist's name", view : " K views",selected: false },
+  {id: 's3',image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+  {id: 's4',image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+  {id: 's5', image: require('../../assets/song.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+  {id: 's6',image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
  ]
  const recently  = [
-  {id: 1,image: require('../../assets/recently.jpg'), name:" recently song's name", artist : "artist's name", view : " K views", selected: false },
-  {id: 2, image: require('../../assets/recently.jpg'),name:"recently song's name", artist : "artist's name", view : " K views",selected: false },
-  {id: 3,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 4,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 5, image: require('../../assets/recently.jpg'), name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 6,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
+  {id: 'r1',image: require('../../assets/recently.jpg'), name:" recently song's name", artist : "artist's name", view : " K views", selected: false },
+  {id: 'r2', image: require('../../assets/recently.jpg'),name:"recently song's name", artist : "artist's name", view : " K views",selected: false },
+  {id: 'r3',image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
+  {id: 'r4',image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
+  {id: 'r5', image: require('../../assets/recently.jpg'), name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
+  {id: 'r6',image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
  ]
 
 const playlist = [
-    {image: require('../../assets/add.png'), name:"Add" },
-    {id: 3,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 4,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 5, image: require('../../assets/recently.jpg'), name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 6,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 7,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 8,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 9, image: require('../../assets/recently.jpg'), name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 10,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false }
+    {image: require('../../assets/add.png'), name:"Add" }
 ]
 
 const artist = [
-  {id: 1,image: require('../../assets/account.png'), name:"artist's name", },
-  {id: 2, image: require('../../assets/account.png'),name:"artist's name" },
-  {id: 3,image: require('../../assets/account.png'),  name:"artist's name" },
-  {id: 4,image: require('../../assets/account.png'),  name:"artist's name" },
-  {id: 5, image: require('../../assets/account.png'), name:"artist's name" }
+  {id: 'a1',image: require('../../assets/account.png'), name:"artist's name", },
+  {id: 'a2', image: require('../../assets/account.png'),name:"artist's name" },
+  {id: 'a3',image: require('../../assets/account.png'),  name:"artist's name" },
+  {id: 'a4',image: require('../../assets/account.png'),  name:"artist's name" },
+  {id: 'a5', image: require('../../assets/account.png'), name:"artist's name" }
 ]
 
 const listTab = [
@@ -164,15 +156,11 @@ const MySong = () =>{
   return (
     
       <View style = {styles.container}>
-        
-        
-        
-           
-              <View style= {styles.listplaylist}>
+        <View style= {styles.listplaylist}>
                 <FlatList
                 style= {{width:widthScreen, padding:20}}
-                data={playlist}
-                keyExtractor={(item, index) => item.id + 'P'}
+                data={playlistData}
+                keyExtractor={item => item.id}
                 renderItem= {({item, index})=>(
                   <View> 
                   {item.name != 'Add'?
@@ -259,10 +247,7 @@ const MySong = () =>{
               }
               
               
-              />
-            
-              </View> 
-      
+    /></View>
       </View>
   )
 }
@@ -272,8 +257,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent:'center',
-    alignItems:'center',
-    paddingTop:'20%',
+    alignItems:'center'
   },
   header:{
     height:heightScreen*0.25,

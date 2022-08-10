@@ -14,7 +14,7 @@ import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon3 from 'react-native-vector-icons/Feather';
 import Icon4 from 'react-native-vector-icons/Entypo';
 import Icon5 from 'react-native-vector-icons/FontAwesome';
-import { BottomPopup } from './pop'
+import { BottomPopup } from './pop2'
 import { API_URL, PATH } from '../constants/constants';
 import axios from 'axios'
 import { AudioContext } from '../context/AudioProvider';
@@ -30,32 +30,61 @@ const widthScreen =Dimensions.get('window').width;
 let imagelink = '../../assets/chill.png'
 
 const popupPlaylist = [
-  {id: 1,icon:'add-circle-outline', name: 'add song'},
+  {id: 1,icon:'add-circle-outline', name: 'add new song to playlist'},
   {id: 2,icon: 'pencil-sharp', name: 'edit playlist'},
   {id: 3,icon:'search', name: 'search song/ artist'},
-  {id: 4,icon:'ios-musical-note', name: 'add to playlist'},
-  {id: 5, icon:'ios-paper-plane-outline', name: 'add to occur streaming'},
-  {id: 6,icon:'download', name: 'pick song to download'},
-  {id: 8,icon:'md-share-social-outline', name: 'share'},
-  {id: 9,icon:'md-trash-outline', name: 'remove playlist'},
+  {id: 4, icon:'ios-paper-plane-outline', name: 'add a song to occur streaming'},
+  {id: 5,icon:'download', name: 'pick a song to download'},
+  {id: 6,icon:'md-share-social-outline', name: 'share playlist'},
+  {id: 7,icon:'md-trash-outline', name: 'remove playlist'},
   
 ]
 const popupSong = [
   {id: 1,icon:'remove-circle-outline', name: 'remove from playlist'},
-  {id: 2,icon:'add-circle-outline', name: 'add to playlist'},
-  {id: 3,icon:'md-add', name: 'add to stream list'},
+  {id: 2,icon:'add-circle-outline', name: 'add to another playlist'},
+  {id: 3,icon:'md-add', name: 'add to streaming list'},
   {id: 4,icon:'play-forward', name: 'play next'},
-  {id: 5, icon:'search', name: 'search artist'},
-  {id: 6,icon:'download', name: 'download'},
-  {id: 8,icon:'close', name: 'ban'},
-  {id: 9,icon:'md-share-social-outline', name: 'share'},
+  {id: 5, icon:'search', name: 'search song artist'},
+  {id: 6,icon:'download', name: 'download this song'},
+  {id: 7,icon:'close', name: 'ban this song'},
+  {id: 8,icon:'md-share-social-outline', name: 'share song'},
 ]
 
 const Playlist = ({ navigation, route }) =>  {
+  
   const audioContext = useContext(AudioContext)
-
+  const [Songchoice,setSongChoice] = useState("");
+  const [Playlistchoice,setPlaylistChoice] = useState("");
+  
+settingChoice = (option) =>{
+    popupPlaylist.map(pl=>{
+      if(option == pl.name ){
+        setPlaylistChoice(option)
+        //console.log('playlist',option)
+      }}
+    )
+  
+    popupSong.map(s=>{
+      if(option == s.name ){
+        setSongChoice(option)
+        //console.log('song',option)
+      }}
+    )
+    
+}
   const {content} = route.params;
-  const [data, setdata] = useState(content)
+  const [data, setdata] = useState([
+    {id: 1,image: require('../../assets/chill.png'), name:"song's name", artist : "artist's name", view : " K views", selected: false },
+    {id: 2, image: require('../../assets/love.png'),name:"song's name", artist : "artist's name", view : " K views",selected: false },
+    {id: 3,image: require('../../assets/motivation.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 4,image: require('../../assets/soul.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 5, image: require('../../assets/rhymtm.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 6,image: require('../../assets/pop.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 7,image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 8, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 9, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 10, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false }
+  ])
   const [playlistlove,setplaylist] = useState(false);
   onValueChange = (item, index) => {
     const newData = data.map( preItem =>{
@@ -136,6 +165,8 @@ const Playlist = ({ navigation, route }) =>  {
               style= {{position:'absolute',justifyContent:'flex-end',alignSelf:'flex-end'}}
               onPress={()=>{
                 alert('play shuffle playlist')
+                console.log('playlist',Playlistchoice)
+                console.log('song',Songchoice)
             }}>
               <Icon4 name = "shuffle" size = {30} color = "white" /></TouchableOpacity>
         
@@ -172,7 +203,7 @@ const Playlist = ({ navigation, route }) =>  {
                   <BottomPopup 
                     title = {item.title}
                     author= {item.performer}
-                  
+                    settingChoice ={settingChoice}
                     ref={(target) => popupRef2 = target}
                     onTouchOutside = {onClosePopup2}
                     data = {popupSong}
@@ -186,12 +217,13 @@ const Playlist = ({ navigation, route }) =>  {
         </FlatList>
       </View>
       <BottomPopup 
+        
           title ="Playlist's name"
           author= "Artist's name"
-          
           ref={(target) => popupRef1 = target}
           onTouchOutside = {onClosePopup1}
           data = {popupPlaylist}
+          settingChoice ={settingChoice}
         />
 
         
