@@ -38,14 +38,7 @@ const song = [
 
 const playlist = [
     {image: require('../../assets/add.png'), name:"Add" },
-    {id: 3,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 4,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 5, image: require('../../assets/recently.jpg'), name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 6,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 7,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 8,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 9, image: require('../../assets/recently.jpg'), name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 10,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false }
+    
 ]
 
 const artist = [
