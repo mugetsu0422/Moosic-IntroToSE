@@ -38,7 +38,7 @@ const song = [
 
 const playlist = [
     {image: require('../../assets/add.png'), name:"Add" },
-    
+    {image: require('../../assets/fav.jpg'), name:"My fav" },   
 ]
 
 const artist = [
@@ -165,9 +165,10 @@ const MySong = () =>{
                 <FlatList
                 style= {{width:widthScreen, padding:20}}
                 data={playlistData}
-                keyExtractor={(item, index) => item.id + 'P'}
+                keyExtractor={(item, index) => item.id }
                 renderItem= {({item, index})=>(
                   <View> 
+                    
                   {item.name != 'Add'?
                 <View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
                 width:widthScreen*0.9}}>
@@ -183,6 +184,7 @@ const MySong = () =>{
                       </View>
                        </View>
                   </TouchableOpacity>
+                  {item.name !='My fav'?
                   <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}  
                     onPress={() => Alert.alert('Warning', 'Do you want to delete this playlist' , [
                       {text: 'Yes', onPress: () => {removePlaylist(item.id)}},
@@ -191,7 +193,7 @@ const MySong = () =>{
                       <Icon  name = "remove-circle-outline" size ={40} color='black' borderRadius={2}  />
                      
                     </TouchableOpacity>
-                </View>:<View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
+                :null}</View>:<View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
                 width:widthScreen*0.9}}>
                  
                       <Modal

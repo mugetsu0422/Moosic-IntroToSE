@@ -5,7 +5,9 @@ import { StyleSheet,
   Dimensions,
   FlatList,
   TouchableOpacity, 
+  Modal,
   ImageBackground,
+  TextInput,
   StatusBar } from 'react-native';
 import React,{useContext, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,12 +20,13 @@ import { BottomPopup } from './pop2'
 import { API_URL, PATH } from '../constants/constants';
 import axios from 'axios'
 import { AudioContext } from '../context/AudioProvider';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 
 const imageheight = Dimensions.get('window').width*0.35;
 const widthscreen = Dimensions.get('window').width;
 const imageheight2 = Dimensions.get('window').height*0.12;
-const widthScreen =Dimensions.get('window').width;
+const heightscreen =Dimensions.get('window').height;
 
 
 
@@ -49,32 +52,50 @@ const popupSong = [
   {id: 7,icon:'close', name: 'ban this song'},
   {id: 8,icon:'md-share-social-outline', name: 'share song'},
 ]
-
+const ExistancePlaylist=[
+   {id: 1,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
+    {id: 2, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
+    {id: 3,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 4,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 5,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+]
 const Playlist = ({ navigation, route }) =>  {
-  
+  const[setupSongID,setSongID]=useState("") //song dang duoc chon
   const audioContext = useContext(AudioContext)
-  const [Songchoice,setSongChoice] = useState("");
-  const [Playlistchoice,setPlaylistChoice] = useState("");
+  const [Songchoice,setSongChoice] = useState(""); //lua chon cho song
+  const [Playlistchoice,setPlaylistChoice] = useState(""); //lua chon cho plalist
   
-settingChoice = (option) =>{
+settingChoice = (option,id) =>{
     popupPlaylist.map(pl=>{
       if(option == pl.name ){
         setPlaylistChoice(option)
         console.log('pl',pl.name)
+        setSongID(id)
       }}
     )
   
     popupSong.map(s=>{
       if(option == s.name ){
         setSongChoice(option)
-        console.log('song',s.name)
+        setSongID(id)
+        
       }}
-    )
+    ) 
+    if(option =='add to another playlist'){
+      setModalVisible(!modalVisible)
+    }
     
 }
+const check=()=>{
+  if(Songchoice =='add to another playlist'){
+    setModalVisible(!modalVisible)
+  }
+}
+  const [modalVisible, setModalVisible] = useState(false);
   const {playlistInfo, content} = route.params;
   const [data, setdata] = useState(content)
   const [playlistlove,setplaylist] = useState(false);
+  const [playlistaddsong,setplaylistadd] = useState('');
   onValueChange = (item, index) => {
     const newData = data.map( preItem =>{
       
@@ -89,20 +110,23 @@ settingChoice = (option) =>{
           ...preItem,
           selected: preItem.selected, } })
     setdata(newData);}
+    
+
 
   let popupRef1 = React.createRef()
   const onShowPopup1 = () => {
-    popupRef1.show()
+    popupRef1.show('','','')
   }
   const onClosePopup1 = () => {
     popupRef1.close()
   }
   let popupRef2 = React.createRef()
-  const onShowPopup2 = () => {
-    popupRef2.show()
+  const onShowPopup2 = (item) => {
+    popupRef2.show(item.title,item.performer,item.song_id)
   }
   const onClosePopup2 = () => {
     popupRef2.close()
+  
   }
   
   return (
@@ -137,7 +161,6 @@ settingChoice = (option) =>{
             <TouchableOpacity 
             onPress={() =>{
                 setplaylist(!playlistlove);
-                
             }}> 
             {playlistlove ? <Icon5 name = "star"  size = {50} color = "white" /> : <Icon5 name = "star-o"  size = {50} color= "white" />}
               </TouchableOpacity>
@@ -157,10 +180,10 @@ settingChoice = (option) =>{
               style= {{position:'absolute',justifyContent:'flex-end',alignSelf:'flex-end'}}
               onPress={()=>{
                 alert('play shuffle playlist')
-                console.log(data)
+               
             }}>
               <Icon4 name = "shuffle" size = {30} color = "white" /></TouchableOpacity>
-        
+            
           </View>
         </View> 
         </ImageBackground>
@@ -196,7 +219,7 @@ settingChoice = (option) =>{
                 }>
                 {item.selected ? <Icon5 name = "star"  size = {40} color = "red" /> : <Icon5 name = "star-o"  size = {40} color= "red" />}</TouchableOpacity>
                 <TouchableOpacity 
-                onPress={ onShowPopup2}>
+                onPress={()=>{ onShowPopup2(item)}}>
                   <BottomPopup 
                     title = {item.title}
                     author= {item.performer}
@@ -210,7 +233,7 @@ settingChoice = (option) =>{
               </TouchableOpacity>
             </View>    
             </TouchableOpacity>)}
-          keyExtractor={item => item.song_id} >
+          keyExtractor={(item, index)=>index.toString()} >
         </FlatList>
       </View>
       <BottomPopup 
@@ -222,7 +245,50 @@ settingChoice = (option) =>{
           settingChoice ={settingChoice}
         />
 
-        
+                <Modal
+                      animationType="slide"
+                      transparent={true}
+                      visible={modalVisible}
+                      onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                        setSongChoice("")
+                      }}
+                    >
+                    <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                      <TouchableOpacity
+                        style={[styles.button, styles.buttonClose,{alignSelf:'flex-start'}]}
+                        onPress={() => {setModalVisible(!modalVisible)
+                                        setSongChoice('') //xoa lua chon add song to another playlist o day cho no check khong mo modal nua
+                                      }}
+                      >
+                      <Icon name = "close"/>
+                      </TouchableOpacity>
+                      <Text style={styles.modalText}>Your playlist here!</Text>
+                      <FlatList
+          
+          data ={ExistancePlaylist}
+          renderItem ={({item, index}) =>(
+            
+            <TouchableOpacity
+              style={{height:heightscreen*0.05,width:widthscreen*0.55,borderBottomWidth:2,borderColor:'gray'}}
+              onPress={() => {
+                setplaylistadd(item.id)
+                //them song vao playlist o day,
+                //goi ham them vo database hay gi do
+                setSongChoice('') //xoa lua chon add song to another playlist o day cho no check khong mo modal nua
+                setModalVisible(!modalVisible)
+              }}>
+                {item.selected?<Icon name = "checksquare"/>:null}
+                <Text style ={{fontSize:20, color:'black',textAlign: 'center',color:'grey',justifyContent:'center'}}>{item.name}</Text>
+              </TouchableOpacity>
+              )}
+          keyExtractor={song=> song.title} >
+        </FlatList>
+          </View>
+        </View>
+      </Modal>
     </View>
 
     
@@ -307,7 +373,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     //borderWidth:3,
     //alignItems:'center',
-    width:widthScreen*0.92,
+    width:widthscreen*0.92,
     justifyContent:'space-between',
     alignItems:'center',
   },
@@ -317,7 +383,7 @@ const styles = StyleSheet.create({
       borderColor:'blue',
   },
   songs:{ 
-    width:widthScreen,
+    width:widthscreen,
     height:imageheight2,
     borderWidth:1,
     borderColor:'grey',
@@ -347,6 +413,44 @@ const styles = StyleSheet.create({
     alignSelf:"flex-start",
     paddingBottom: 20,
     // backgroundColor:'blue',
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    //position:'absolute',
+  },
+  modalView: {
+    borderWidth:1,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    margin:20,
+    alignContent:'center',
+    alignItems: "center",
+    width:'75%',
+    // height: '30%',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 20,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#f27e7e",
+    //alignSelf:'flex-start',
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
 });
  

@@ -8,20 +8,17 @@ export class BottomPopup extends React.Component{
         this.state = {
             show: false,
             choice: '',
-            title:'',
-            author:'',
-            id:'',
         }
           
     }
-    show = (ntitle,nauthor,nid) =>{
-        this.setState({show:true,title:ntitle,author:nauthor,id:nid})
+    show = () =>{
+        this.setState({show:true})
     }
     close = () =>{
         this.setState({show:false})
     }
-    settingChoice = (option)=>{
-        this.setState
+    settingChoice2 = (option)=>{
+       
     }
     renderOutsideTouchabe(onTouch){
         const view = <View style ={{flex: 1, width:'100%'}}/>
@@ -36,7 +33,7 @@ export class BottomPopup extends React.Component{
       }
 
     renderTitle = () =>{
-        
+        const {title,author} = this.props
         return (
             <View style ={{margin: 10}} > 
             <Text style ={{
@@ -44,7 +41,7 @@ export class BottomPopup extends React.Component{
                 fontSize: 25, 
                
             }}>
-                {this.state.title}
+                {title}
 
             </Text>
             <Text style ={{
@@ -52,8 +49,8 @@ export class BottomPopup extends React.Component{
                 fontSize: 15, 
                
             }}>
-                {this.state.author}
-                
+                {author}
+
             </Text>
         </View>
         )
@@ -118,7 +115,7 @@ export class BottomPopup extends React.Component{
         >
             <TouchableWithoutFeedback 
             onPress = {()=>{this.setState({show:false})
-            settingChoice(this.state.choice,this.state.id)
+            settingChoice2(this.state.choice)
            
         }}
 

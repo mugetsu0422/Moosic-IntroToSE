@@ -8,6 +8,7 @@ export class BottomPopup extends React.Component{
         this.state = {
             show: false,
             choice: '',
+            
         }
           
     }
