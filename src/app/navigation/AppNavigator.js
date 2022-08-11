@@ -39,9 +39,9 @@ function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{
       headerShown: false,
-      background: 'transparent',
+      background: 'Welcome',
   }}
-      initialRouteName = "HomeNavigator"
+      initialRouteName = "SignIn"
 
   >
         <Stack.Screen name="Welcome" component={Welcomescreen} />

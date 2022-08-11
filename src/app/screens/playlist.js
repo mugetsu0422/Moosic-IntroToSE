@@ -72,19 +72,8 @@ settingChoice = (option) =>{
     )
     
 }
-  const {content} = route.params;
-  const [data, setdata] = useState([
-    {id: 1,image: require('../../assets/chill.png'), name:"song's name", artist : "artist's name", view : " K views", selected: false },
-    {id: 2, image: require('../../assets/love.png'),name:"song's name", artist : "artist's name", view : " K views",selected: false },
-    {id: 3,image: require('../../assets/motivation.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 4,image: require('../../assets/soul.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 5, image: require('../../assets/rhymtm.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 6,image: require('../../assets/pop.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 7,image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 8, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 9, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 10, image: require('../../assets/chill.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false }
-  ])
+  const {playlistInfo, content} = route.params;
+  const [data, setdata] = useState(content)
   const [playlistlove,setplaylist] = useState(false);
   onValueChange = (item, index) => {
     const newData = data.map( preItem =>{
@@ -126,10 +115,10 @@ settingChoice = (option) =>{
               style = {styles.imagesetting}
               source = {require('../../assets/chill.png')} /> */}
               <View style= {styles.info}>
-                <Text style= {styles.plname}> Playlist's name</Text>
+                <Text style= {styles.plname}> {playlistInfo.title}</Text>
                 <View style ={{flexDirection: 'row',justifyContent:'space-between'}}>
-                  <Text style ={{color:'white'}}> Trending Playlist</Text> 
-                  <Text style ={{color:'white'}}> 290K views</Text>
+                  {/* <Text style ={{color:'white'}}> Trending Playlist</Text>  */}
+                  {/* <Text style ={{color:'white'}}> 290K views</Text> */}
                 </View>
               </View>
           </View>
@@ -181,7 +170,7 @@ settingChoice = (option) =>{
             <TouchableOpacity
               style={styles.songs}
               onPress={() => {
-                audioContext.playNewSong(item)
+                audioContext.playNewSong(item, content)
                 navigation.navigate("Music", {songInfo: item})}}>
               <Image style={styles.songimage} 
                          source={require('../../assets/song.png')}/>
@@ -278,7 +267,7 @@ const styles = StyleSheet.create({
       backgroundColor:'black',
   },
   plname:{
-    fontSize:30,
+    fontSize:50,
     color:'white',
    
   },

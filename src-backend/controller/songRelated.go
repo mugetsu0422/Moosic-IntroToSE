@@ -1,13 +1,14 @@
 package controller
 
 import (
+	"log"
 	mysqlgorm "music-app-backend/database/mysqlGORM"
 	"music-app-backend/model"
 	"net/http"
-	"github.com/labstack/echo/v4"
-	"log"
 	"strconv"
 	"time"
+
+	"github.com/labstack/echo/v4"
 )
 
 // Like Song API
@@ -50,6 +51,24 @@ func DislikeSong(c echo.Context) error {
 	return c.JSON(http.StatusOK, like_song) 
 }
 
+// Search Playlist info API
+// Method: GET
+// Path: /search/playlist?q=
+func GetPlaylist(c echo.Context) error {
+	db := mysqlgorm.GetDBInstance()
+	playlists := []model.Playlist{}
+
+	query := c.QueryParam("q")
+	query = "%" + query + "%"
+
+	result := db.Where("title like ?", query).Limit(10).Find(&playlists);
+	if result.Error != nil {
+		return c.JSON(http.StatusInternalServerError, "Playlist(s) not found");
+	}
+
+	return c.JSON(http.StatusOK, playlists) 
+}
+
 // Get Song info API
 // Method: GET
 // Path: /search/:type?q=	type là song hoặc artist hoặc
@@ -77,6 +96,8 @@ func GetSong(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, songs) 
 }
+
+
 
 // Create Playlist API
 // Method: POST
@@ -143,7 +164,7 @@ func RemovePlaylist(c echo.Context) error {
 // Get Playlist content API
 // Method: GET
 // Path: /playlist/:id
-func GetPlaylist(c echo.Context) error {
+func GetPlaylistContent(c echo.Context) error {
 	db := mysqlgorm.GetDBInstance();
 	playlist_content := []model.Playlist_content{};
 	songs := []model.Song{};

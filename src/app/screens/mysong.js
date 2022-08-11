@@ -157,14 +157,14 @@ const MySong = () =>{
   return (
     
       <View style = {styles.container}>
-        
+        <Text style={{fontSize: 50}}>My Playlist</Text>
         
         
            
               <View style= {styles.listplaylist}>
                 <FlatList
                 style= {{width:widthScreen, padding:20}}
-                data={playlist}
+                data={playlistData}
                 keyExtractor={(item, index) => item.id + 'P'}
                 renderItem= {({item, index})=>(
                   <View> 
@@ -183,7 +183,11 @@ const MySong = () =>{
                       </View>
                        </View>
                   </TouchableOpacity>
-                  <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}  onPress={() => {removePlaylist(item.id)}}>
+                  <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}  
+                    onPress={() => Alert.alert('Warning', 'Do you want to delete this playlist' , [
+                      {text: 'Yes', onPress: () => {removePlaylist(item.id)}},
+                      {text: 'No'}
+                    ])}>
                       <Icon  name = "remove-circle-outline" size ={40} color='black' borderRadius={2}  />
                      
                     </TouchableOpacity>
@@ -369,7 +373,8 @@ modalView: {
   borderRadius: 20,
   padding: 35,
   alignItems: "center",
-  width:'50%',
+  width:'75%',
+  // height: '30%',
 },
 button: {
   borderRadius: 20,

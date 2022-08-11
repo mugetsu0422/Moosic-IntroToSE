@@ -31,8 +31,8 @@ export default function Music({navigation, route}) {
 
         <View style={styles.musicInf}>
           <Image style={styles.musicImg} source={require('../../assets/song.png')}/>
-          <Text style={styles.nameSong}> {audioContext.currentSong.title} </Text>
-          <Text style={styles.artist}> {audioContext.currentSong.performer} </Text>
+          <Text style={styles.nameSong}> {songInfo.title} </Text>
+          <Text style={styles.artist}> {songInfo.performer} </Text>
           <Slider
             style={styles.slider}
             minimumValue={0}

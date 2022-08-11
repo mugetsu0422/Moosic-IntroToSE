@@ -8,6 +8,17 @@ import { API_URL, PATH } from '../constants/constants';
 import {encode as btoa} from 'base-64'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const prepareHomeData = async() => {
+  const fullURL = API_URL + PATH.SEARCH_BY_PLAYLIST + '?q='
+  try {
+    const {data:response} = await axios.get(fullURL) //use data destructuring to get data from the promise object
+    return response
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
 const SignIn = ({navigation}) => {
   const login = async (formData) => {
     var basicAuth = 'Basic ' + btoa(formData.username + ':' + formData.password)
@@ -22,8 +33,10 @@ const SignIn = ({navigation}) => {
         try {
           AsyncStorage.clear()
           AsyncStorage.setItem('uid' ,data.data._uid)
-          alert('Login successfully')
-          navigation.navigate('HomeNavigator')
+          // navigation.navigate('HomeNavigator')
+          prepareHomeData().then(content => {
+            navigation.navigate('HomeNavigator', {content: content})
+          })
         } catch (error) {
           console.log(error)
         }

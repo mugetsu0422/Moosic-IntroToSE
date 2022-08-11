@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import{
   View,
   StyleSheet,
@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { Formik } from 'formik'
 import { API_URL, PATH } from '../constants/constants';
 import axios from 'axios'
+import { AudioContext } from '../context/AudioProvider';
 
 const widthScreen =Dimensions.get('window').width;
 const heightScreen =Dimensions.get('window').height;
@@ -49,6 +50,7 @@ var artist = [
 
 
 const Search = ({navigation}) =>{
+  const audioContext = useContext(AudioContext)
   const [choice,setChoice] = useState("Search by Song");
   const [searchData, setSearchData] = useState(null)
 
@@ -98,7 +100,7 @@ const Search = ({navigation}) =>{
           <TouchableOpacity style = {{justifyContent:'flex-start'}} onPress ={ ()=>{
 
           }}>
-                <Icon  name = "left" size ={25} color='black' borderRadius={2}  />
+                {/* <Icon  name = "left" size ={25} color='black' borderRadius={2}  /> */}
             </TouchableOpacity>
 
             <Formik initialValues={{query: ''}} onSubmit={search}>
@@ -193,7 +195,9 @@ const Search = ({navigation}) =>{
                 renderItem= {({item, index})=>(
                     <TouchableOpacity
                         style={styles.songinf1}
-                        onPress={() => navigation.navigate("Music", {songInfo: item})}>
+                        onPress={() => {
+                          audioContext.playNewSong(item, song)
+                          navigation.navigate("Music")}}>
                         <Image style={styles.imageformat} 
                          source={require('../../assets/song.png')}/>
                         <View style={styles.songinf} >

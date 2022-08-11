@@ -17,7 +17,10 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 
-function MyTabs() {
+function MyTabs({navigation, route}) {
+  const {content} = route.params
+  // console.log(route.params)
+  // console.log(content)
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -46,6 +49,7 @@ function MyTabs() {
             <AntDesign name="home" color={color} size={size} />
           ),
         }}
+        initialParams={{content: content}}
       />
       <Tab.Screen
         name="Search"
@@ -86,10 +90,10 @@ function MyTabs() {
   );
 }
 
-export default function HomeNavigator() {
+export default function HomeNavigator({navigation, route}) {
   return (
     <View style={styles.container}>   
-        <MyTabs />
+        <MyTabs navigation={navigation} route={route}/>
     </View>
   );
 }

@@ -61,13 +61,14 @@ func main() {
     // Controllers
     e.GET("/user/forgotpassword", controller.ForgotPassword)
     e.GET("/search/:type", controller.GetSong)
+    e.GET("/search/playlist", controller.GetPlaylist)
     e.POST("/song/like", controller.LikeSong)
 	e.DELETE("/song/like", controller.DislikeSong)
 
     // User
     e.POST("/user/register", controller.Register)
     e.POST("/user/login", controller.Login, middleware.BasicAuth(mdw.BasicAuth))
-    e.GET("/playlist/:id", controller.GetPlaylist)
+    e.GET("/playlist/content/:id", controller.GetPlaylistContent)
 
     // Playlist
     e.POST("/user/:uid/playlists", controller.CreatePlaylist)

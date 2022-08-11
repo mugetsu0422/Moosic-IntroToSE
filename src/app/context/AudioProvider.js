@@ -24,8 +24,8 @@ export class AudioProvider extends Component {
         }
     }
 
-    updateState = (previousState, newState = {}) => {
-        this.setState({...previousState, ...newState})
+    updateState = async(previousState, newState = {}) => {
+        return this.setState({...previousState, ...newState})
     }
 
     onPlaybackStatusUpdate = async(playbackStatus) => {
@@ -49,8 +49,11 @@ export class AudioProvider extends Component {
         }
     }
 
-    playNewSong = async(audio) => {
-        const { song, songStatus, currentSong, updateState, playlistContent } = this.state
+    playNewSong = async(audio, content) => {
+        await this.updateState(this.state, {
+            playlistContent: content,
+        })
+        const { song, songStatus, currentSong, playlistContent } = this.state
         // Find index of current song in playlistContent
         const idx = playlistContent.findIndex(song => song.song_id === audio.song_id)
 
@@ -58,8 +61,8 @@ export class AudioProvider extends Component {
         if(songStatus === null) {
             const song = new Audio.Sound()
             try {
-                const status = await song.loadAsync({uri: SONG_URI + audio.song_id}, {shouldPlay: true})
-                updateState(this.state, {
+                const status = await song.loadAsync({uri: SONG_URI + audio.song_id + '.mp3'}, {shouldPlay: true})
+                this.updateState(this.state, {
                     song: song, 
                     songStatus: status, 
                     currentSong: audio,
@@ -81,8 +84,8 @@ export class AudioProvider extends Component {
                 await song.unloadAsync()
 
                 // load another song
-                const status = await song.loadAsync({uri: SONG_URI + audio.song_id}, {shouldPlay: true})
-                updateState(this.state, {
+                const status = await song.loadAsync({uri: SONG_URI + audio.song_id + '.mp3'}, {shouldPlay: true})
+                this.updateState(this.state, {
                     song: song, 
                     songStatus: status, 
                     currentSong: audio,
@@ -97,11 +100,11 @@ export class AudioProvider extends Component {
     }
 
     shuffleButton = () => {
-        const { shuffle, updateState, currentSong, playlistContent } = this.state
+        const { shuffle, currentSong, playlistContent } = this.state
         const idx = playlistContent.findIndex(song => song.song_id === currentSong.song_id)
 
         if (shuffle === 'random') {
-            updateState(this.state, {
+            this.updateState(this.state, {
                 shuffle: 'alphabetical',
                 currentSongIndex: idx,
             })
@@ -112,7 +115,7 @@ export class AudioProvider extends Component {
             // console.log(randArrTemp)
             // console.log(idx)
 
-            updateState(this.state, {
+            this.updateState(this.state, {
                 randArr: randArrTemp,
                 shuffle: 'random',
                 currentSongIndex: 0,
@@ -121,10 +124,10 @@ export class AudioProvider extends Component {
     }
 
     repeatButton = async() => {
-        const { repeat, updateState, song } = this.state
+        const { repeat, song } = this.state
         // switch to playlist
         if (repeat === 'none') {
-            updateState(this.state, {
+            this.updateState(this.state, {
                 repeat: 'playlist',
             })
         }
@@ -132,7 +135,7 @@ export class AudioProvider extends Component {
         else if (repeat === 'playlist') {
             try {
                 const status = await song.setStatusAsync({isLooping: true})
-                updateState(this.state, {
+                this.updateState(this.state, {
                     repeat: 'song',
                     songStatus: status,
                 })
@@ -144,7 +147,7 @@ export class AudioProvider extends Component {
         else {
             try {
                 const status = await song.setStatusAsync({isLooping: false})
-                updateState(this.state, {
+                this.updateState(this.state, {
                     repeat: 'none',
                     songStatus: status,
                 })
@@ -155,12 +158,12 @@ export class AudioProvider extends Component {
     }
 
     playpauseButton = async() => {
-        const { song, songStatus, currentSong, updateState,  } = this.state
+        const { song, songStatus, currentSong, } = this.state
         // pause song
         if(songStatus.isPlaying) {
             try {
                 const status = await song.setStatusAsync({ shouldPlay: false})
-                return updateState(this.state, {
+                return this.updateState(this.state, {
                     songStatus: status,
                     play: 'play',})
             } catch (error) {
@@ -171,86 +174,21 @@ export class AudioProvider extends Component {
         else {
             try {
                 const status = await song.setStatusAsync({ shouldPlay: true})
-                return updateState(this.state, {
+                return this.updateState(this.state, {
                     songStatus: status,
                     play: 'pause'})
             } catch (error) {
                 console.log('error resuming song', error.message)
-            }
-        }
-    }
-
-    handleAudioPress = async(audio) => {
-        const { song, songStatus, currentSong, updateState,  } = this.state
-        // playing audio for the first time
-        if(songStatus === null) {
-            const song = new Audio.Sound()
-            try {
-                const status = await song.loadAsync({uri: SONG_URI + audio.song_id}, {shouldPlay: true})
-                return updateState(this.state, {
-                    song: song, 
-                    songStatus: status, 
-                    currentSong: audio,
-                    play: 'pause',
-                })
-                // return song.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
-            } catch (error) {
-                console.log('error playing song', error.message)
-            }
-            
-        }
-
-        // pause song
-        if(songStatus.isLoaded && songStatus.isPlaying && currentSong.song_id === audio.song_id) {
-            try {
-                const status = await song.setStatusAsync({ shouldPlay: false})
-                return updateState(this.state, {
-                    songStatus: status,
-                    play: 'play',})
-            } catch (error) {
-                console.log('error pausing song', error.message)
-            }    
-        }
-
-        // resume song 
-        if(songStatus.isLoaded && !songStatus.isPlaying && currentSong.song_id === audio.song_id) {
-            try {
-                const status = await song.setStatusAsync({ shouldPlay: true})
-                return updateState(this.state, {
-                    songStatus: status,
-                    play: 'pause'})
-            } catch (error) {
-                console.log('error resuming song', error.message)
-            }
-        }
-
-        // // play another song
-        if(songStatus.isLoaded && currentSong.song_id !== audio.song_id) {
-            try {
-                // unload current song
-                await song.stopAsync()
-                await song.unloadAsync()
-
-                // load another song
-                const status = await song.loadAsync({uri: SONG_URI + audio.song_id}, {shouldPlay: true})
-                return updateState(this.state, {
-                    song: song, 
-                    songStatus: status, 
-                    currentSong: audio,
-                    play: 'pause',
-                })
-            } catch (error) {
-                console.log('error playing another song', error.message)
             }
         }
     }
 
     forwardButton = async() => {
-        const { song, currentSong, updateState, playlistContent, shuffle, randArr, currentSongIndex } = this.state
-
+        const { song, currentSong, playlistContent, shuffle, randArr, currentSongIndex } = this.state
+        // console.log(currentSongIndex)
         // index in playlistContent
-        var realIdx = currentSongIndex + 1 >= playlistContent.length ? 0 : currentSongIndex + 1
-        var virtIdx = realIdx
+        let realIdx = currentSongIndex + 1 >= playlistContent.length ? 0 : currentSongIndex + 1
+        let virtIdx = realIdx
         if (shuffle === 'random') {
             virtIdx = randArr[realIdx]
         }
@@ -264,9 +202,9 @@ export class AudioProvider extends Component {
 
             // load next song
             const status = await song.loadAsync({
-                uri: SONG_URI + playlistContent[virtIdx].song_id}, 
+                uri: SONG_URI + playlistContent[virtIdx].song_id + '.mp3'}, 
                 {shouldPlay: true})
-            updateState(this.state, {
+            this.updateState(this.state, {
                 song: song, 
                 songStatus: status, 
                 currentSong: playlistContent[virtIdx],
@@ -280,16 +218,16 @@ export class AudioProvider extends Component {
     }
 
     backwardButton = async() => {
-        const { song, currentSong, updateState, playlistContent, shuffle, randArr, currentSongIndex } = this.state
+        const { song, currentSong, playlistContent, shuffle, randArr, currentSongIndex } = this.state
 
         // index in playlistContent
-        var realIdx = currentSongIndex - 1 < 0 ? playlistContent.length - 1 : currentSongIndex - 1
-        var virtIdx = realIdx
+        let realIdx = currentSongIndex - 1 < 0 ? playlistContent.length - 1 : currentSongIndex - 1
+        let virtIdx = realIdx
         if (shuffle === 'random') {
             virtIdx = randArr[realIdx]
         }
-        console.log('realIdx', realIdx)
-        console.log('virtIdx', virtIdx)
+        // console.log('realIdx', realIdx)
+        // console.log('virtIdx', virtIdx)
 
         try {
             // unload current song
@@ -298,9 +236,9 @@ export class AudioProvider extends Component {
 
             // load next song
             const status = await song.loadAsync({
-                uri: SONG_URI + playlistContent[virtIdx].song_id}, 
+                uri: SONG_URI + playlistContent[virtIdx].song_id + '.mp3'}, 
                 {shouldPlay: true})
-            updateState(this.state, {
+            this.updateState(this.state, {
                 song: song, 
                 songStatus: status, 
                 currentSong: playlistContent[virtIdx],
