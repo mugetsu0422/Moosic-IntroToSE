@@ -60,14 +60,14 @@ settingChoice = (option) =>{
     popupPlaylist.map(pl=>{
       if(option == pl.name ){
         setPlaylistChoice(option)
-        //console.log('playlist',option)
+        console.log('pl',pl.name)
       }}
     )
   
     popupSong.map(s=>{
       if(option == s.name ){
         setSongChoice(option)
-        //console.log('song',option)
+        console.log('song',s.name)
       }}
     )
     
@@ -77,7 +77,9 @@ settingChoice = (option) =>{
   const [playlistlove,setplaylist] = useState(false);
   onValueChange = (item, index) => {
     const newData = data.map( preItem =>{
-      if (item.id == preItem.id){
+      
+      if (item.song_id == preItem.song_id){
+        
           return {
             ...preItem,
             selected: !preItem.selected,
@@ -148,14 +150,14 @@ settingChoice = (option) =>{
             <TouchableOpacity 
             onPress={()=>{
                 alert('play playlist')
+                
             }}>
               <Icon2 name = "play" /*star */ size = {70} color = "#b8291f"  /></TouchableOpacity>
               <TouchableOpacity
               style= {{position:'absolute',justifyContent:'flex-end',alignSelf:'flex-end'}}
               onPress={()=>{
                 alert('play shuffle playlist')
-                console.log('playlist',Playlistchoice)
-                console.log('song',Songchoice)
+                console.log(data)
             }}>
               <Icon4 name = "shuffle" size = {30} color = "white" /></TouchableOpacity>
         
@@ -185,14 +187,20 @@ settingChoice = (option) =>{
                          </View>
                   <View style ={styles.star}>
                 <TouchableOpacity
-                onPress={() =>{onValueChange(item,index)}}>
+                onPress={() =>{
+                  
+                  onValueChange(item,index)
+                  
+                }
+                  
+                }>
                 {item.selected ? <Icon5 name = "star"  size = {40} color = "red" /> : <Icon5 name = "star-o"  size = {40} color= "red" />}</TouchableOpacity>
                 <TouchableOpacity 
                 onPress={ onShowPopup2}>
                   <BottomPopup 
                     title = {item.title}
                     author= {item.performer}
-                    settingChoice ={settingChoice}
+                    settingChoice={settingChoice}
                     ref={(target) => popupRef2 = target}
                     onTouchOutside = {onClosePopup2}
                     data = {popupSong}
@@ -206,7 +214,6 @@ settingChoice = (option) =>{
         </FlatList>
       </View>
       <BottomPopup 
-        
           title ="Playlist's name"
           author= "Artist's name"
           ref={(target) => popupRef1 = target}
