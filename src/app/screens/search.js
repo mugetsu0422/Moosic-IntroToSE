@@ -54,7 +54,7 @@ const Search = ({navigation}) =>{
 
   let popupRef1 = React.createRef()
   const onShowPopup1 = () => {
-    popupRef1.show()
+    popupRef1.show(choice)
   }
   const onClosePopup1 = () => {
     popupRef1.close()
@@ -64,7 +64,7 @@ const Search = ({navigation}) =>{
   }
   settingChoice = (option) =>{
       setChoice(option)
-      // console.log(option)
+      console.log(option)
   }
 
   const search = async(text) => {
@@ -118,6 +118,7 @@ const Search = ({navigation}) =>{
                 <BottomPopup 
                     title =""
                     author= ""
+                    Choice = "Search By Song"
                     ref={(target) => popupRef1 = target}
                     onTouchOutside = {onClosePopup1}
                     data = {popupList}

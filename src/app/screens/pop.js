@@ -11,14 +11,15 @@ export class BottomPopup extends React.Component{
         }
           
     }
-    show = () =>{
-        this.setState({show:true})
+    show = (option) =>{
+        this.setState({show:true, choice:option})
+        
     }
     close = () =>{
         this.setState({show:false})
     }
     settingChoice = (option)=>{
-        this.setState
+       
     }
     renderOutsideTouchabe(onTouch){
         const view = <View style ={{flex: 1, width:'100%'}}/>
@@ -74,6 +75,7 @@ export class BottomPopup extends React.Component{
         )   
     }
     renderItem = ({item}) => {
+        
         return (
             <TouchableOpacity style={{flexDirection:'row', padding: 10}} 
                 onPress = {
@@ -103,7 +105,8 @@ export class BottomPopup extends React.Component{
     }
     render(){
         let {show} = this.state
-        const {onTouchOutside, title,author} = this.props
+        const {onTouchOutside, title,author,Choice} = this.props
+        this.settingChoice(Choice)
         return (
             show ? 
         <Modal
