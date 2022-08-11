@@ -81,14 +81,29 @@ func GetSong(c echo.Context) error {
 	query = "%" + query + "%"
 	
 	if _type == "song" {
-		result := db.Where("title like ?", query).Limit(10).Find(&songs);
-		if result.Error != nil {
-			return c.JSON(http.StatusInternalServerError, "Song not found");
+		if query =="%%" {
+			result := db.Where("title like ?", query).Order("rand()").Limit(10).Find(&songs);
+			if result.Error != nil {
+				return c.JSON(http.StatusInternalServerError, "Song not found");
+			}
+		} else {
+			result := db.Where("title like ?", query).Limit(10).Find(&songs);
+			if result.Error != nil {
+				return c.JSON(http.StatusInternalServerError, "Song not found");
+			}
 		}
+		
 	} else if _type == "artist" {
-		result := db.Where("performer like ?", query).Limit(10).Find(&songs);
-		if result.Error != nil {
-			return c.JSON(http.StatusInternalServerError, "Song not found");
+		if query == "%%" {
+			result := db.Where("performer like ?", query).Order("rand()").Limit(10).Find(&songs);
+			if result.Error != nil {
+				return c.JSON(http.StatusInternalServerError, "Song not found");
+			}
+		} else {
+			result := db.Where("performer like ?", query).Limit(10).Find(&songs);
+			if result.Error != nil {
+				return c.JSON(http.StatusInternalServerError, "Song not found");
+			}
 		}
 	} else {
 		return c.JSON(http.StatusNotFound, "Invalid path")
