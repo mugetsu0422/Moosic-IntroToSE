@@ -171,7 +171,7 @@ settingChoice = (option) =>{
               style={styles.songs}
               onPress={() => {
                 audioContext.playNewSong(item, content)
-                navigation.navigate("Music", {songInfo: item})}}>
+                navigation.navigate("Music")}}>
               <Image style={styles.songimage} 
                          source={require('../../assets/song.png')}/>
                          <View style={styles.songinf} >

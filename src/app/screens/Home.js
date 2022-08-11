@@ -21,19 +21,6 @@ import Profile from './Profile';
 import { AudioContext } from '../context/AudioProvider';
 const Stack = createNativeStackNavigator();
 
-const prepareHomeData = async() => {
-  const fullURL = API_URL + PATH.SEARCH_BY_PLAYLIST + '?q='
-  try {
-    const {data:response} = await axios.get(fullURL) //use data destructuring to get data from the promise object
-    return response
-  }
-  catch (error) {
-    console.log(error);
-  }
-};
-
-prepareHomeData()
-
 export default function Home({navigation, route}) {
   const {content} = route.params
   return(

@@ -176,6 +176,10 @@ func GetPlaylistContent(c echo.Context) error {
 		return result.Error;
 	}
 
+	if len(playlist_content) == 0 {
+		return c.JSON(http.StatusOK, songs);
+	}
+
 	var song_id []string
 	for i := 0; i < len(playlist_content); i++ {
 		song_id = append(song_id, playlist_content[i].Song_id)

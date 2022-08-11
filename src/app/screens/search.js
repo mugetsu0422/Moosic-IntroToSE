@@ -19,7 +19,7 @@ const heightScreen =Dimensions.get('window').height;
 const popupList = [
   {id: 1,icon:'checkmark-sharp', name:'Search by Song' },
   {id: 2,icon:'checkmark-sharp', name:'Search by Artist' },
-  {id: 3, icon:'checkmark-sharp',name:'Search by Playlist' },
+  // {id: 3, icon:'checkmark-sharp',name:'Search Playlist' },
 ]
 const link = '../assets/chill.png'
 var song = [
@@ -65,11 +65,11 @@ const Search = ({navigation}) =>{
         return popupRef1.sendOption()
   }
   settingChoice = (option) =>{
-      setChoice(option)
       console.log(option)
   }
 
   const search = async(text) => {
+    console.log('search')
     var fullURL = API_URL
     if (choice === 'Search by Song') {
       fullURL += PATH.SEARCH_BY_SONG
@@ -92,6 +92,56 @@ const Search = ({navigation}) =>{
     }
   }
 
+  const getPlaylistContent = async(playlist_id) => {
+    const fullURL = API_URL + PATH.PLAYLIST_CONTENT + playlist_id
+    try {
+      const {data:response} = await axios.get(fullURL) //use data destructuring to get data from the promise object
+      return response
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  const renderSong = ({item}) => (
+    <TouchableOpacity
+      style={styles.songinf1}
+      onPress={() => {
+        audioContext.playNewSong(item, song)
+        navigation.navigate("Music")}}>
+      <Image style={styles.imageformat} 
+        source={require('../../assets/song.png')}/>
+      <View style={styles.songinf} >
+        <Text style ={{fontSize:15, color:'black'}}>{item.title}</Text>
+        <View style ={{flexDirection:'row',paddingRight:'5%'}}>
+          <Text style ={{fontSize:13, color:'grey'}}>{item.performer}</Text>
+          {/* <Text style ={{fontSize:13, color:'grey'}}> {item.play_count}</Text> */}
+        </View>
+      </View>
+    </TouchableOpacity>
+  )
+
+  const renderPlaylist = ({item}) => (
+    <TouchableOpacity
+      style={styles.songinf1}
+      onPress={() => {
+        getPlaylistContent(item.playlist_id).then(playlistContent => {
+          navigation.navigate('Playlist', {playlistInfo: item, content: playlistContent})}).catch(err =>{
+            console.log(err)
+          });
+      ;}}>
+      <Image style={styles.imageformat} 
+        source={require('../../assets/playlist.png')}/>
+      <View style={styles.songinf} >
+        <Text style ={{fontSize:15, color:'black'}}>{item.title}</Text>
+        <View style ={{flexDirection:'row',paddingRight:'5%'}}>
+          {/* <Text style ={{fontSize:13, color:'grey'}}>{item.performer}</Text> */}
+          {/* <Text style ={{fontSize:13, color:'grey'}}> {item.play_count}</Text> */}
+        </View>
+      </View>
+    </TouchableOpacity>
+  )
+
   return (
       <View style = {styles.container}>
         <View style={styles.header}>
@@ -105,6 +155,7 @@ const Search = ({navigation}) =>{
 
             <Formik initialValues={{query: ''}} onSubmit={search}>
               {({handleChange, handleSubmit, values}) => (
+                
                 <TextInput
                   placeholder="Search"
                   placeholderTextColor="gray"
@@ -115,6 +166,7 @@ const Search = ({navigation}) =>{
                 />
               )}
             </Formik>
+              
             <TouchableOpacity style = {{justifyContent:'flex-start'}} onPress ={ onShowPopup1 }>
                 <Icon  name = "filter" size ={25} color='black' borderRadius={2}  />
                 <BottomPopup 
@@ -126,7 +178,7 @@ const Search = ({navigation}) =>{
                     data = {popupList}
                     settingChoice = {settingChoice}/>
             </TouchableOpacity>
-
+            
             </View>
         </View>
         <View style ={styles.footer}>
@@ -192,27 +244,8 @@ const Search = ({navigation}) =>{
               <Text style ={{ fontSize:25, color:'black',alignSelf:'center',}}> RESULT</Text>
             <FlatList
                 data={song}
-                renderItem= {({item, index})=>(
-                    <TouchableOpacity
-                        style={styles.songinf1}
-                        onPress={() => {
-                          audioContext.playNewSong(item, song)
-                          navigation.navigate("Music")}}>
-                        <Image style={styles.imageformat} 
-                         source={require('../../assets/song.png')}/>
-                        <View style={styles.songinf} >
-                         <Text style ={{fontSize:15, color:'black'}}>{item.title}</Text>
-                         <View style ={{flexDirection:'row',paddingRight:'5%'}}>
-                          <Text style ={{fontSize:13, color:'grey'}}>{item.performer}</Text>
-                          {/* <Text style ={{fontSize:13, color:'grey'}}> {item.play_count}</Text> */}
-                        </View>
-                         
-                         </View>
-                        
-                    </TouchableOpacity>
-                )
-                }
-                keyExtractor={item => item.song_id}
+                renderItem={choice === 'Search Playlist' ? renderPlaylist : renderSong}
+                keyExtractor={item => item.title}
                 extraData={searchData}
               />
               

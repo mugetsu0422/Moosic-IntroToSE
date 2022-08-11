@@ -41,7 +41,7 @@ function AppNavigator() {
       headerShown: false,
       background: 'Welcome',
   }}
-      initialRouteName = "SignIn"
+      initialRouteName = "Welcome"
 
   >
         <Stack.Screen name="Welcome" component={Welcomescreen} />

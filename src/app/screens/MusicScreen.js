@@ -10,7 +10,6 @@ const heightScreen = Dimensions.get('window').height;
 
 export default function Music({navigation, route}) {
   const audioContext = React.useContext(AudioContext)
-  const {songInfo} = route.params
 
   const calculateSeekBar =() => {
     if(audioContext.playbackPosition !== null && audioContext.playbackDuration !== null) {
@@ -31,13 +30,14 @@ export default function Music({navigation, route}) {
 
         <View style={styles.musicInf}>
           <Image style={styles.musicImg} source={require('../../assets/song.png')}/>
-          <Text style={styles.nameSong}> {songInfo.title} </Text>
-          <Text style={styles.artist}> {songInfo.performer} </Text>
+          <Text style={styles.nameSong}> {audioContext.currentSong.title} </Text>
+          <Text style={styles.artist}> {audioContext.currentSong.performer} </Text>
           <Slider
             style={styles.slider}
             minimumValue={0}
             maximumValue={1}
             value={calculateSeekBar()}
+            onValueChange={(value) => audioContext.seekbarSlider(value)}
             minimumTrackTintColor="red"
             maximumTrackTintColor="white"
           />
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   nameSong:{
     color: 'white',
-    fontSize: 25,
+    fontSize: 30,
     paddingTop: 10,
   },
   artist:{

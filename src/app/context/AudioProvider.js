@@ -45,6 +45,9 @@ export class AudioProvider extends Component {
                         this.forwardButton()
                     }
                 }
+                else {
+                    this.forwardButton()
+                }
             }
         }
     }
@@ -251,6 +254,18 @@ export class AudioProvider extends Component {
         }
     }
 
+    seekbarSlider = async(percentage) => {
+        const { song, songStatus} = this.state
+        try {
+            const status = await song.playFromPositionAsync(percentage * songStatus.durationMillis)
+            this.updateState(this.state, {
+                songStatus: status,
+            })
+        } catch (error) {
+            console.log('error seekbar', error.message)
+        }
+    }
+
     render() {
         const {
             playlistContent, 
@@ -285,6 +300,7 @@ export class AudioProvider extends Component {
                 playpauseButton: this.playpauseButton,
                 forwardButton: this.forwardButton,
                 backwardButton: this.backwardButton,
+                seekbarSlider: this.seekbarSlider,
             }}>
                 {this.props.children}
             </AudioContext.Provider>

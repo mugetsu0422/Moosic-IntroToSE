@@ -9,7 +9,7 @@ import {encode as btoa} from 'base-64'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const prepareHomeData = async() => {
-  const fullURL = API_URL + PATH.SEARCH_BY_PLAYLIST + '?q='
+  const fullURL = API_URL + PATH.SEARCH_BY_PLAYLIST
   try {
     const {data:response} = await axios.get(fullURL) //use data destructuring to get data from the promise object
     return response
