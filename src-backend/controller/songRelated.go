@@ -251,14 +251,7 @@ func AddItemToPlaylist(c echo.Context) error {
 // Path: /playlists/{playlist_id}/tracks
 func RemovePlaylistItems(c echo.Context) error {
 	p_id := c.Param("pid")
-
-	newSong := &struct {
-		Song_id string `json:"song_id" xml:"song_id" form:"song_id" query:"song_id"`
-	} {}
-
-	if err := c.Bind(newSong); err != nil {
-		return err
-	}
+	s_id := c.Param("sid")
 
 	db := mysqlgorm.GetDBInstance()
 
@@ -273,7 +266,7 @@ func RemovePlaylistItems(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "Can't delete song from recommend playlist")
 	}
 
-	db.Exec("DELETE FROM `musicapp`.`playlist_content` WHERE (`playlist_id` = ? AND `song_id` = ?)", p_id, newSong.Song_id)
+	db.Exec("DELETE FROM `musicapp`.`playlist_content` WHERE (`playlist_id` = ? AND `song_id` = ?)", p_id, s_id)
 
 	return c.JSON(http.StatusOK, "Song removed")
 }

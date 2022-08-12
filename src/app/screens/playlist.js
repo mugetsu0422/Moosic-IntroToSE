@@ -57,11 +57,31 @@ const ExistancePlaylist=[
 ]
 
 const Playlist = ({ navigation, route }) =>  {
+  const [modalVisible, setModalVisible] = useState(false);
+  const {playlistInfo, content} = route.params;
+  const [data, setdata] = useState(content)
+  const [playlistlove,setplaylist] = useState(false);
+  const [playlistaddsong,setplaylistadd] = useState('');
+
+  onValueChange = (item) => {
+    const newData = data.map( preItem =>{
+      
+      if (item.song_id == preItem.song_id){
+        
+          return {
+            ...preItem,
+            selected: !preItem.selected,
+          }
+      }
+      return {   
+          ...preItem,
+          selected: preItem.selected, } })
+    setdata(newData);}
+
   const[setupSongID,setSongID]=useState("") //song dang duoc chon
   const audioContext = useContext(AudioContext)
   const [Songchoice,setSongChoice] = useState(""); //lua chon cho song
   const [Playlistchoice,setPlaylistChoice] = useState(ExistancePlaylist); //lua chon cho plalist
-  const [selectedSong, setSelectedSong] = useState('');
 
   const loadPlaylist = () => {
     try {
@@ -93,27 +113,39 @@ const Playlist = ({ navigation, route }) =>  {
   }
 
   const addSongToPlaylist = (playlist_id) => {
-  console.log(`Bai hat da chon: ${setupSongID}`)
-  console.log(`ID la: ${playlist_id}`)
-  try {
-    AsyncStorage.getItem('uid')
-    .then(value => {
-      if (value != null) {
-        axios.post(API_URL + `/playlists/${playlist_id}/tracks`, {song_id: setupSongID})
-          .then(response => {
-            console.log(response.data)
-            Alert.alert("Song added to playlist")
-          })
-          .catch(error => {
-            console.log(error.response.data)
-            Alert.alert(error.response.data)
-          })
-      }
-    })
+    axios.post(API_URL + `/playlists/${playlist_id}/tracks`, {song_id: setupSongID})
+      .then(response => {
+        console.log(response.data)
+        Alert.alert("Song added to playlist")
+        })
+      .catch(error => {
+        console.log(error.response.data)
+        Alert.alert(error.response.data)
+        }
+      )
   }
-  catch(error) {
-    console.log(error)
-  }
+
+  const removeSongToPlaylist = (song_id) => {
+    Alert.alert('Warning', 'Do you want to delete this playlist' , [
+      {text: 'Yes', onPress: () => {
+        axios.delete(API_URL + `/playlists/${playlistInfo.id}/${song_id}`)
+        .then(response => {
+          console.log(response.data)
+          let new_data = data.filter(function(item) {
+            return item.song_id !== song_id
+          })
+  
+          setdata(new_data)
+          Alert.alert("Song removed")
+          })
+        .catch(error => {
+          console.log(error.response.data)
+          Alert.alert(error.response.data)
+          }
+        )
+      }},
+      {text: 'No'}
+    ])
   }
 
 settingChoice = (option,id) =>{
@@ -138,37 +170,12 @@ settingChoice = (option,id) =>{
       loadPlaylist()
       setModalVisible(!modalVisible)
     }
+
+    if(option =='remove from playlist'){
+      removeSongToPlaylist(id)
+    }
     
 }
-
-const check=()=>{
-  if(Songchoice =='add to another playlist'){
-    setModalVisible(!modalVisible)
-  }
-}
-  const [modalVisible, setModalVisible] = useState(false);
-  const {playlistInfo, content} = route.params;
-  const [data, setdata] = useState(content)
-  const [playlistlove,setplaylist] = useState(false);
-  const [playlistaddsong,setplaylistadd] = useState('');
-
-  onValueChange = (item, index) => {
-    const newData = data.map( preItem =>{
-      
-      if (item.song_id == preItem.song_id){
-        
-          return {
-            ...preItem,
-            selected: !preItem.selected,
-          }
-      }
-      return {   
-          ...preItem,
-          selected: preItem.selected, } })
-    setdata(newData);}
-    
-
-
   let popupRef1 = React.createRef()
   const onShowPopup1 = () => {
     popupRef1.show('','','')
@@ -267,7 +274,7 @@ const check=()=>{
                 <TouchableOpacity
                 onPress={() =>{
                   
-                  onValueChange(item,index)
+                  onValueChange(item)
                   
                 }
                   
@@ -330,13 +337,7 @@ const check=()=>{
               style={{height:heightscreen*0.05,width:widthscreen*0.55,borderBottomWidth:2,borderColor:'gray'}}
               onPress={() => {
                 setplaylistadd(item.id)
-                //them song vao playlist o day,
-                // console.log(`Bai hat da chon: ${setupSongID}`)
-                // console.log(`ID la: ${playlistaddsong}`)
-
                 addSongToPlaylist(item.id)
-
-                //goi ham them vo database hay gi do
                 setSongChoice('') //xoa lua chon add song to another playlist o day cho no check khong mo modal nua
                 setModalVisible(!modalVisible)
               }}>
