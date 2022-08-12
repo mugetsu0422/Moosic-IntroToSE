@@ -58,6 +58,11 @@ const ExistancePlaylist=[
     {id: 3,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
     {id: 4,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
     {id: 5,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 6,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
+    {id: 7, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
+    {id: 8,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 9,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
+    {id: 10,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
 ]
 const Playlist = ({ navigation, route }) =>  {
   const[setupSongID,setSongID]=useState("") //song dang duoc chon
@@ -269,6 +274,7 @@ const check=()=>{
                       <FlatList
           
           data ={ExistancePlaylist}
+          style={{height:heightscreen*0.3}}
           renderItem ={({item, index}) =>(
             
             <TouchableOpacity
