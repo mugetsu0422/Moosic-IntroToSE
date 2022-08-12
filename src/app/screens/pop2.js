@@ -15,13 +15,21 @@ export class BottomPopup extends React.Component{
           
     }
     show = (ntitle,nauthor,nid) =>{
-        this.setState({show:true,title:ntitle,author:nauthor,id:nid})
+        this.setState({show:true,title:ntitle,author:nauthor,id:nid,choice:''})
     }
+    
     close = () =>{
         this.setState({show:false})
+        console.log(this.state.choice,this.state.id)
+        settingChoice(this.state.choice,this.state.id)
     }
-    settingChoice = (option)=>{
-        this.setState
+    close = (choice)=>{
+        console.log(choice,this.state.id)
+        settingChoice(choice,this.state.id)   
+        this.setState({show:false})
+    }
+    settingChoice = (option,iid)=>{
+        this.setState({choice:option , id:iid})
     }
     renderOutsideTouchabe(onTouch){
         const view = <View style ={{flex: 1, width:'100%'}}/>
@@ -81,10 +89,8 @@ export class BottomPopup extends React.Component{
             <TouchableOpacity style={{flexDirection:'row', padding: 10}} 
                 onPress = {
                     ()=> {
-                        this.setState({choice: item.name,
-                        
-                    })
-                        
+                        this.setState({choice: item.name})
+                    this.close(item.name)  
                     }
                 }
             >
@@ -114,7 +120,8 @@ export class BottomPopup extends React.Component{
             animationType="slide"
             transparent= {true}
             visible= {show}
-            onRequestClose = {this.close}
+            onRequestClose = {()=>{this.close,
+                settingChoice(this.state.choice,this.state.id)}}
         >
             <TouchableWithoutFeedback 
             onPress = {()=>{this.setState({show:false})
