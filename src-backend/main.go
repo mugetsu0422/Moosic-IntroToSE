@@ -74,6 +74,7 @@ func main() {
     e.POST("/user/:uid/playlists", controller.CreatePlaylist)
     e.GET("/user/:uid/playlists", controller.GetUserPlaylist)
     e.DELETE("/playlists/:pid", controller.RemovePlaylist)
+    e.POST("/playlists/:pid/tracks", controller.AddItemToPlaylist)
 
     // Start server
     e.Logger.Fatal(e.Start(":" + constant.ServerPort))

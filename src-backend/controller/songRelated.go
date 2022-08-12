@@ -208,6 +208,36 @@ func GetPlaylistContent(c echo.Context) error {
 	return c.JSON(http.StatusOK, songs);
 }
 
+// add item to playlist API
+// Method: POST
+// Path: /playlists/{playlist_id}/tracks
+func AddItemToPlaylist(c echo.Context) error {
+	p_id := c.Param("pid")
+
+	newSong := &struct {
+		Song_id string `json:"song_id" xml:"song_id" form:"song_id" query:"song_id"`
+	} {}
+
+	log.Printf("%s", p_id)
+
+	if err := c.Bind(newSong); err != nil {
+		return err
+	}
+
+	db := mysqlgorm.GetDBInstance()
+
+	p_content := model.Playlist_content{}
+
+	record := db.Where("playlist_id = ? AND song_id = ?", p_id, newSong.Song_id).Take(&p_content)
+
+	if record.RowsAffected == 1 {
+		return c.JSON(http.StatusInternalServerError, "Song has already added to this playlist")
+	}
+
+	db.Exec("INSERT INTO `musicapp`.`playlist_content` (`playlist_id`, `song_id`) VALUES (?, ?)", p_id, newSong.Song_id)
+
+	return c.JSON(http.StatusOK, p_content)
+}
 
 func generatePID() string {
 	db := mysqlgorm.GetDBInstance()
