@@ -49,8 +49,8 @@ const popupSong = [
   {id: 4,icon:'play-forward', name: 'play next'},
   {id: 5, icon:'search', name: 'search song artist'},
   {id: 6,icon:'download', name: 'download this song'},
-  {id: 7,icon:'close', name: 'ban this song'},
-  {id: 8,icon:'md-share-social-outline', name: 'share song'},
+  
+  {id: 7,icon:'md-share-social-outline', name: 'share song'},
 ]
 const ExistancePlaylist=[
    {id: 1,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
@@ -305,6 +305,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     paddingTop: StatusBar.currentHeight,
+    
     //backgroundColor:'red',
     ////borderWidth:1,
   },
@@ -413,6 +414,7 @@ const styles = StyleSheet.create({
     alignSelf:"flex-start",
     paddingBottom: 20,
     // backgroundColor:'blue',
+    padding:10,
   },
   centeredView: {
     flex: 1,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import{
   SafeAreaView,
   StyleSheet,
@@ -6,6 +6,8 @@ import{
   Image,
   View,
   TouchableOpacity,
+  TextInput,
+  Modal,
   Dimensions
 } from 'react-native'
 import { BottomPopup } from './pop'
@@ -24,9 +26,13 @@ const feedback = [
   {id: 1,icon:"bulb-outline" , name:'Report error' },
   {id: 2,icon: "paper-plane-outline", name:'Send feedback' },
 ]
+const heightscreen =Dimensions.get('window').height;
+const widthscreen = Dimensions.get('window').width;
 const deviceWidth = Dimensions.get('window').width;
 const Setting = ({navigation}) =>{
-  
+  const [modalVisible, setModalVisible] = useState(false);
+  const [choice,setChoice]=useState('');
+ 
   return (
 
     <>
@@ -71,6 +77,11 @@ const Setting = ({navigation}) =>{
             renderItem= {({item, index})=>(
                   <TouchableOpacity
                   style={styles.selected}
+                  onPress={()=>{setModalVisible(!modalVisible)
+                    setChoice(item.name)
+                  }
+                  
+                }
                   >
             <View style ={{flexDirection:'row',padding:10, paddingHorizontal: 10,justifyContent:'space-between', borderBottomWidth:1, borderBottomColor:'grey'}}>
                   <Icon name = {item.icon} size = {30} >
@@ -85,6 +96,41 @@ const Setting = ({navigation}) =>{
  
       </View>
       </View>
+      <Modal
+                      animationType="slide"
+                      transparent={true}
+                      visible={modalVisible}
+                      onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                    <View style={styles.centeredView}>
+        
+          <View style={styles.modalView}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose,{alignSelf:'flex-start'}]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Icon name = "close"/>
+              </TouchableOpacity>
+              {choice =='Send feedback'?<Text style={styles.modalText}>Thank for your feedback!</Text>:choice =='Report error'?<Text style={styles.modalText}>What make you ảngy?</Text>:null}
+              
+                <TextInput
+                placeholder="Text here!"
+                placeholderTextColor="gray"
+                style={styles.textinput}
+                autoCapitalize = "none"
+                />
+              <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                <Text>         Send         </Text>
+              </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </>
   )
 }
@@ -124,7 +170,46 @@ const styles = StyleSheet.create({
     fontSize:25,
     color:'grey',
     
-  }
+  },
+  textinput:{
+    margin:10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    //position:'absolute',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    width:'75%',
+    // height: '30%',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 20,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#f27e7e",
+    //alignSelf:'flex-start',
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
 })
 
 export default Setting;
