@@ -203,7 +203,7 @@ export class AudioProvider extends Component {
     }
 
     forwardButton = async() => {
-        const { song, currentSong, playlistContent, shuffle, randArr, currentSongIndex } = this.state
+        const { song, repeat, playlistContent, shuffle, randArr, currentSongIndex } = this.state
         // console.log(currentSongIndex)
         // index in playlistContent
         let realIdx = currentSongIndex + 1 >= playlistContent.length ? 0 : currentSongIndex + 1
@@ -223,7 +223,8 @@ export class AudioProvider extends Component {
             // load next song
             const status = await song.loadAsync({
                 uri: SONG_URI + playlistContent[virtIdx].song_id + '.mp3'}, 
-                {shouldPlay: true})
+                {shouldPlay: true,
+                isLooping: repeat === 'song' ? true : false})
             // console.log(status)
             this.updateState(this.state, {
                 song: song, 
@@ -239,7 +240,7 @@ export class AudioProvider extends Component {
     }
 
     backwardButton = async() => {
-        const { song, currentSong, playlistContent, shuffle, randArr, currentSongIndex } = this.state
+        const { song, repeat, playlistContent, shuffle, randArr, currentSongIndex } = this.state
 
         // index in playlistContent
         let realIdx = currentSongIndex - 1 < 0 ? playlistContent.length - 1 : currentSongIndex - 1
@@ -258,7 +259,8 @@ export class AudioProvider extends Component {
             // load next song
             const status = await song.loadAsync({
                 uri: SONG_URI + playlistContent[virtIdx].song_id + '.mp3'}, 
-                {shouldPlay: true})
+                {shouldPlay: true,
+                isLooping: repeat === 'song' ? true : false})
             this.updateState(this.state, {
                 song: song, 
                 songStatus: status, 
@@ -276,7 +278,7 @@ export class AudioProvider extends Component {
         const { song, songStatus, play } = this.state
         try {
             let status = await song.playFromPositionAsync(percentage * songStatus.durationMillis)
-            this.updateState(this.state, {
+            await this.updateState(this.state, {
                 songStatus: status,
                 playbackPosition: status.positionMillis,
             })
@@ -284,7 +286,7 @@ export class AudioProvider extends Component {
             status = await song.playAsync()
             return this.updateState(this.state, {
                 songStatus: status,
-                play: status.isPlaying ? 'pause' : 'play'
+                play: 'pause'
             })
         } catch (error) {
             console.log('error seekbar', error.message)

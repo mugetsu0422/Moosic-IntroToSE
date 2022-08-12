@@ -1,4 +1,4 @@
-export const API_URL = "http://10.255.130.201:4000"
+export const API_URL = "http://192.168.100.9:4000"
 export const PATH = {
     LOGIN: '/user/login',
     REGISTER: '/user/register',

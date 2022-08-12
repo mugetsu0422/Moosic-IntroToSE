@@ -18,9 +18,16 @@ export default function Music({navigation, route}) {
     return 0
   }
 
+  const convertTimestamp = (value) => {
+    let second = value / 1000
+    const minute = parseInt(second / 60)
+    const remainder = parseInt(second % 60)
+    return  minute.toString() + ':' + (remainder < 10 ? '0' + remainder : remainder)
+  }
+
   return (
     <View style={styles.container}>
-      <ImageBackground style={styles.background} source={require('../../assets/musicBackground.jpg')} 
+      <ImageBackground style={styles.background} source={require('../../assets/background.jpg')} 
         resizeMode="cover">
         <View style={styles.des1}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -32,6 +39,16 @@ export default function Music({navigation, route}) {
           <Image style={styles.musicImg} source={require('../../assets/song.png')}/>
           <Text style={styles.nameSong}> {audioContext.currentSong.title} </Text>
           <Text style={styles.artist}> {audioContext.currentSong.performer} </Text>
+        </View>
+
+        <View style={styles.seekbar}>
+          <View style={{flexDirection: 'row',}}>
+            <Text style={{fontSize: 15, color: 'white', paddingLeft: 30,}}>
+              {convertTimestamp(audioContext.playbackPosition)}</Text>
+            <View style={{flex: 1}}></View>
+            <Text style={{fontSize: 15, color: 'white', paddingRight: 30,}}>
+              {convertTimestamp(audioContext.playbackDuration)}</Text>
+          </View>
           <Slider
             style={styles.slider}
             minimumValue={0}
@@ -96,9 +113,11 @@ const styles = StyleSheet.create({
   },
   musicInf:
   {
-    flex: 8,
+    flex: 5.5,
     justifyContent: "center",
     alignItems: "center",
+    // backgroundColor: 'blue',
+    // marginBottom: -20,
   },
   musicImg:{
     width: widthScreen * 0.6,
@@ -119,7 +138,13 @@ const styles = StyleSheet.create({
   slider:{
     width: widthScreen - 50, 
     height: 50,
+    
   },
+  seekbar:{
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });
 
 const PlayPause = {
