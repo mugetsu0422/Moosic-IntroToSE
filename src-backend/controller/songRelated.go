@@ -168,6 +168,8 @@ func RemovePlaylist(c echo.Context) error {
 	db := mysqlgorm.GetDBInstance()
 	pid := c.Param("pid")
 
+	db.Exec("DELETE FROM `musicapp`.`playlist_content` WHERE (`playlist_id` = ?)", pid)
+
 	record := db.Delete(&model.Playlist{}, "playlist_id = ?", pid)
 	if record.Error != nil {
 		return record.Error 
@@ -234,9 +236,14 @@ func AddItemToPlaylist(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "Song has already added to this playlist")
 	}
 
-	db.Exec("INSERT INTO `musicapp`.`playlist_content` (`playlist_id`, `song_id`) VALUES (?, ?)", p_id, newSong.Song_id)
+	new_p := model.Playlist_content{
+		Playlist_id: p_id,
+		Song_id: newSong.Song_id,
+	}
 
-	return c.JSON(http.StatusOK, p_content)
+	db.Create(&new_p)
+
+	return c.JSON(http.StatusOK, new_p)
 }
 
 func generatePID() string {
