@@ -114,7 +114,7 @@ const Setting = ({navigation}) =>{
               >
                 <Icon name = "close"/>
               </TouchableOpacity>
-              {choice =='Send feedback'?<Text style={styles.modalText}>Thank for your feedback!</Text>:choice =='Report error'?<Text style={styles.modalText}>What make you ảngy?</Text>:null}
+              {choice =='Send feedback'?<Text style={styles.modalText}>Thank for your feedback!</Text>:choice =='Report error'?<Text style={styles.modalText}>Input error</Text>:null}
               
                 <TextInput
                 placeholder="Text here!"
