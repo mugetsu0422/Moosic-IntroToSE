@@ -37,9 +37,10 @@ export default function Music({navigation, route}) {
             minimumValue={0}
             maximumValue={1}
             value={calculateSeekBar()}
-            onValueChange={(value) => audioContext.seekbarSlider(value)}
+            // onValueChange={(value) => audioContext.seekbarSlider(value)}
             minimumTrackTintColor="red"
             maximumTrackTintColor="white"
+            onSlidingComplete={(value) => audioContext.seekbarSlider(value)}
           />
         </View>
           

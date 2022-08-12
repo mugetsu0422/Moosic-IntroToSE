@@ -64,13 +64,20 @@ export class AudioProvider extends Component {
         if(songStatus === null) {
             const song = new Audio.Sound()
             try {
-                const status = await song.loadAsync({uri: SONG_URI + audio.song_id + '.mp3'}, {shouldPlay: true})
+                let status = await song.loadAsync({uri: SONG_URI + audio.song_id + '.mp3'}, {shouldPlay: true})
+                // console.log(status)
                 this.updateState(this.state, {
                     song: song, 
                     songStatus: status, 
                     currentSong: audio,
                     currentSongIndex: idx,
                     play: 'pause',
+                })
+
+                status = await song.playAsync()
+                // console.log(status)
+                this.updateState(this.state, {
+                    songStatus: status,
                 })
                 return song.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
             } catch (error) {
@@ -87,13 +94,20 @@ export class AudioProvider extends Component {
                 await song.unloadAsync()
 
                 // load another song
-                const status = await song.loadAsync({uri: SONG_URI + audio.song_id + '.mp3'}, {shouldPlay: true})
+                let status = await song.loadAsync({uri: SONG_URI + audio.song_id + '.mp3'}, {shouldPlay: true})
+                // console.log(status)
                 this.updateState(this.state, {
                     song: song, 
                     songStatus: status, 
                     currentSong: audio,
                     currentSongIndex: idx,
                     play: 'pause',
+                })
+
+                status = await song.playAsync()
+                // console.log(status)
+                this.updateState(this.state, {
+                    songStatus: status,
                 })
                 return song.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
             } catch (error) {
@@ -204,11 +218,13 @@ export class AudioProvider extends Component {
             // unload current song
             await song.stopAsync()
             await song.unloadAsync()
+            // console.log(temp)
 
             // load next song
             const status = await song.loadAsync({
                 uri: SONG_URI + playlistContent[virtIdx].song_id + '.mp3'}, 
                 {shouldPlay: true})
+            // console.log(status)
             this.updateState(this.state, {
                 song: song, 
                 songStatus: status, 
@@ -257,14 +273,18 @@ export class AudioProvider extends Component {
     }
 
     seekbarSlider = async(percentage) => {
-        // console.log('slider')
         const { song, songStatus, play } = this.state
-        // console.log(songStatus.isPlaying)
         try {
-            const status = await song.playFromPositionAsync(percentage * songStatus.durationMillis)
-            // console.log(status.isPlaying)
+            let status = await song.playFromPositionAsync(percentage * songStatus.durationMillis)
             this.updateState(this.state, {
                 songStatus: status,
+                playbackPosition: status.positionMillis,
+            })
+
+            status = await song.playAsync()
+            return this.updateState(this.state, {
+                songStatus: status,
+                play: status.isPlaying ? 'pause' : 'play'
             })
         } catch (error) {
             console.log('error seekbar', error.message)
