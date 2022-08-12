@@ -233,7 +233,7 @@ const check=()=>{
               </TouchableOpacity>
             </View>    
             </TouchableOpacity>)}
-          keyExtractor={(item, index)=>index.toString()} >
+          keyExtractor={item => item.song_id} >
         </FlatList>
       </View>
       <BottomPopup 
@@ -284,7 +284,7 @@ const check=()=>{
                 <Text style ={{fontSize:20, color:'black',textAlign: 'center',color:'grey',justifyContent:'center'}}>{item.name}</Text>
               </TouchableOpacity>
               )}
-          keyExtractor={song=> song.title} >
+          keyExtractor={item=> item.id} >
         </FlatList>
           </View>
         </View>

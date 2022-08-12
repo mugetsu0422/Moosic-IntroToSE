@@ -53,8 +53,6 @@ export default function Music({navigation, route}) {
           </TouchableOpacity>
           
           <TouchableOpacity onPress={() => {
-            audioContext.updateState(audioContext,
-              {play: audioContext.play === 'play' ? 'pause' : 'play'})
             audioContext.playpauseButton()}}>
             {PlayPause.type[audioContext.play]}
           </TouchableOpacity>
@@ -110,6 +108,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 30,
     paddingTop: 10,
+    textAlign: 'center',
   },
   artist:{
     color: 'white',

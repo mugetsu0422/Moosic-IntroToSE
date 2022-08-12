@@ -178,7 +178,7 @@ func RemovePlaylist(c echo.Context) error {
 
 // Get Playlist content API
 // Method: GET
-// Path: /playlist/:id
+// Path: /playlist/content/:id
 func GetPlaylistContent(c echo.Context) error {
 	db := mysqlgorm.GetDBInstance();
 	playlist_content := []model.Playlist_content{};

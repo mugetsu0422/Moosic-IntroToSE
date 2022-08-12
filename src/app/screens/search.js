@@ -65,11 +65,11 @@ const Search = ({navigation}) =>{
         return popupRef1.sendOption()
   }
   settingChoice = (option) =>{
-      console.log(option)
+    setChoice(option)
   }
 
   const search = async(text) => {
-    console.log('search')
+    // console.log(choice)
     var fullURL = API_URL
     if (choice === 'Search by Song') {
       fullURL += PATH.SEARCH_BY_SONG
@@ -172,7 +172,7 @@ const Search = ({navigation}) =>{
                 <BottomPopup 
                     title =""
                     author= ""
-                    Choice = "Search By Song"
+                    // Choice = "Search by Song"
                     ref={(target) => popupRef1 = target}
                     onTouchOutside = {onClosePopup1}
                     data = {popupList}

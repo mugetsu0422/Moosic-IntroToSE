@@ -161,7 +161,9 @@ export class AudioProvider extends Component {
     }
 
     playpauseButton = async() => {
+        // console.log('play/pause')
         const { song, songStatus, currentSong, } = this.state
+        // console.log(songStatus.isPlaying)
         // pause song
         if(songStatus.isPlaying) {
             try {
@@ -255,9 +257,12 @@ export class AudioProvider extends Component {
     }
 
     seekbarSlider = async(percentage) => {
-        const { song, songStatus} = this.state
+        // console.log('slider')
+        const { song, songStatus, play } = this.state
+        // console.log(songStatus.isPlaying)
         try {
             const status = await song.playFromPositionAsync(percentage * songStatus.durationMillis)
+            // console.log(status.isPlaying)
             this.updateState(this.state, {
                 songStatus: status,
             })

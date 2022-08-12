@@ -37,8 +37,8 @@ const song = [
  ]
 
 const playlist = [
-    {image: require('../../assets/add.png'), name:"Add" },
-    {image: require('../../assets/fav.jpg'), name:"My fav" },   
+    {id: -1, image: require('../../assets/add.png'), name:"Add" },
+    {id: -2, image: require('../../assets/fav.jpg'), name:"My fav" },   
 ]
 
 const artist = [
