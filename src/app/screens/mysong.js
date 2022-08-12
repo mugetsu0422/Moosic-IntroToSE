@@ -19,46 +19,10 @@ import { API_URL, PATH } from '../constants/constants';
 
 const widthScreen =Dimensions.get('window').width;
 const heightScreen =Dimensions.get('window').height;
-const song = [
-  {id: 1,image: require('../../assets/song.png'), name:"song's name", artist : "artist's name", view : " K views", selected: false },
-  {id: 2, image: require('../../assets/song.png'),name:"song's name", artist : "artist's name", view : " K views",selected: false },
-  {id: 3,image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 4,image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 5, image: require('../../assets/song.png'), name:"song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 6,image: require('../../assets/song.png'),  name:"song's name", artist: "artist's name", view : " K views",selected: false },
- ]
- const recently  = [
-  {id: 1,image: require('../../assets/recently.jpg'), name:" recently song's name", artist : "artist's name", view : " K views", selected: false },
-  {id: 2, image: require('../../assets/recently.jpg'),name:"recently song's name", artist : "artist's name", view : " K views",selected: false },
-  {id: 3,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 4,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 5, image: require('../../assets/recently.jpg'), name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
-  {id: 6,image: require('../../assets/recently.jpg'),  name:"recently song's name", artist: "artist's name", view : " K views",selected: false },
- ]
 
 const playlist = [
-    {id: -1, image: require('../../assets/add.png'), name:"Add" },
-    {id: -2, image: require('../../assets/fav.jpg'), name:"My fav" },   
-]
-
-const artist = [
-  {id: 1,image: require('../../assets/account.png'), name:"artist's name", },
-  {id: 2, image: require('../../assets/account.png'),name:"artist's name" },
-  {id: 3,image: require('../../assets/account.png'),  name:"artist's name" },
-  {id: 4,image: require('../../assets/account.png'),  name:"artist's name" },
-  {id: 5, image: require('../../assets/account.png'), name:"artist's name" }
-]
-
-const listTab = [
-{
-  status: 'Playlist'
-},
-{
-  status: 'Song'
-},
-{
-  status: 'Recently'
-},
+    {id: -1, image: require('../../assets/add.png'), title:"Add" },
+    {id: -2, image: require('../../assets/fav.jpg'), title:"My fav" },   
 ]
 
 const init = async() => {
@@ -73,7 +37,7 @@ const init = async() => {
             for (let i = 0; i < body.length; i++) {
               playlist.push({image: require('../../assets/playlist.png'),
                             id: body[i].playlist_id,
-                            name: body[i].title, 
+                            title: body[i].title, 
                             selected: false 
                           })
             }
@@ -90,7 +54,7 @@ const init = async() => {
 }
 
 init()
-const MySong = () =>{
+const MySong = ({navigation}) =>{
   const [status,setStatus] = useState('Playlist')
   const [playlistName, setPlaylistName] = useState('') 
   const [playlistData, setplaylistData] = useState(playlist)
@@ -116,7 +80,7 @@ const MySong = () =>{
                 .then(response => {
                   let newPlaylist = [{image: require('../../assets/playlist.png'),
                                     id: response.data.playlist_id,
-                                    name: response.data.title, 
+                                    title: response.data.title, 
                                     selected: false 
                                   }]
 
@@ -135,6 +99,17 @@ const MySong = () =>{
       } catch (error) {
         console.log(error)
       }
+    }
+  }
+
+  const getPlaylistContent = async(playlist_id) => {
+    const fullURL = API_URL + PATH.PLAYLIST_CONTENT + playlist_id
+    try {
+      const {data:response} = await axios.get(fullURL) //use data destructuring to get data from the promise object
+      return response
+    }
+    catch (error) {
+      console.log(error);
     }
   }
 
@@ -158,9 +133,6 @@ const MySong = () =>{
     
       <View style = {styles.container}>
         <Text style={{fontSize: 50}}>My Playlist</Text>
-        
-        
-           
               <View style= {styles.listplaylist}>
                 <FlatList
                 style= {{width:widthScreen, padding:20}}
@@ -169,22 +141,30 @@ const MySong = () =>{
                 renderItem= {({item, index})=>(
                   <View> 
                     
-                  {item.name != 'Add'?
+                  {item.title != 'Add'?
                 <View style ={{ flexDirection:'row',  justifyContent:'space-between',position:'relative',
                 width:widthScreen*0.9}}>
                   <TouchableOpacity
+                      onPress={() => {
+                        getPlaylistContent(item.id).then(playlistContent => {
+                          //console.log({playlistInfo: item, content: playlistContent})
+                          console.log(item)
+                          navigation.navigate('Playlist', {playlistInfo: item, content: playlistContent})}).catch(err =>{
+                            console.log(err)
+                          });
+                        ;}}
                       style={styles.songinf1} >
                       <Image style={styles.imageformat} 
                        source={item.image}/>
                       <View style={styles.songinf} >
-                       <Text style ={{fontSize:15, color:'black'}}>{item.name}</Text>
+                       <Text style ={{fontSize:15, color:'black'}}>{item.title}</Text>
                        <View style ={{flexDirection:'row',paddingRight:'5%'}}>
                         <Text style ={{fontSize:13, color:'grey'}}>{item.artist}</Text>
                         <Text style ={{fontSize:13, color:'grey'}}> {item.view}</Text>
                       </View>
                        </View>
                   </TouchableOpacity>
-                  {item.name !='My fav'?
+                  {item.title !='My fav'?
                   <TouchableOpacity style = {{borderWidth:0, justifyContent:'center', paddingHorizontal:20}}  
                     onPress={() => Alert.alert('Warning', 'Do you want to delete this playlist' , [
                       {text: 'Yes', onPress: () => {removePlaylist(item.id)}},
@@ -237,7 +217,7 @@ const MySong = () =>{
                       <Image style={[styles.imageformat]} 
                        source={item.image}/>
                       <View style={styles.songinf} >
-                       <Text style ={{fontSize:15, color:'black'}}>{item.name}</Text>
+                       <Text style ={{fontSize:15, color:'black'}}>{item.title}</Text>
                        <View style ={{flexDirection:'row',paddingRight:'5%'}}>
                         <Text style ={{fontSize:13, color:'grey'}}>{item.artist}</Text>
                         <Text style ={{fontSize:13, color:'grey'}}> {item.view}</Text>

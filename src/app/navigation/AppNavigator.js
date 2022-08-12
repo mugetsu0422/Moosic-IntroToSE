@@ -17,24 +17,6 @@ import Profile from '../screens/Profile';
 const Stack = createNativeStackNavigator();
 
 function AppNavigator() {
-  // const AdminUser = {
-  //   username: "admin",
-  //   password: "admin123",
-  // }
-
-  // const [user, setUser] = useState({name: "", email:""});
-  // const [error, setError] = useState("");
-
-  // const Login = details => {
-  //   console.log(details);
-  // }
-
-  // const Logout = () => {
-  //   console.log("Logout");
-  // }
-
-
-
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{

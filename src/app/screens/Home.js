@@ -57,6 +57,8 @@ const HomeDisplay = ({navigation, route}) => {
   const renderItem = ({item}) => (
     <TouchableOpacity onPress={() => {
       getPlaylistContent(item.playlist_id).then(playlistContent => {
+        //console.log({playlistInfo: item, content: playlistContent})
+        console.log(item)
         navigation.navigate('Playlist', {playlistInfo: item, content: playlistContent})}).catch(err =>{
           console.log(err)
         });

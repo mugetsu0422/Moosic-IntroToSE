@@ -8,7 +8,8 @@ import { StyleSheet,
   Modal,
   ImageBackground,
   TextInput,
-  StatusBar } from 'react-native';
+  StatusBar, 
+  Alert} from 'react-native';
 import React,{useContext, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
@@ -21,7 +22,7 @@ import { API_URL, PATH } from '../constants/constants';
 import axios from 'axios'
 import { AudioContext } from '../context/AudioProvider';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const imageheight = Dimensions.get('window').width*0.35;
 const widthscreen = Dimensions.get('window').width;
@@ -53,44 +54,93 @@ const popupSong = [
   {id: 7,icon:'md-share-social-outline', name: 'share song'},
 ]
 const ExistancePlaylist=[
-   {id: 1,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
-    {id: 2, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
-    {id: 3,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 4,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 5,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 6,image: require('../../assets/playlist.png'), name:"playlist's name", artist : "artist's name", view : " K views", selected: false },
-    {id: 7, image: require('../../assets/playlist.png'),name:"playlist's name", artist : "artist's name", view : " K views",selected: false },
-    {id: 8,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 9,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
-    {id: 10,image: require('../../assets/playlist.png'),  name:"playlist's name", artist: "artist's name", view : " K views",selected: false },
 ]
+
 const Playlist = ({ navigation, route }) =>  {
   const[setupSongID,setSongID]=useState("") //song dang duoc chon
   const audioContext = useContext(AudioContext)
   const [Songchoice,setSongChoice] = useState(""); //lua chon cho song
-  const [Playlistchoice,setPlaylistChoice] = useState(""); //lua chon cho plalist
-  
+  const [Playlistchoice,setPlaylistChoice] = useState(ExistancePlaylist); //lua chon cho plalist
+  const [selectedSong, setSelectedSong] = useState('');
+
+  const loadPlaylist = () => {
+    try {
+      AsyncStorage.getItem('uid')
+      .then(value => {
+        if (value != null) {
+          axios.get(API_URL + `/user/${value}` + PATH.CREATE_PLAYLIST)
+            .then(response => {
+              let body = response.data
+              let empList = []
+              for (let i = 0; i < body.length; i++) {
+                empList.push({id: body[i].playlist_id,
+                                        image: require('../../assets/playlist.png'), 
+                                        name: body[i].title, 
+                                        selected: false 
+                                      })
+              }
+              setPlaylistChoice(empList)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+      })
+    }
+    catch(error) {
+      console.log(error)
+    }
+  }
+
+  const addSongToPlaylist = (playlist_id) => {
+  console.log(`Bai hat da chon: ${setupSongID}`)
+  console.log(`ID la: ${playlist_id}`)
+  try {
+    AsyncStorage.getItem('uid')
+    .then(value => {
+      if (value != null) {
+        axios.post(API_URL + `/playlists/${playlist_id}/tracks`, {song_id: setupSongID})
+          .then(response => {
+            console.log(response.data)
+            Alert.alert("Song added to playlist")
+          })
+          .catch(error => {
+            console.log(error.response.data)
+            Alert.alert(error.response.data)
+          })
+      }
+    })
+  }
+  catch(error) {
+    console.log(error)
+  }
+  }
+
 settingChoice = (option,id) =>{
     popupPlaylist.map(pl=>{
       if(option == pl.name ){
         setPlaylistChoice(option)
         console.log('pl',pl.name)
         setSongID(id)
-      }}
+      }
+    }
     )
   
     popupSong.map(s=>{
       if(option == s.name ){
         setSongChoice(option)
         setSongID(id)
-        
-      }}
+      }
+    }
     ) 
+
     if(option =='add to another playlist'){
+      loadPlaylist()
       setModalVisible(!modalVisible)
     }
     
 }
+
 const check=()=>{
   if(Songchoice =='add to another playlist'){
     setModalVisible(!modalVisible)
@@ -101,6 +151,7 @@ const check=()=>{
   const [data, setdata] = useState(content)
   const [playlistlove,setplaylist] = useState(false);
   const [playlistaddsong,setplaylistadd] = useState('');
+
   onValueChange = (item, index) => {
     const newData = data.map( preItem =>{
       
@@ -131,7 +182,6 @@ const check=()=>{
   }
   const onClosePopup2 = () => {
     popupRef2.close()
-  
   }
   
   return (
@@ -273,8 +323,7 @@ const check=()=>{
                       <Text style={styles.modalText}>Your playlist here!</Text>
                       <FlatList
           
-          data ={ExistancePlaylist}
-          style={{height:heightscreen*0.3}}
+          data ={Playlistchoice}
           renderItem ={({item, index}) =>(
             
             <TouchableOpacity
@@ -282,6 +331,11 @@ const check=()=>{
               onPress={() => {
                 setplaylistadd(item.id)
                 //them song vao playlist o day,
+                // console.log(`Bai hat da chon: ${setupSongID}`)
+                // console.log(`ID la: ${playlistaddsong}`)
+
+                addSongToPlaylist(item.id)
+
                 //goi ham them vo database hay gi do
                 setSongChoice('') //xoa lua chon add song to another playlist o day cho no check khong mo modal nua
                 setModalVisible(!modalVisible)
