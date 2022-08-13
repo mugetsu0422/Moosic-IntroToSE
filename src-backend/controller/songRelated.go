@@ -5,9 +5,8 @@ import (
 	mysqlgorm "music-app-backend/database/mysqlGORM"
 	"music-app-backend/model"
 	"net/http"
-	"strconv"
 	"time"
-
+	"github.com/lithammer/shortuuid"
 	"github.com/labstack/echo/v4"
 )
 
@@ -273,21 +272,23 @@ func RemovePlaylistItems(c echo.Context) error {
 
 func generatePID() string {
 	db := mysqlgorm.GetDBInstance()
-	
-	var i int64 = 2
 
+	var valid_pid string
 	for true {
-		p := &model.Playlist{}
+		p_id := shortuuid.New()
+
+		p := &model.Playlist{
+			Playlist_id: p_id,
+		}
 	
 		// check if user exists
-		record := db.Where("playlist_id = ?", i).Take(&p)
+		record := db.Where("user_id = ?", p.Playlist_id).Take(&p)
 
 		if record.RowsAffected == 0 {
+			valid_pid = p_id
 			break
 		}
-
-		i += 1
 	}
 
-	return strconv.FormatInt(i, 10)
+	return valid_pid[:8]
 }

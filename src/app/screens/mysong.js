@@ -74,8 +74,6 @@ const MySong = ({navigation}) =>{
         AsyncStorage.getItem('uid')
           .then(value => {
             if (value != null) {
-              console.log(playlistName)
-              console.log('Loading....')
               axios.post(API_URL + `/user/${value}` + PATH.CREATE_PLAYLIST, {title: playlistName})
                 .then(response => {
                   let newPlaylist = [{image: require('../../assets/playlist.png'),
@@ -88,6 +86,7 @@ const MySong = ({navigation}) =>{
 
                   setplaylistData(newPlaylist)
                   console.log(response.data)
+                  setPlaylistName('')
                   Alert.alert("New playlist created")
                 })
                 .catch(error => {
