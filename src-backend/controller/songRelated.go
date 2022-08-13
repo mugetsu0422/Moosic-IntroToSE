@@ -281,8 +281,8 @@ func generatePID() string {
 			Playlist_id: p_id,
 		}
 	
-		// check if user exists
-		record := db.Where("user_id = ?", p.Playlist_id).Take(&p)
+		// check if playlist exists
+		record := db.Where("playlist_id = ?", p.Playlist_id).Take(&p)
 
 		if record.RowsAffected == 0 {
 			valid_pid = p_id
