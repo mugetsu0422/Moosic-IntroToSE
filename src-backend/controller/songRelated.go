@@ -60,7 +60,7 @@ func GetPlaylist(c echo.Context) error {
 	query := c.QueryParam("q")
 	query = "%" + query + "%"
 
-	result := db.Where("title like ?", query).Limit(10).Find(&playlists);
+	result := db.Where("created_by = ? AND title like ?", "1", query).Limit(10).Find(&playlists);
 	if result.Error != nil {
 		return c.JSON(http.StatusInternalServerError, "Playlist(s) not found");
 	}

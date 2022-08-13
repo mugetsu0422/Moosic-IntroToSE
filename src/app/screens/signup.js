@@ -24,7 +24,7 @@ const SignUp = ({ navigation }) => {
       .then(response => {
         console.log(response.data)
         alert('Register successfully')
-        navigation.navigate('Favorite', { name: 'Favorite' })
+        navigation.navigate('SignIn')
       })
       .catch(error => {
         console.log(error.response.data)
